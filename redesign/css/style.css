@@ -133,12 +133,13 @@ a:active
 
 #cmc_widget
 {
-    width: 20%;
+
     position: absolute;
     top: 30%;
     left: 55%;
     background-image: url("../img/1x1_blk_trans75.png");
     color: #fff;
+    box-shadow: 0 0 100px 0px rgba(0,0,255,.25);
 }
 
 /***************
@@ -163,12 +164,18 @@ a:active
 
 .button-links ul li a
 {
+    font-size: 70%;
     display: block;
-    padding: .5rem 1rem;
+    padding: .35rem .75rem;
     margin: .075rem;
     background-image: url("../img/1x1_blk_trans75.png");
     border: 1px solid #001166;
     box-shadow: 0 0 200px 0px rgba(0,0,255,.5);
+}
+
+.button-links ul li a:hover
+{
+    box-shadow: 0 0 50px 0px rgba(255,255,255,.25);
 }
 
 .feed-box

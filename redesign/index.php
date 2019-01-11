@@ -23,8 +23,8 @@
 					<li><a target="_blank" href="https://getlynx.io/news">Lynx News</a></li>
 					<li><a target="_blank" href="https://getlynx.io/faq">Lynx FAQ</a></li>
 					<li><a target="_blank" href="https://getlynx.io/downloads">Lynx Wallets</a></li>
-					<li><a target="_blank" href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI</a></li>
-					<li><a target="_blank" href="https://www.coinomi.com/en/downloads">Coinomi</a></li>
+					<li><a target="_blank" href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI ISO</a></li>
+					<li><a target="_blank" href="https://www.coinomi.com/en/downloads">Coinomi Wallets</a></li>
 
 					<li><a target="_blank" href="https://explorer.getlynx.io">Block Explorer</a></li>
 					<li><a target="_blank" href="https://github.com/getlynx/Lynx">Github</a></li>
@@ -32,8 +32,8 @@
 					<li><a target="_blank" href="https://twitter.com/GetLynxIo">Twitter</a></li>
 					<li><a target="_blank" href="https://reddit.com/r/lynx">Reddit</a></li>
 
-					<li><a target="_blank" href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>
 					<li><a target="_blank" href="https://coinmarketcap.com/currencies/lynx">CoinMarketCap</a></li>
+					<li><a target="_blank" href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>
 					<li><a target="_blank" href="https://www.livecoinwatch.com/price/Lynx-LYNX">LiveCoinWatch</a></li>
 					<li><a target="_blank" href="https://walletinvestor.com/currency/lynx">WalletInvestor</a></li>
 
@@ -105,6 +105,7 @@
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="search" placeholder="Block Height / Block Hash / Tx ID ...">
+							
 						</div>
 					</form>
 				</div>
@@ -139,15 +140,15 @@
 				</div>
 			</div>
 
-			<div id="feed_twitter" class="col-lg-4">
+			<div id="feed_twitter" class="col-md-6 col-lg-4">
 				<h3 class="header-glow"> Twitter</h3>
 					
-<a class="twitter-timeline" data-theme="dark" data-height="25rem" href="https://twitter.com/GetlynxIo">Twitter: @GetLynxIo</a> 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+				<a class="twitter-timeline" data-theme="dark" data-height="25rem" href="https://twitter.com/GetlynxIo">Twitter: @GetLynxIo</a> 
+				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 			</div>
 
-			<div id="feed_discord" class="col-lg-4">
+			<div id="feed_discord" class="col-md-6 col-lg-4">
 				<h3 class="header-glow"> Discord</h3>
 				<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
 			</div>
