@@ -13,6 +13,72 @@
 
 <div id="wrapper">
 
+	<!-- DESKTOP Menu -->
+	<div class="d-none d-md-block">
+		<div class="col-sm-12">
+			<div class="col-12 button-links">
+				<ul>
+
+					<li><a target="_blank" href="https://getlynx.io">Lynx Website</a></li>
+					<li><a target="_blank" href="https://getlynx.io/news">Lynx News</a></li>
+					<li><a target="_blank" href="https://getlynx.io/faq">Lynx FAQ</a></li>
+					<li><a target="_blank" href="https://getlynx.io/downloads">Lynx Wallets</a></li>
+					<li><a target="_blank" href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI</a></li>
+					<li><a target="_blank" href="https://www.coinomi.com/en/downloads">Coinomi</a></li>
+
+					<li><a target="_blank" href="https://explorer.getlynx.io">Block Explorer</a></li>
+					<li><a target="_blank" href="https://github.com/getlynx/Lynx">Github</a></li>
+					<li><a target="_blank" href="https://discord.gg/yTfCs5J">Discord</a></li>
+					<li><a target="_blank" href="https://twitter.com/GetLynxIo">Twitter</a></li>
+					<li><a target="_blank" href="https://reddit.com/r/lynx">Reddit</a></li>
+
+					<li><a target="_blank" href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>
+					<li><a target="_blank" href="https://coinmarketcap.com/currencies/lynx">CoinMarketCap</a></li>
+					<li><a target="_blank" href="https://www.livecoinwatch.com/price/Lynx-LYNX">LiveCoinWatch</a></li>
+					<li><a target="_blank" href="https://walletinvestor.com/currency/lynx">WalletInvestor</a></li>
+
+					<li><a target="_blank" href="https://cryptopanic.com">CryptoPanic</a></li>
+					<li><a target="_blank" href="https://www.coinsignals.trade">CoinSignal</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<!-- MOBILE Menu -->
+	<div class="d-block d-md-none">
+		<div class="col-sm-12">
+			<div class="col-12 button-links">
+				<ul>
+					<li><a href="#">&#9660; Open Menu &#9660;</a></li>
+				</ul>
+			</div>
+			<div id="mobile_menu" class="col-12 button-links" style="display:none;">
+				<ul>
+
+					<li><a href="https://getlynx.io">Lynx Website</a></li>
+					<li><a href="https://getlynx.io/news">Lynx News</a></li>
+					<li><a href="https://getlynx.io/faq">Lynx FAQ</a></li>
+					<li><a href="https://getlynx.io/downloads">Lynx Wallets</a></li>
+					<li><a href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI</a></li>
+					<li><a href="https://www.coinomi.com/en/downloads">Coinomi</a></li>
+
+					<li><a href="https://explorer.getlynx.io">Block Explorer</a></li>
+					<li><a href="https://github.com/getlynx/Lynx">Github</a></li>
+					<li><a href="https://discord.gg/yTfCs5J">Discord</a></li>
+					<li><a href="https://twitter.com/GetLynxIo">Twitter</a></li>
+					<li><a href="https://reddit.com/r/lynx">Reddit</a></li>
+
+					<li><a href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>
+					<li><a href="https://coinmarketcap.com/currencies/lynx">CoinMarketCap</a></li>
+					<li><a href="https://www.livecoinwatch.com/price/Lynx-LYNX">LiveCoinWatch</a></li>
+					<li><a href="https://walletinvestor.com/currency/lynx">WalletInvestor</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+	
 
 	<div id="site_container" class="container-fluid">
 		
@@ -22,9 +88,9 @@
 
 				<div id="network_info" class="box-glow">
 					<div class="row">
-						<div class="col-4"><strong>Block Count:</strong> <span class="text-glow">123457890</span></div>
-						<div class="col-4"><strong>Difficulty:</strong> <span class="text-glow">244.23487</span></div>
-						<div class="col-4"><strong>Connections:</strong> <span class="text-glow">45</span></div>
+						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow">123457890</span></div>
+						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">244.23487</span></div>
+						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">45</span></div>
 					</div>
 				</div>
 
@@ -62,9 +128,9 @@
 				</div>
 			</div>
 
-			
 		</div>
 		<div class="row site_body">
+
 			<div id="feed_website" class="col-lg-4">
 				<h3 class="header-glow"> Updates</h3>
 				<div class="feed-box box-glow">
@@ -85,7 +151,6 @@
 				<h3 class="header-glow"> Discord</h3>
 				<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
 			</div>
-
 
 
 

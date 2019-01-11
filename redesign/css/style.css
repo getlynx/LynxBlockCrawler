@@ -1,7 +1,7 @@
 body 
 {
     background-color: #000000 !important;
-    color: #79f !important;
+    color: #336699 !important;
 }
 
 /* Helper Classes */
@@ -145,6 +145,32 @@ a:active
     SITE BODY
  ***************/
 
+
+.button-links ul
+{
+    padding: 0;
+    margin: 0;
+    margin-bottom: .25rem;
+    text-align: center;
+}
+
+.button-links ul li
+{
+    list-style: none;
+    padding: 0;
+    display: inline-block;
+}
+
+.button-links ul li a
+{
+    display: block;
+    padding: .5rem 1rem;
+    margin: .075rem;
+    background-image: url("../img/1x1_blk_trans75.png");
+    border: 1px solid #001166;
+    box-shadow: 0 0 200px 0px rgba(0,0,255,.5);
+}
+
 .feed-box
 {
     padding: .5rem;
@@ -202,7 +228,7 @@ a:active
     position: absolute;
     left: 10%;
     right: 10%;
-    top: 10%;
+    top: 5%;
     display: block;
     margin: 4em auto;
     z-index: 100;
@@ -288,6 +314,11 @@ body.loading #site_container
         font-size: .75rem;
         font-weight: bold;
         height: 1.85rem;
+    }
+    #cmc_widget
+    {
+        top: 38%;
+        left: 48%;
     }
 }
 
