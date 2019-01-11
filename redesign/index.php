@@ -154,7 +154,15 @@
 				<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
 			</div>
 
+			<div class="col-12">
 
+				<div id="network_info" class="box-glow">
+					<div class="row">
+						<div class="col-12 align-center"><span class="text-glow">Powered by LYNX</span></div>
+					</div>
+				</div>
+
+			</div>
 
 		</div>
 	</div>
