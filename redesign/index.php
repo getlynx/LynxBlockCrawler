@@ -115,7 +115,7 @@
 			</div>
 			
 			<!-- MOBILE Logo/Search -->
-			<div class="d-block d-md-none">
+			<div class="col-12 d-block d-md-none">
 				<div class="col-sm-12">
 					<img class="img-fluid" src="img/logo_mobile.png" />
 				</div>
