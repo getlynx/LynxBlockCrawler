@@ -143,15 +143,17 @@
 
 			<div id="feed_twitter" class="col-md-6 col-lg-4">
 				<h3 class="header-glow"> Twitter</h3>
-					
-				<a class="twitter-timeline" data-theme="dark" data-height="25rem" href="https://twitter.com/GetlynxIo">Twitter: @GetLynxIo</a> 
-				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+				<div class="box-glow">
+					<a class="twitter-timeline" data-theme="dark" data-height="25rem" href="https://twitter.com/GetlynxIo">&nbsp</a> 
+					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+				</div>
 			</div>
 
 			<div id="feed_discord" class="col-md-6 col-lg-4">
 				<h3 class="header-glow"> Discord</h3>
-				<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
+				<div class="box-glow">
+					<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
+				</div>
 			</div>
 
 			<div class="col-12">

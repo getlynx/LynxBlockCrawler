@@ -4,6 +4,38 @@ body
     color: #336699 !important;
 }
 
+/*
+ *  STYLE 12
+ */
+/*
+ *  STYLE 11
+ */
+
+*::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background: linear-gradient(90deg, #113355, #002244, #002244, #113355);
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar
+{
+    width: 1rem;
+    background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(90deg, #3366cc, #6699ff, #6699ff, #3366cc);
+    z-index: 999;
+}
+*::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(90deg, #aaccff, #fff, #aaccff);
+    box-shadow: 0 0 25px 0px rgba(90,140,255,1), 0 0 50px 0px rgba(60,90,255,1);
+    z-index: 999;
+}
 /* Helper Classes */
 
 .block { display: block; }
@@ -35,7 +67,14 @@ body
 .box-glow
 {
     background: #000;
-    box-shadow: 0 0 15px 0px rgba(30,50,255,.5);
+    -webkit-animation: boxglow 3s ease-in-out infinite alternate;
+    -moz-animation: boxglow 3s ease-in-out infinite alternate;
+    animation: boxglow 3s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes boxglow {
+  from { box-shadow: 0 0 15px 0px rgba(30,50,255,.5); }
+    to { box-shadow: 0 0 25px 0px rgba(60,90,255,.75); }
 }
 
 .text-glow
@@ -97,7 +136,7 @@ button:hover
 {
     cursor: pointer;
     background: linear-gradient(#6699ff, #3366cc);
-    box-shadow: 0 0 30px 0px rgba(100,130,255,1);
+    box-shadow: 0 0 25px 0px rgba(90,140,255,1), 0 0 50px 0px rgba(60,90,255,1);
     text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF;
 }
 
@@ -218,6 +257,7 @@ button:hover
 #feed_website .feed-box
 {
     height: 25rem;
+    border-radius: 8px;
 }
 
 #feed_discord iframe
@@ -225,6 +265,14 @@ button:hover
     height: 25rem;
 }
 
+
+#feed_twitter .box-glow,
+#feed_discord .box-glow
+{
+    height: 25rem;
+    overflow:hidden;
+    border-radius: 8px;
+}
 
 #feed_twitter a
 {
@@ -297,6 +345,7 @@ body.loading #site_container
     box-shadow: none;
     border-color:transparent;
 }
+
 #particles-js canvas {
     display: block;
     vertical-align: bottom;
