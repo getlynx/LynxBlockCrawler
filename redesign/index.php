@@ -99,13 +99,13 @@
 			<!-- DESKTOP Logo/Search -->
 			<div class="d-none d-md-block">
 				<div class="col-sm-12">
-					<img class="img-fluid" src="img/logo.png" />
+					<a href="/"><img class="img-fluid" src="img/logo.png" /></a>
 				</div>
 				<div id="block_search">
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="search" placeholder="Block Height / Block Hash / Tx ID ...">
-							
+							<button id="button_search">GO!</button>
 						</div>
 					</form>
 				</div>
@@ -118,12 +118,13 @@
 			<!-- MOBILE Logo/Search -->
 			<div class="col-12 d-block d-md-none">
 				<div class="col-sm-12">
-					<img class="img-fluid" src="img/logo_mobile.png" />
+					<a href="/"><img class="img-fluid" src="img/logo_mobile.png" /></a>
 				</div>
 				<div id="block_search_mobile" class="col-12">
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="search" placeholder="Block Height / Block Hash / Tx ID ...">
+							<button id="button_search">GO!</button>
 						</div>
 					</form>
 				</div>

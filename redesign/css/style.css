@@ -45,6 +45,12 @@ body
     -moz-animation: textglow 3s ease-in-out infinite alternate;
     animation: textglow 3s ease-in-out infinite alternate;
 }
+.rainbow
+{
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+                linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+                linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+}
 @-webkit-keyframes textglow {
   from { text-shadow: 0 0 5px #36F, 0 0 10px #36F, 0 0 15px #36F, 0 0 20px #36F; }
     to { text-shadow: 0 0 10px #69F, 0 0 15px #69F, 0 0 20px #69F, 0 0 25px #69F; }
@@ -77,6 +83,22 @@ a:active
 {
     color: #ffffff !important;
     text-shadow: 0 0 5px #FFF, 0 0 15px #69F;
+}
+
+button
+{
+    color: #fff;
+    border: 1px solid #3366cc;
+    border-radius: .25rem !important;
+    background: linear-gradient(#3366cc, #003399);
+}
+
+button:hover
+{
+    cursor: pointer;
+    background: linear-gradient(#6699ff, #3366cc);
+    box-shadow: 0 0 30px 0px rgba(100,130,255,1);
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF;
 }
 
 /*******************
@@ -128,15 +150,22 @@ a:active
 
 #block_search input
 {
-    width: 100%;
+    width: 85%;
+    border-radius: .25rem !important;
+}
+
+#block_search_mobile input
+{
+    width: 93%;
+    border-radius: .25rem !important;
 }
 
 #cmc_widget
 {
 
     position: absolute;
-    top: 30%;
-    left: 55%;
+    top: 33%;
+    left: 56%;
     background-image: url("../img/1x1_blk_trans75.png");
     color: #fff;
     box-shadow: 0 0 100px 0px rgba(0,0,255,.25);
@@ -213,6 +242,15 @@ a:active
 
 
 
+
+#block_search button,
+#block_search_mobile button
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: calc(2.25rem + 2px)
+}
 
 
 
@@ -322,6 +360,11 @@ body.loading #site_container
         font-weight: bold;
         height: 1.85rem;
     }
+    #block_search button
+    {
+        height: 1.85rem;
+        font-size: .75rem;
+    }
     #cmc_widget
     {
         top: 38%;
@@ -343,11 +386,16 @@ body.loading #site_container
     {
         font-size: .70rem;
     }
-
     #block_search_mobile input
     {
         font-size: .75rem;
         font-weight: bold;
         height: 1.85rem;
     }
+    #block_search_mobile button
+    {
+        height: 1.85rem;
+        font-size: .75rem;
+    }
+    
 }
