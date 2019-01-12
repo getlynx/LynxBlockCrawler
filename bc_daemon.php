@@ -3,10 +3,10 @@
 /******************************************************************************
 	Wallet Configuration
 ******************************************************************************/
-	$GLOBALS["wallet_ip"] = "127.0.0.1";
-	$GLOBALS["wallet_port"] = "8332";
-	$GLOBALS["wallet_user"] = "username";
-	$GLOBALS["wallet_pass"] = "password";
+	$GLOBALS["wallet_ip"] = "104.248.189.185";
+	$GLOBALS["wallet_port"] = "9332";
+	$GLOBALS["wallet_user"] = "225600474010323611393087579953";
+	$GLOBALS["wallet_pass"] = "140974733633061792581149415793";
 /******************************************************************************
 
 	Block Chain And Network Information
