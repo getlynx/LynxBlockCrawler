@@ -1,4 +1,25 @@
 <?php
+
+/*
+// METHOD 1... In Apache --> SetEnv APP_INCLUDE_PATH /root/.lynx
+define('CONF', $_SERVER['APP_INCLUDE_PATH'] . '/lynx.conf');
+*/
+
+// METHOD 2...
+define('INCLUDE_DIR', '/root/lynx');
+if(!isset($GLOBALS['config'])){
+    $GLOBALS['config'] = parse_ini_file(INCLUDE_DIR . '/lynx.conf');
+}
+
+echo $GLOBALS['config']['rpcuser']."<br>";
+echo $GLOBALS['config']['rpcpassword']."<br>";
+
+
+
+
+/*
+	// METHOD 3...
+
 	// Instantiate local RPC containers
 	$rpcuser = "";
 	$rpcpassword = "";
@@ -28,6 +49,7 @@
 
 	// Now $rpcuser and $rpcpassword contain the credentials, hidden from user view.
 	// Just be sure to send them ENCRYPTED!!!
+*/
 
 ?>
 
