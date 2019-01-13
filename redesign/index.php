@@ -9,6 +9,8 @@ define('CONF', $_SERVER['APP_INCLUDE_PATH'] . '/lynx.conf');
 define('INCLUDE_DIR', '/var/www/austincaine.com');
 
 echo "Attempting to include ". INCLUDE_DIR . "/lynx.conf"."<br>";
+echo "Currently serving from ". $_SERVER['DOCUMENT_ROOT']."<br>";
+
 $GLOBALS['config'] = parse_ini_file(INCLUDE_DIR . '/lynx.conf') or die('Error, cannot read CONF file...');
 
 echo $GLOBALS['config']['rpcuser']."<br>";
