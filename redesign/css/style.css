@@ -494,5 +494,10 @@ body.loading #site_container
         height: 1.85rem;
         font-size: .75rem;
     }
+    .button-links ul li a
+    {
+        font-size: 100%;
+        padding: .5rem .75rem;
+    }
     
 }
