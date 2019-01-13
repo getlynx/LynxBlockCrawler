@@ -66,7 +66,7 @@ echo "'rpcpass' = ". $GLOBALS['config']['rpcpassword']."<br>";
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
 
 	<link rel="stylesheet" media="screen" href="css/style.css" />
-	<link rel="shortcut icon" href="./img/lynx256.png" />
+	<link rel="shortcut icon" href="http://austincaine.com/lynx/blockcrawler/redesign/img/lynx256.png" />
 
 </head>
 <body class="loading">
