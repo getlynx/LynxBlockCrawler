@@ -6,15 +6,15 @@ define('CONF', $_SERVER['APP_INCLUDE_PATH'] . '/lynx.conf');
 */
 
 // METHOD 2...
-define('INCLUDE_DIR', '/var/www/austincaine.com');
+define('INCLUDE_FILE', '/var/www/lynx.conf');
 
-echo "Attempting to include ". INCLUDE_DIR . "/lynx.conf"."<br>";
-echo "Currently serving from ". $_SERVER['DOCUMENT_ROOT']."<br>";
+echo "Reading config file: ". INCLUDE_FILE ."<br>";
+echo "This page served from: ". $_SERVER['DOCUMENT_ROOT']."<br>";
 
-$GLOBALS['config'] = parse_ini_file(INCLUDE_DIR . '/lynx.conf') or die('Error, cannot read CONF file...');
+$GLOBALS['config'] = parse_ini_file(INCLUDE_FILE) or die('Error, cannot read CONF file...');
 
-echo $GLOBALS['config']['rpcuser']."<br>";
-echo $GLOBALS['config']['rpcpassword']."<br>";
+echo "'rpcuser' = ". $GLOBALS['config']['rpcuser']."<br>";
+echo "'rpcpass' = ". $GLOBALS['config']['rpcpassword']."<br>";
 
 
 
