@@ -1,12 +1,49 @@
+<?php
+	// Instantiate local RPC containers
+	$rpcuser = "";
+	$rpcpassword = "";
+	
+	// Open lynx.conf (sitting well outside of WWW scope)
+	$confpath = fopen("../../../../test.conf", "r") or die("Unable to open file!");
+	
+	// Iterate each line until end-of-file
+	while(!feof($confpath)) {
+		
+		// Read in the full line
+		$line = fgets($confpath);
+		
+		// Split the line at the = sign
+		$array = explode("=", $line);
+
+		// Capture RPC credentials
+		if (trim($array[0]) == "rpcuser") {
+			$rpcuser = str_replace('"', "", trim($array[1]));
+		} else if (trim($array[0]) == "rpcpassword") {
+			$rpcpassword = str_replace('"', "", trim($array[1]));
+		}
+	}
+
+	// Close the file
+	fclose($confpath);
+
+	// Now $rpcuser and $rpcpassword contain the credentials, hidden from user view.
+	// Just be sure to send them ENCRYPTED!!!
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>BLOCK CRAWLER</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<title>Lynx Block Crawler</title>
 
-	<link rel="stylesheet" media="screen" href="css/style.css">
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
+
+	<link rel="stylesheet" media="screen" href="css/style.css" />
+	<link rel="shortcut icon" href="./img/lynx256.png" />
 
 </head>
 <body class="loading">
@@ -17,6 +54,7 @@
 		<div class="col-sm-12">
 			<div class="col-12 button-links">
 				<ul>
+					<?php $menuLinks = '
 
 					<li><a target="_blank" href="https://getlynx.io">Lynx Website</a></li>
 					<li><a target="_blank" href="https://getlynx.io/news">Lynx News</a></li>
@@ -38,6 +76,9 @@
 
 					<li><a target="_blank" href="https://cryptopanic.com/news/lynx">CryptoPanic</a></li>
 					<li><a target="_blank" href="https://www.coinsignals.trade/?coin=LYNX%3ABTC">CoinSignal</a></li>
+					
+					'; ?>
+					<?php echo $menuLinks; ?>
 
 				</ul>
 			</div>
@@ -47,32 +88,16 @@
 	<!-- MOBILE Menu -->
 	<div class="d-block d-md-none">
 		<div class="col-sm-12">
-			<div class="col-12 button-links">
-				<ul>
-					<li><a href="#">&#9660; Open Menu &#9660;</a></li>
-				</ul>
-			</div>
 			<div id="mobile_menu" class="col-12 button-links" style="display:none;">
 				<ul>
 
-					<li><a href="https://getlynx.io">Lynx Website</a></li>
-					<li><a href="https://getlynx.io/news">Lynx News</a></li>
-					<li><a href="https://getlynx.io/faq">Lynx FAQ</a></li>
-					<li><a href="https://getlynx.io/downloads">Lynx Wallets</a></li>
-					<li><a href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI</a></li>
-					<li><a href="https://www.coinomi.com/en/downloads">Coinomi</a></li>
+					<?php echo $menuLinks; ?>
 
-					<li><a href="https://explorer.getlynx.io">Block Explorer</a></li>
-					<li><a href="https://github.com/getlynx/Lynx">Github</a></li>
-					<li><a href="https://discord.gg/yTfCs5J">Discord</a></li>
-					<li><a href="https://twitter.com/GetLynxIo">Twitter</a></li>
-					<li><a href="https://reddit.com/r/lynx">Reddit</a></li>
-
-					<li><a href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>
-					<li><a href="https://coinmarketcap.com/currencies/lynx">CoinMarketCap</a></li>
-					<li><a href="https://www.livecoinwatch.com/price/Lynx-LYNX">LiveCoinWatch</a></li>
-					<li><a href="https://walletinvestor.com/currency/lynx">WalletInvestor</a></li>
-
+				</ul>
+			</div>
+			<div class="col-12 button-links">
+				<ul>
+					<li><a id="mobile_menu_btn" href="#">&#9660; Open Menu &#9660;</a></li>
 				</ul>
 			</div>
 		</div>
@@ -101,12 +126,16 @@
 					<a href="/"><img class="img-fluid" src="img/logo.png" /></a>
 				</div>
 				<div id="block_search">
+					<?php $searchForm = '
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="search" placeholder="Block Height / Block Hash / Tx ID ...">
 							<button id="button_search">GO!</button>
 						</div>
 					</form>
+					'
+					?>
+					<?php echo $searchForm; ?>
 				</div>
 				<div id="cmc_widget" class="d-none d-md-block">
 					<script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>
@@ -120,12 +149,7 @@
 					<a href="/"><img class="img-fluid" src="img/logo_mobile.png" /></a>
 				</div>
 				<div id="block_search_mobile" class="col-12">
-					<form>
-						<div class="form-group">
-							<input type="text" class="form-control" id="search" placeholder="Block Height / Block Hash / Tx ID ...">
-							<button id="button_search">GO!</button>
-						</div>
-					</form>
+					<?php echo $searchForm; ?>
 				</div>
 			</div>
 
@@ -134,7 +158,7 @@
 			<div class="row">
 
 				<div id="feed_website" class="col-sm-6">
-					<h3 class="header-glow"> Website</h3>
+					<h3 class="header-glow"> <a target="_blank" href="https://getlynx.io">Website</a></h3>
 					<div class="feed-box box-glow">
 						<script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=https%3A%2F%2Fgetlynx.io%2Ffeed%2F&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=1&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=%23ffffff&amp;titlebgcol=transparent&amp;titletxtcol=%23ffffff&amp;itembgcol=transparent&amp;itemtxtcol=%23336699&amp;ctl=0"></script>
 						<noscript>Please enable JavaScript.</noscript>
@@ -142,7 +166,7 @@
 				</div>
 
 				<div id="feed_reddit" class="col-sm-6">
-					<h3 class="header-glow"> /r/LYNX</h3>
+					<h3 class="header-glow"> <a target="_blank" href="https://reddit.com/r/LYNX">/r/LYNX</a></h3>
 					<div class="feed-box box-glow">
 						<script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Flynx%2Fhot.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=0&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=inherit&amp;titlebgcol=transparent&amp;titletxtcol=inherit&amp;itembgcol=transparent&amp;itemtxtcol=inherit&amp;ctl=0"></script>
 						<noscript>Please enable JavaScript.</noscript>
@@ -150,7 +174,7 @@
 				</div>
 
 				<div id="feed_twitter" class="col-sm-6">
-					<h3 class="header-glow"> Twitter</h3>
+					<h3 class="header-glow"> <a target="_blank" href="https://twitter.com/GetLynxIo">Twitter</a></h3>
 					<div class="box-glow">
 						<a class="twitter-timeline" data-theme="dark" data-height="20rem" href="https://twitter.com/GetlynxIo">&nbsp</a> 
 						<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -158,7 +182,7 @@
 				</div>
 
 				<div id="feed_discord" class="col-sm-6">
-					<h3 class="header-glow"> Discord</h3>
+					<h3 class="header-glow"> <a target="_blank" href="https://discord.gg/yTfCs5J">Discord</a></h3>
 					<div class="box-glow">
 						<iframe src="https://discordapp.com/widget?id=400373936266936348&amp;theme=dark" width="100%" height="300" frameborder="0"></iframe>
 					</div>

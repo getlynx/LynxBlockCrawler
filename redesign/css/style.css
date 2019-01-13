@@ -4,6 +4,10 @@ body
     color: #336699 !important;
 }
 
+.ui-effects-wrapper {
+  box-shadow: none !important;
+}
+
 *::-webkit-scrollbar-track
 {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -80,14 +84,14 @@ body
 .box-glow
 {
     background: #000;
-    -webkit-animation: boxglow 3s ease-in-out infinite alternate;
-    -moz-animation: boxglow 3s ease-in-out infinite alternate;
-    animation: boxglow 3s ease-in-out infinite alternate;
+    -webkit-animation: boxglow 6s ease-in-out infinite alternate;
+    -moz-animation: boxglow 6s ease-in-out infinite alternate;
+    animation: boxglow 6s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes boxglow {
-  from { box-shadow: 0 0 15px 0px rgba(30,50,255,.5); }
-    to { box-shadow: 0 0 25px 0px rgba(60,90,255,.75); }
+  from { box-shadow: 0 0 5px 0px rgba(30,50,255,.5), 0 0 10px 0px rgba(30,50,255,.5); }
+    to { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 40px 0px rgba(60,90,255,.75); }
 }
 
 .text-glow
@@ -104,8 +108,8 @@ body
                 linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
 }
 @-webkit-keyframes textglow {
-  from { text-shadow: 0 0 5px #36F, 0 0 10px #36F, 0 0 15px #36F, 0 0 20px #36F; }
-    to { text-shadow: 0 0 10px #69F, 0 0 15px #69F, 0 0 20px #69F, 0 0 25px #69F; }
+  from { text-shadow: 0 0 5px rgba(20,100,255,1), 0 0 10px rgba(20,100,255,1), 0 0 15px rgba(20,100,255,1), 0 0 20px rgba(20,100,255,1); }
+    to { text-shadow: 0 0 10px rgba(90,140,255,1), 0 0 15px rgba(90,140,255,1), 0 0 20px rgba(90,140,255,1), 0 0 25px rgba(90,140,255,1); }
 }
 
 
@@ -120,22 +124,34 @@ h3
     animation: headerglow 3s ease-in-out infinite alternate;
 }
 @-webkit-keyframes headerglow {
-  from { text-shadow: 0 0 5px #36F, 0 0 10px #36F; }
-    to { text-shadow: 0 0 10px #69F, 0 0 15px #69F; }
+  from { text-shadow: 0 0 10px rgba(20,100,255,1), 0 0 20px rgba(20,100,255,1); }
+    to { text-shadow: 0 0 20px rgba(90,140,255,1), 0 0 30px rgba(90,140,255,1); }
 }
 
 
 a
 {
     color: #99ccff !important;
-    text-shadow: 0 0 5px #36F, 0 0 10px #36F;
+    text-shadow: 0 0 10px rgba(90,140,255,1), 0 0 15px rgba(90,140,255,1);
 }
 
 a:hover,
 a:active
 {
     color: #ffffff !important;
-    text-shadow: 0 0 5px #FFF, 0 0 15px #69F;
+    text-shadow: 0 0 15px rgba(90,140,255,1), 0 0 25px rgba(90,140,255,1), 0 0 35px rgba(90,140,255,1);
+    text-decoration: none;
+}
+
+.header-glow a
+{
+    color: #fff !important;
+    text-shadow: 0 0 10px rgba(90,140,255,1), 0 0 15px rgba(90,140,255,1);
+}
+
+.header-glow a:hover
+{
+    text-shadow: 0 0 15px rgba(90,140,255,1), 0 0 35px rgba(90,140,255,1), 0 0 45px rgba(90,140,255,1);
 }
 
 button
@@ -186,6 +202,11 @@ button:hover
     SITE HEADER
  *****************/
 
+#mobile_menu_btn
+{
+    font-size: 120%;
+}
+
 #network_info
 {
     margin: 1rem;
@@ -215,13 +236,12 @@ button:hover
 
 #cmc_widget
 {
-
     position: absolute;
     top: 33%;
     left: 56%;
     background-image: url("../img/1x1_blk_trans75.png");
     color: #fff;
-    box-shadow: 0 0 100px 0px rgba(0,0,255,.25);
+    box-shadow: 0 0 200px 0px rgba(0,0,255,.5);
 }
 
 /***************
@@ -255,9 +275,11 @@ button:hover
     box-shadow: 0 0 200px 0px rgba(0,0,255,.5);
 }
 
-.button-links ul li a:hover
+.button-links ul li a:hover,
+.button-links ul li a:active
 {
-    box-shadow: 0 0 50px 0px rgba(255,255,255,.25);
+    text-shadow: 0 0 5px rgba(255,255,255,1), 0 0 10px rgba(255,255,255,1), 0 0 15px rgba(90,140,255,1);
+    box-shadow: 0 0 50px 0px rgba(60,100,255,.75);
 }
 
 .feed-box
@@ -454,6 +476,7 @@ body.loading #site_container
         top: 3%;
         right: 15%;
         left: 5%;
+        margin-bottom: 15rem;
     }
 
     .network_info 

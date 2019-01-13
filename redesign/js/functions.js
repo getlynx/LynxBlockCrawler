@@ -1,10 +1,12 @@
 $(window).on("load", function() {
 
-    load_reddit();
+    //load_reddit();
+
+    mobile_menu_init();
 
 });
 
-function load_reddit(){
+function load_reddit() {
     console.log("Getting LYNX Reddit RSS...");
     rssurl = "https://www.reddit.com/r/lynx/hot.rss";
     $.get(rssurl, function(data) {
@@ -34,3 +36,16 @@ function load_reddit(){
 
     });
 };
+
+
+function mobile_menu_init() {
+    $("#mobile_menu_btn").click(function() {
+        if ($("#mobile_menu").css("display") != "none") {
+            $("#mobile_menu_btn").html("&#9660; Open Menu &#9660;")
+            $("#mobile_menu").slideToggle();
+        } else {
+            $("#mobile_menu").slideToggle();
+            $("#mobile_menu_btn").html("&#9650; Close Menu &#9650;")
+        }
+    });
+}
