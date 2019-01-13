@@ -4,7 +4,7 @@
 	$rpcpassword = "";
 	
 	// Open lynx.conf (sitting well outside of WWW scope)
-	$confpath = fopen("../../../../test.conf", "r") or die("Unable to open file!");
+	$confpath = fopen("../../../../test.conf", "r") or die("Unable to read conf file...");
 	
 	// Iterate each line until end-of-file
 	while(!feof($confpath)) {
