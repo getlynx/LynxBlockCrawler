@@ -8,7 +8,7 @@ define('CONF', $_SERVER['APP_INCLUDE_PATH'] . '/lynx.conf');
 // METHOD 2...
 define('INCLUDE_DIR', '/root/lynx');
 if(!isset($GLOBALS['config'])){
-    $GLOBALS['config'] = parse_ini_file(INCLUDE_DIR . '/lynx.conf');
+    $GLOBALS['config'] = parse_ini_file(INCLUDE_DIR . '/lynx.conf') or die('Error, cannot read CONF file...');
 }
 
 echo $GLOBALS['config']['rpcuser']."<br>";
