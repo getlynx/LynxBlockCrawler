@@ -104,6 +104,22 @@ class WalletRPC {
   
 
 
+  # # # # # # # # # # # # # #
+  #                         #
+  #     == Blockchain ==    #
+  #                         #
+  # # # # # # # # # # # # # #
+
+  ################################################################################################
+  # getblockchaininfo
+
+  function getblockchaininfo()
+  {
+    $command["method"] = "getblockchaininfo";
+    //$command["params"][0] = NULL;
+    $results = $this->run($command);
+    $this->debug($results);
+  }
 
 
   # # # # # # # # # # # #

@@ -26,7 +26,7 @@ while(!feof($conf)) {
 		$rpc_user = str_replace('"', "", trim($array[1]));
 	} else if (trim($array[0]) == "rpcpassword") {
 		$rpc_pass = str_replace('"', "", trim($array[1]));
-	} else if (trim($array[0]) == "rpcbind" && trim($array[1] != "::1")) {
+	} else if (trim($array[0]) == "rpcbind" && trim($array[1]) != "::1") {
 		$rpc_addy = str_replace('"', "", trim($array[1]));
 	} else if (trim($array[0]) == "rpcport") {
 		$rpc_port = str_replace('"', "", trim($array[1]));
@@ -42,7 +42,7 @@ $WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 $WalletRPC->debug("This page served from: ". $_SERVER['DOCUMENT_ROOT']);
 $WalletRPC->debug("Reading config file outide of public scope: ". INCLUDE_FILE );
 
-$WalletRPC->getwalletinfo();
+$WalletRPC->getblockchaininfo();
 
 ?>
 
