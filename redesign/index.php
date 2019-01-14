@@ -44,7 +44,7 @@ $WalletRPC->debug("Reading config file outide of public scope: ". INCLUDE_FILE )
 
 $blockchaininfo = $WalletRPC->getblockchaininfo();
 
-echo $blockchaininfo["blocks"];
+print_r($blockchaininfo);
 
 ?>
 
