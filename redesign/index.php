@@ -46,8 +46,6 @@ $blockchaininfo = $WalletRPC->getblockchaininfo();
 $networkinfo = $WalletRPC->getnetworkinfo();
 $walletinfo = $WalletRPC->getwalletinfo();
 
-print_r($networkinfo);
-
 ?>
 
 
@@ -134,7 +132,7 @@ print_r($networkinfo);
 					<div class="row">
 						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow"><?php echo $blockchaininfo["blocks"]; ?></span></div>
 						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow"><?php echo $blockchaininfo["difficulty"]; ?></span></div>
-						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">45</span></div>
+						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow"><?php echo $networkinfo["connections"]; ?></span></div>
 					</div>
 				</div>
 
