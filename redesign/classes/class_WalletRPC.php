@@ -87,7 +87,7 @@ class WalletRPC {
     //  The JSON response is read into an array
     $return = json_decode ($results, TRUE);
 
-    echo $return;
+    print_r($return);
 
     //  If an error message was received the message is returned
     //  to the calling code as a string.  
