@@ -1,7 +1,9 @@
+
 body 
 {
     background-color: #000000 !important;
     color: #336699 !important;
+    height: 0;
 }
 
 .ui-effects-wrapper {
@@ -27,6 +29,8 @@ body
     background: linear-gradient(90deg, #3366cc, #6699ff, #6699ff, #3366cc);
     z-index: 999;
 }
+
+.box-glow:hover::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb:hover
 {
     background: linear-gradient(90deg, #aaccff, #fff, #aaccff);
@@ -93,6 +97,19 @@ body
   from { box-shadow: 0 0 5px 0px rgba(30,50,255,.5), 0 0 10px 0px rgba(30,50,255,.5); }
     to { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 40px 0px rgba(60,90,255,.75); }
 }
+
+#site_body .box-glow:hover 
+{
+    -webkit-animation: boxglowhover 2s ease-in-out infinite alternate;
+    -moz-animation: boxglowhover 2s ease-in-out infinite alternate;
+    animation: boxglowhover 2s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes boxglowhover {
+  from { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 15px 0px rgba(60,90,255,.75); }
+    to { box-shadow: 0 0 15px 0px rgba(180,220,255,1), 0 0 45px 0px rgba(90,128,255,1); }
+}
+
 
 .text-glow
 {

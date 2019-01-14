@@ -226,7 +226,7 @@ class BlockCrawler {
       </div>
 
     </div>
-    <div class="site_body">
+    <div id="site_body">
 
     ');
     return join("", $html);
