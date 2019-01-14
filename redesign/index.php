@@ -42,7 +42,9 @@ $WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 $WalletRPC->debug("This page served from: ". $_SERVER['DOCUMENT_ROOT']);
 $WalletRPC->debug("Reading config file outide of public scope: ". INCLUDE_FILE );
 
-$WalletRPC->getblockchaininfo();
+$blockchaininfo = $WalletRPC->getblockchaininfo();
+
+echo $blockchaininfo["blocks"];
 
 ?>
 

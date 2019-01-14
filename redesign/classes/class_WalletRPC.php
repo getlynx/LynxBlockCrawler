@@ -1,7 +1,7 @@
 <?php
 
 /* * * * * * * * * * * 
-  WalletRPC()
+  Class WalletRPC()
  * * * * * * * * * * */
 
 
@@ -37,6 +37,7 @@ class WalletRPC {
     echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
   }
 
+  // Returns Array on success
   function run($command="")
   {
     // Command must be supplied
@@ -86,8 +87,6 @@ class WalletRPC {
 
     //  The JSON response is read into an array
     $return = json_decode ($results, TRUE);
-
-    print_r($return);
 
     //  If an error message was received the message is returned
     //  to the calling code as a string.  
