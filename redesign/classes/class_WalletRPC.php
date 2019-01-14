@@ -53,14 +53,14 @@ class WalletRPC {
     $coind = curl_init();
 
     //  Set the IP address and port for the wallet server
-    curl_setopt ($coind, CURLOPT_URL, $self.rpc_addy);
-    curl_setopt ($coind, CURLOPT_PORT, $self.rpc_port);
+    curl_setopt ($coind, CURLOPT_URL, $this->rpc_addy);
+    curl_setopt ($coind, CURLOPT_PORT, $this->rpc_port);
 
     //  Tell curl to use basic HTTP authentication
     curl_setopt($coind, CURLOPT_HTTPAUTH, CURLAUTH_BASIC) ;
 
     //  Provide the username and password for the connection
-    curl_setopt($coind, CURLOPT_USERPWD, $self.rpc_user.":".$self.rpc_pass);
+    curl_setopt($coind, CURLOPT_USERPWD, $this->rpc_user.":".$this->rpc_pass);
 
     //  JSON-RPC Header for the wallet
     curl_setopt($coind, CURLOPT_HTTPHEADER, array ("Content-type: application/json"));
@@ -86,6 +86,8 @@ class WalletRPC {
 
     //  The JSON response is read into an array
     $return = json_decode ($results, TRUE);
+
+    echo $return;
 
     //  If an error message was received the message is returned
     //  to the calling code as a string.  
