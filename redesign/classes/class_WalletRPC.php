@@ -119,7 +119,7 @@ class WalletRPC {
     $command["method"] = "getblockchaininfo";
     //$command["params"][0] = NULL;
     $results = $this->run($command);
-    $this->debug($results);
+    return $results;
   }
 
 
@@ -137,7 +137,7 @@ class WalletRPC {
     $command["method"] = "getwalletinfo";
     //$command["params"][0] = NULL;
     $results = $this->run($command);
-    $this->debug($results);
+    return $results;
   }
 
 
