@@ -1,58 +1,51 @@
 <?php
 
-/*
-// METHOD 1... In Apache --> SetEnv APP_INCLUDE_PATH /root/.lynx
-define('CONF', $_SERVER['APP_INCLUDE_PATH'] . '/lynx.conf');
-*/
-
-// METHOD 2...
+// Include copy of lynx.conf for RPC credentials
 define('INCLUDE_FILE', '/var/www/lynx.conf');
 
-$GLOBALS['config'] = parse_ini_file(INCLUDE_FILE) or die('Error, cannot read CONF file...');
+// Instantiate local RPC containers
+$rpc_user = "";
+$rpc_pass = "";
+$rpc_addy = "";
+$rpc_port = "";
 
-echo "This page served from: ". $_SERVER['DOCUMENT_ROOT']."<br>";
-echo "Reading config file outide of public scope: ". INCLUDE_FILE ."<br>";
-echo "'rpcuser' = ". $GLOBALS['config']['rpcuser']."<br>";
-echo "'rpcpass' = ". $GLOBALS['config']['rpcpassword']."<br>";
+// Open lynx.conf (sitting well outside of WWW scope)
+$conf = fopen(INCLUDE_FILE, "r") or die("Unable to read conf file...");
 
-
-
-
-/*
-	// METHOD 3...
-
-	// Instantiate local RPC containers
-	$rpcuser = "";
-	$rpcpassword = "";
+// Iterate each line until end-of-file
+while(!feof($conf)) {
 	
-	// Open lynx.conf (sitting well outside of WWW scope)
-	$confpath = fopen("../../../../test.conf", "r") or die("Unable to read conf file...");
+	// Read in each full line
+	$line = fgets($conf);
 	
-	// Iterate each line until end-of-file
-	while(!feof($confpath)) {
-		
-		// Read in the full line
-		$line = fgets($confpath);
-		
-		// Split the line at the = sign
-		$array = explode("=", $line);
+	// Split the line at the = sign
+	$array = explode("=", $line);
 
-		// Capture RPC credentials
-		if (trim($array[0]) == "rpcuser") {
-			$rpcuser = str_replace('"', "", trim($array[1]));
-		} else if (trim($array[0]) == "rpcpassword") {
-			$rpcpassword = str_replace('"', "", trim($array[1]));
-		}
+	// Capture config data
+	if (trim($array[0]) == "rpcuser") {
+		$rpc_user = str_replace('"', "", trim($array[1]));
+	} else if (trim($array[0]) == "rpcpassword") {
+		$rpc_pass = str_replace('"', "", trim($array[1]));
+	} else if (trim($array[0]) == "rpcbind" && trim($array[1] != "::1")) {
+		$rpc_addy = str_replace('"', "", trim($array[1]));
+	} else if (trim($array[0]) == "rpcport") {
+		$rpc_port = str_replace('"', "", trim($array[1]));
 	}
+}
 
-	// Close the file
-	fclose($confpath);
+// Close the file
+fclose($conf);
 
-	// Now $rpcuser and $rpcpassword contain the credentials, hidden from user view.
-	// Just be sure to send them ENCRYPTED!!!
-*/
+// Include WalletRPC class and instantiate using RPC creds from conf
+include("./classes/class_WalletRPC.php");
+$WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
+$WalletRPC->debug("This page served from: ". $_SERVER['DOCUMENT_ROOT']);
+$WalletRPC->debug("Reading config file outide of public scope: ". INCLUDE_FILE );
+
+$WalletRPC->getwalletinfo();
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
