@@ -30,6 +30,19 @@ class WalletRPC {
     $this->debug("==================================================");
   }
 
+  // rounding to chopping too many decimal places (i.e. difficulty)
+  function round_up($number, $precision = 8)
+  {
+    $fig = (int) str_pad('1', $precision, '0');
+    return (ceil($number * $fig) / $fig);
+  }
+
+  function round_down($number, $precision = 8)
+  {
+    $fig = (int) str_pad('1', $precision, '0');
+    return (floor($number * $fig) / $fig);
+  }
+
   function debug($output="")
   {
     if ( $output == "" ) { return FALSE; }

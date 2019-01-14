@@ -130,9 +130,9 @@ $walletinfo = $WalletRPC->getwalletinfo();
 
 				<div id="network_info" class="box-glow">
 					<div class="row">
-						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow"><?php echo $blockchaininfo["blocks"]; ?></span></div>
-						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow"><?php echo $blockchaininfo["difficulty"]; ?></span></div>
-						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow"><?php echo $networkinfo["connections"]; ?></span></div>
+						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow"><?php echo number_format($blockchaininfo["blocks"], 0, '.', ','); ?></span></div>
+						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow"><?php echo number_format($blockchaininfo["difficulty"], 8, '.', ''); ?></span></div>
+						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow"><?php echo number_format($networkinfo["connections"], 0, '.', ','); ?></span></div>
 					</div>
 				</div>
 
