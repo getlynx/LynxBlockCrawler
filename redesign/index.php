@@ -43,8 +43,10 @@ $WalletRPC->debug("This page served from: ". $_SERVER['DOCUMENT_ROOT']);
 $WalletRPC->debug("Reading config file outide of public scope: ". INCLUDE_FILE );
 
 $blockchaininfo = $WalletRPC->getblockchaininfo();
+$networkinfo = $WalletRPC->getnetworkinfo();
+$walletinfo = $WalletRPC->getwalletinfo();
 
-print_r($blockchaininfo);
+print_r($networkinfo);
 
 ?>
 
@@ -130,8 +132,8 @@ print_r($blockchaininfo);
 
 				<div id="network_info" class="box-glow">
 					<div class="row">
-						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow">123457890</span></div>
-						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">244.23487</span></div>
+						<div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow"><?php echo $blockchaininfo["blocks"]; ?></span></div>
+						<div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow"><?php echo $blockchaininfo["difficulty"]; ?></span></div>
 						<div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">45</span></div>
 					</div>
 				</div>

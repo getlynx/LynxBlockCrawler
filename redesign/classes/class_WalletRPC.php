@@ -123,6 +123,24 @@ class WalletRPC {
   }
 
 
+  # # # # # # # # # # # # #
+  #                       #
+  #     == Network ==     #
+  #                       #
+  # # # # # # # # # # # # #
+
+  ################################################################################################
+  # getnetworkinfo
+
+  function getnetworkinfo()
+  {
+    $command["method"] = "getnetworkinfo";
+    //$command["params"][0] = NULL;
+    $results = $this->run($command);
+    return $results;
+  }
+
+
   # # # # # # # # # # # #
   #                     #
   #     == Wallet ==    #
