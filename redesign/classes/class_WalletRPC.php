@@ -4,7 +4,6 @@
   Class WalletRPC()
  * * * * * * * * * * */
 
-
 class WalletRPC {
 
   var $rpc_user;
@@ -21,33 +20,17 @@ class WalletRPC {
     $this->rpc_port = $rpc_port;
       $this->phrase = $phrase;
 
-    $this->debug("==================================================");
-    $this->debug("Class WalletRPC(): RPC User = ".$this->rpc_user);
-    $this->debug("Class WalletRPC(): RPC Pass = ".$this->rpc_pass);
-    $this->debug("Class WalletRPC(): RPC Addy = ".$this->rpc_addy);
-    $this->debug("Class WalletRPC(): RPC Port = ".$this->rpc_port);
-    $this->debug("Class WalletRPC(): Phrase = ".$this->phrase);
-    $this->debug("==================================================");
+    $this->debug(" Class WalletRPC(): Initializing...");
   }
 
-  // rounding to chopping too many decimal places (i.e. difficulty)
-  function round_up($number, $precision = 8)
-  {
-    $fig = (int) str_pad('1', $precision, '0');
-    return (ceil($number * $fig) / $fig);
-  }
-
-  function round_down($number, $precision = 8)
-  {
-    $fig = (int) str_pad('1', $precision, '0');
-    return (floor($number * $fig) / $fig);
-  }
-
+  // Debug output to console
   function debug($output="")
   {
-    if ( $output == "" ) { return FALSE; }
-    if ( is_array( $output ) ) { $output = implode( ',', $output); }
-    echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
+    if (DEBUG) {
+      if ( $output == "" ) { return FALSE; }
+      if ( is_array( $output ) ) { $output = implode( ',', $output); }
+      echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
+    }
   }
 
   // Returns Array on success
@@ -59,9 +42,7 @@ class WalletRPC {
     //  Encode the request as JSON for the wallet
     $jdata = json_encode($command);
 
-    $this->debug("==================================================");
-    $this->debug("WalletRPC.Run(): ".$jdata);
-    $this->debug("==================================================");
+    $this->debug(" WalletRPC.Run(): ".$jdata);
 
     //  Create curl connection object
     $coind = curl_init();
@@ -125,15 +106,39 @@ class WalletRPC {
   # # # # # # # # # # # # # #
 
   ################################################################################################
+  # getblock
+
+  function getblock($blockhash="", $verbosity=1)
+  {
+    $command["method"] = "getblock";
+    $command["params"][0] = $blockhash;
+    $command["params"][1] = $verbosity;
+    $results = $this->run($command);
+    return $results;
+  }
+
+  ################################################################################################
   # getblockchaininfo
 
   function getblockchaininfo()
   {
     $command["method"] = "getblockchaininfo";
-    //$command["params"][0] = NULL;
     $results = $this->run($command);
     return $results;
   }
+
+  ################################################################################################
+  # getblockhash
+
+  function getblockhash($height=0)
+  {
+    $command["method"] = "getblockhash";
+    $command["params"][0] = $height;
+    $results = $this->run($command);
+    return $results;
+  }
+
+
 
 
   # # # # # # # # # # # # #
@@ -152,6 +157,28 @@ class WalletRPC {
     $results = $this->run($command);
     return $results;
   }
+
+
+
+  # # # # # # # # # # # # # # # # #
+  #                               #
+  #     == Raw Transactions ==    #
+  #                               #
+  # # # # # # # # # # # # # # # # #
+
+  ################################################################################################
+  # getrawtransaction
+
+  function getrawtransaction($txid="", $verbose=FALSE, $blockhash="")
+  {
+    $command["method"] = "getrawtransaction";
+    $command["params"][0] = $txid;
+    $command["params"][1] = $verbose;
+    $command["params"][2] = $blockhash;
+    $results = $this->run($command);
+    return $results;
+  }
+
 
 
   # # # # # # # # # # # #
