@@ -96,7 +96,7 @@ body
 
 @-webkit-keyframes boxglow {
   from { box-shadow: 0 0 5px 0px rgba(30,50,255,.5), 0 0 10px 0px rgba(30,50,255,.5); }
-    to { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 40px 0px rgba(60,90,255,.75); }
+    to { box-shadow: 0 0 7px 0px rgba(60,90,255,.75), 0 0 12px 0px rgba(60,90,255,.75); }
 }
 
 #site_body .box-glow:hover 
@@ -107,8 +107,8 @@ body
 }
 
 @-webkit-keyframes boxglowhover {
-  from { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 15px 0px rgba(60,90,255,.75); }
-    to { box-shadow: 0 0 15px 0px rgba(180,220,255,1), 0 0 45px 0px rgba(90,128,255,1); }
+  from { box-shadow: 0 0 13px 0px rgba(180,220,255,1), 0 0 20px 0px rgba(90,128,255,1); }
+    to { box-shadow: 0 0 10px 0px rgba(60,90,255,.75), 0 0 15px 0px rgba(60,90,255,.75); }
 }
 
 
@@ -229,7 +229,7 @@ button:hover,
 
 #network_info
 {
-    margin: 1rem;
+    margin: 1rem 0 2.5rem 0;
     padding: .5rem 2rem;
     border-radius: 50px;
 }
@@ -399,7 +399,16 @@ button:hover,
 
 
 
+/*****************
+    SITE FOOTER
+ *****************/
 
+#powered_by
+{
+    margin: 2.5rem 0 1rem 0;
+    padding: .5rem 2rem;
+    border-radius: 50px;
+}
 
 
 

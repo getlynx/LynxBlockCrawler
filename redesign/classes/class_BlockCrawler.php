@@ -237,17 +237,13 @@ class BlockCrawler {
   {
     $html = [];
     array_push($html, '
-      <div class="row">
-        <div class="col-12">
+    </div>
+    <div id="site_footer">
 
-          <div id="network_info" class="box-glow">
-            <div class="row">
-              <div class="col-12 align-center"><span class="text-glow"><em>Powered by LYNX</em></span></div>
-            </div>
-          </div>
-
+      <div id="powered_by" class="box-glow">
+        <div class="row">
+          <div class="col-12 align-center"><span class="text-glow"><em>Powered by LYNX</em></span></div>
         </div>
-
       </div>
 
     </div>
@@ -443,19 +439,19 @@ class BlockCrawler {
     array_push($html, '  </div>');
     array_push($html, '  <br/>');
     array_push($html, '  <div class="row">');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Block Version:</strong><br/>');
     array_push($html, '        <span class="text-glow">'.$raw_block["version"].'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Block Size:</strong><br/>');
     array_push($html, '        <span class="text-glow">'.$raw_block["size"].'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Confirmations:</strong><br/>');
     array_push($html, '        <span class="text-glow">'.$raw_block["confirmations"].'</span> ');
@@ -464,19 +460,19 @@ class BlockCrawler {
     array_push($html, '  </div>');
     array_push($html, '  <br/>');
     array_push($html, '  <div class="row">');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Block Bits:</strong><br/>');
     array_push($html, '        <span class="text-glow">'.$raw_block["bits"].'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Block Nonce:</strong><br/>');
     array_push($html, '        <span class="text-glow">'.$raw_block["nonce"].'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
-    array_push($html, '    <div class="col-4 align-center">');
+    array_push($html, '    <div class="col-6 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Difficulty:</strong><br/>');
     array_push($html, '        <span class="text-glow">0.'.$raw_block["difficulty"].'</span> ');
