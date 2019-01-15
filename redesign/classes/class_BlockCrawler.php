@@ -574,7 +574,7 @@ class BlockCrawler {
     array_push($html, '<h3>Raw Data</h3>');
     
     array_push($html, '<textarea name="rawtrans" rows="20" cols="100%">');
-    array_push($html, $raw_tx);
+    array_push($html, print_r($raw_tx, true);
     array_push($html, '</textarea>');
 
     return join("", $html);
