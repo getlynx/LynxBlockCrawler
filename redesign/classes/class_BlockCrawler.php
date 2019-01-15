@@ -143,94 +143,75 @@ class BlockCrawler {
   function site_header()
   {
     $html = [];
-    array_push($html, '
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Lynx Block Crawler</title>
-
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
-
-  <link rel="stylesheet" media="screen" href="css/style.css" />
-  <link rel="shortcut icon" href="http://austincaine.com/lynx/blockcrawler/redesign/img/lynx256.png" />
-
-</head>
-<body class="loading">
-<div id="wrapper">
-
-  <!-- DESKTOP Menu -->
-  <div class="d-none d-md-block">
-    <div class="col-sm-12">
-      <div class="col-12 button-links">
-        '. $this->site_menu() .'
-      </div>
-    </div>
-  </div>
-  
-  <!-- MOBILE Menu -->
-  <div class="d-block d-md-none">
-    <div class="col-sm-12">
-      <div id="mobile_menu" class="col-12 button-links" style="display:none;">
-        '. $this->site_menu() .'
-      </div>
-      <div class="col-12 button-links">
-        <ul>
-          <li><a id="mobile_menu_btn" href="#">&#9660; Open Menu &#9660;</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  
-
-  <div id="site_container" class="container-fluid">
-    
-    <div id="site_header" class="row">
-      
-      <div class="col-12">
-
-        <div id="network_info" class="box-glow">
-          <div class="row">
-            <div class="col-12 col-sm-4"><strong>Block Count:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>
-            <div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>
-            <div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- DESKTOP Logo/Search -->
-      <div class="d-none d-md-block">
-        <div class="col-sm-12">
-          <a href="index.php"><img class="img-fluid" src="img/logo.png" /></a>
-        </div>
-        <div id="block_search">
-          '. $this->site_search() .'
-        </div>
-        <div id="cmc_widget" class="d-none d-md-block">
-          <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>
-          <div class="coinmarketcap-currency-widget" data-currencyid="3099" data-base="USD"></div>
-        </div>
-      </div>
-      
-      <!-- MOBILE Logo/Search -->
-      <div class="col-12 d-block d-md-none">
-        <div class="col-sm-12">
-          <a href="/"><img class="img-fluid" src="img/logo_mobile.png" /></a>
-        </div>
-        <div id="block_search_mobile" class="col-12">
-          '. $this->site_search() .'
-        </div>
-      </div>
-
-    </div>
-    <div id="site_body">
-
-    ');
+    array_push($html, '<!DOCTYPE html>');
+    array_push($html, '<html lang="en">');
+    array_push($html, '<head>');
+    array_push($html, '  <title>Lynx Block Crawler</title>');
+    array_push($html, '  <meta charset="UTF-8" />');
+    array_push($html, '  <meta http-equiv="X-UA-Compatible" content="IE=edge">');
+    array_push($html, '  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />');
+    array_push($html, '  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />');
+    array_push($html, '  <link rel="stylesheet" media="screen" href="css/style.css" />');
+    array_push($html, '  <link rel="shortcut icon" href="http://austincaine.com/lynx/blockcrawler/redesign/img/lynx256.png" />');
+    array_push($html, '</head>');
+    array_push($html, '<body class="loading">');
+    array_push($html, '<div id="wrapper">');
+    array_push($html, '  <!-- DESKTOP Menu -->');
+    array_push($html, '  <div class="d-none d-md-block">');
+    array_push($html, '    <div class="col-sm-12">');
+    array_push($html, '      <div class="col-12 button-links">');
+    array_push($html, '        '. $this->site_menu());
+    array_push($html, '      </div>');
+    array_push($html, '    </div>');
+    array_push($html, '  </div>');
+    array_push($html, '  <!-- MOBILE Menu -->');
+    array_push($html, '  <div class="d-block d-md-none">');
+    array_push($html, '    <div class="col-sm-12">');
+    array_push($html, '      <div id="mobile_menu" class="col-12 button-links" style="display:none;">');
+    array_push($html, '        '. $this->site_menu());
+    array_push($html, '      </div>');
+    array_push($html, '      <div class="col-12 button-links">');
+    array_push($html, '        <ul>');
+    array_push($html, '          <li><a id="mobile_menu_btn" href="#">&#9660; Open Menu &#9660;</a></li>');
+    array_push($html, '        </ul>');
+    array_push($html, '      </div>');
+    array_push($html, '    </div>');
+    array_push($html, '  </div>');
+    array_push($html, '  <div id="site_container" class="container-fluid">');
+    array_push($html, '    <div id="site_header" class="row">');
+    array_push($html, '      <div class="col-12">');
+    array_push($html, '        <div id="network_info" class="box-glow">');
+    array_push($html, '          <div class="row">');
+    array_push($html, '            <div class="col-12 col-sm-4"><strong>Block Count:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
+    array_push($html, '            <div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
+    array_push($html, '            <div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
+    array_push($html, '          </div>');
+    array_push($html, '        </div>');
+    array_push($html, '      </div>');
+    array_push($html, '      <!-- DESKTOP Logo/Search -->');
+    array_push($html, '      <div class="d-none d-md-block">');
+    array_push($html, '        <div class="col-sm-12">');
+    array_push($html, '          <a href="index.php"><img class="img-fluid" src="img/logo.png" /></a>');
+    array_push($html, '        </div>');
+    array_push($html, '        <div id="block_search">');
+    array_push($html, '          '. $this->site_search());
+    array_push($html, '        </div>');
+    array_push($html, '        <div id="cmc_widget" class="d-none d-md-block">');
+    array_push($html, '          <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>');
+    array_push($html, '          <div class="coinmarketcap-currency-widget" data-currencyid="3099" data-base="USD"></div>');
+    array_push($html, '        </div>');
+    array_push($html, '      </div>');
+    array_push($html, '      <!-- MOBILE Logo/Search -->');
+    array_push($html, '      <div class="col-12 d-block d-md-none">');
+    array_push($html, '        <div class="col-sm-12">');
+    array_push($html, '          <a href="/"><img class="img-fluid" src="img/logo_mobile.png" /></a>');
+    array_push($html, '        </div>');
+    array_push($html, '        <div id="block_search_mobile" class="col-12">');
+    array_push($html, '          '. $this->site_search());
+    array_push($html, '        </div>');
+    array_push($html, '      </div>');
+    array_push($html, '    </div>');
+    array_push($html, '    <div id="site_body">');
     return join("", $html);
   }
 
@@ -238,51 +219,42 @@ class BlockCrawler {
   function site_footer()
   {
     $html = [];
-    array_push($html, '
-    </div>
-    <div id="site_footer">
-
-      <div id="powered_by" class="box-glow">
-        <div class="row">
-          <div class="col-12 align-center"><span class="text-glow"><em>Powered by LYNX</em></span></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  
-</div>
-
-<div id="particles-js"></div>
-
-<!-- js -->
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-<script src="js/particles.js"></script>
-<script src="js/xml2json.js"></script>
-<script src="js/functions.js"></script>
-<script>
-// Load Particles.js background
-  (function() {
-  $(function() {
-      var n, e, t;
-      return n = function() {
-          setTimeout(function() {
-              return $("body").removeClass("loading")
-          }, 1e3)
-      }, 
-      $(window).on("load", function() {
-          return window.innerWidth > 620 ? n() : $("body").removeClass("loading")
-      })
-  })
-  }).call(this);
-  $(window).on("load", function() { particlesJS.load("particles-js", "js/particlesjs-config.json"); });
-</script>
-</body>
-</html>
-    ');
+    array_push($html, '    </div>');
+    array_push($html, '    <div id="site_footer">');
+    array_push($html, '      <div id="powered_by" class="box-glow">');
+    array_push($html, '        <div class="row">');
+    array_push($html, '          <div class="col-12 align-center"><span class="text-glow"><em>Powered by LYNX</em></span></div>');
+    array_push($html, '        </div>');
+    array_push($html, '      </div>');
+    array_push($html, '    </div>');
+    array_push($html, '  </div>');
+    array_push($html, '</div>');
+    array_push($html, '<div id="particles-js"></div>');
+    array_push($html, '<script src="https://code.jquery.com/jquery-2.2.4.js"></script>');
+    array_push($html, '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>');
+    array_push($html, '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>');
+    array_push($html, '<script src="js/particles.js"></script>');
+    array_push($html, '<script src="js/xml2json.js"></script>');
+    array_push($html, '<script src="js/functions.js"></script>');
+    array_push($html, '<script>');
+    array_push($html, '// Load Particles.js background');
+    array_push($html, '  (function() {');
+    array_push($html, '  $(function() {');
+    array_push($html, '      var n, e, t;');
+    array_push($html, '      return n = function() {');
+    array_push($html, '          setTimeout(function() {');
+    array_push($html, '              return $("body").removeClass("loading")');
+    array_push($html, '          }, 1e3)');
+    array_push($html, '      }, ');
+    array_push($html, '      $(window).on("load", function() {');
+    array_push($html, '          return window.innerWidth > 620 ? n() : $("body").removeClass("loading")');
+    array_push($html, '      })');
+    array_push($html, '  })');
+    array_push($html, '  }).call(this);');
+    array_push($html, '  $(window).on("load", function() { particlesJS.load("particles-js", "js/particlesjs-config.json"); });');
+    array_push($html, '</script>');
+    array_push($html, '</body>');
+    array_push($html, '</html>');
     return join("", $html);
   }
 
@@ -523,8 +495,9 @@ class BlockCrawler {
   // Decide what type of hash is being searched...
   function check_hash($hash)
   {
-    echo "Need to check if ".$hash." is a Block or TX hash...";
-
+    $html = []
+    array_push($html, "Need to check if ".$hash." is a Block or TX hash...");
+    return join("", $html);
     // Check for matching block hash...
 
     // If none, check for matching tx hash...
@@ -535,13 +508,83 @@ class BlockCrawler {
   // Return the transaction detail page
   function lookup_txid($txid)
   {
-    echo "Lookup TX: ".$txid;
+    $raw_tx = $this->WalletRPC->getrawtransaction($txid);
+    
+    $html = []
+    array_push($html, '
+
+      <h3>TXID: <small> '.$raw_tx["txid"].'</small></h3>
+
+      <h3>Details</h3>
+      TX Version: '.$raw_tx["version"].'<br>
+      TX Time: '.date ("l F j, Y \@ H:i:s \(\U\T\C\)", $raw_tx["time"]).'<br>
+      Lock Time: '.$raw_tx["locktime"].'<br>
+      Confirmations: '.$raw_tx["confirmations"].'<br>
+      Block Hash: '.$this->link_blockhash($raw_tx["blockhash"]).'<br>
+    ');
+
+    if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
+    {
+      array_push($html, 'TX Message: '.htmlspecialchars($raw_tx["tx-comment"]).'<br>');
+    }
+    array_push($html, 'HEX Data: '.$raw_tx["hex"].'<br>');
+    array_push($html, '<h3>Inputs</h3>');
+    
+    foreach ($raw_tx["vin"] as $key => $txin)
+    {
+      array_push($html, '"Input #'.$key+1.'<br>');
+
+      if (isset ($txin["coinbase"]))
+      {
+        array_push($html, 'Coinbase: '.$txin["coinbase"].'<br>');
+        array_push($html, 'Sequence: '.$txin["sequence"].'<br>');
+      }
+      else
+      {
+        array_push($html, 'TX ID: '.$this->link_txid($txin["txid"]).'<br>');
+        array_push($html, 'TX Output: '.$txin["vout"].'<br>');
+        array_push($html, 'TX Sequence: '.$txin["sequence"].'<br>');
+        array_push($html, 'Script Sig (ASM): '.$txin["scriptSig"]["asm"].'<br>');
+        array_push($html, 'Script Sig (HEX): '.$txin["scriptSig"]["hex"].'<br>');
+      }
+    }
+
+    array_push($html, '<h3>Outputs</h3>');
+    
+    foreach ($raw_tx["vout"] as $key => $txout)
+    {
+      array_push($html, '"Output #'.$key+1.'<br>');
+      array_push($html, 'TX Value: '.$txout["value"].'<br>');
+      array_push($html, 'TX Type: '.$txout["scriptPubKey"]["type"].'<br>');
+      array_push($html, 'Required Sigs: '.$txout["scriptPubKey"]["reqSigs"].'<br>');
+      array_push($html, 'Script Pub Key (ASM): '.$txout["scriptPubKey"]["asm"].'<br>');
+      array_push($html, 'Script Pub Key (HEX): '.$txout["scriptPubKey"]["hex"].'<br>');
+    
+      if (isset ($txout["scriptPubKey"]["addresses"]))
+      {
+        foreach ($txout["scriptPubKey"]["addresses"] as $key => $address);
+        {
+          array_push($html, 'Address #'.$key+1, $address.'<br>');
+        }
+      }
+      
+    }
+    
+    array_push($html, '<h3>Raw Data</h3>');
+    
+    array_push($html, '<textarea name="rawtrans" rows="20" cols="100%">');
+    array_push($html, $raw_tx);
+    array_push($html, '</textarea>');
+
+    return join("", $html);
   }
 
   // Return the transaction detail page
   function lookup_address($address)
   {
-    echo "Lookup Address: ".$address;
+    $html = []
+    array_push($html, 'Lookup Address: '.$address);
+    return join("", $html);
   }
 
 
