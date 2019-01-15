@@ -236,22 +236,23 @@ class BlockCrawler {
     array_push($html, '<script src="js/particles.js"></script>');
     array_push($html, '<script src="js/xml2json.js"></script>');
     array_push($html, '<script src="js/functions.js"></script>');
-    array_push($html, '<script>');
-    array_push($html, '// Load Particles.js background');
-    array_push($html, '  (function() {');
-    array_push($html, '  $(function() {');
-    array_push($html, '      var n, e, t;');
-    array_push($html, '      return n = function() {');
-    array_push($html, '          setTimeout(function() {');
-    array_push($html, '              return $("body").removeClass("loading")');
-    array_push($html, '          }, 1e3)');
-    array_push($html, '      }, ');
-    array_push($html, '      $(window).on("load", function() {');
-    array_push($html, '          return window.innerWidth > 620 ? n() : $("body").removeClass("loading")');
-    array_push($html, '      })');
-    array_push($html, '  })');
-    array_push($html, '  }).call(this);');
-    array_push($html, '  $(window).on("load", function() { particlesJS.load("particles-js", "js/particlesjs-config.json"); });');
+    array_push($html, '<script>
+      // Load Particles.js background
+      (function() {
+      $(function() {
+          var n, e, t;
+          return n = function() {
+              setTimeout(function() {
+                  return $("body").removeClass("loading")
+              }, 1e3)
+          }, 
+          $(window).on("load", function() {
+              return window.innerWidth > 620 ? n() : $("body").removeClass("loading")
+          })
+      })
+      }).call(this);
+      $(window).on("load", function() { particlesJS.load("particles-js", "js/particlesjs-config.json"); });
+    ');
     array_push($html, '</script>');
     array_push($html, '</body>');
     array_push($html, '</html>');
