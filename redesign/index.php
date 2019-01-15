@@ -17,6 +17,8 @@ elseif (isset($_REQUEST["search"]))  {
 	
 	$search_request = $_REQUEST["search"];
 
+	if ($search_request == ""){ $BlockCrawler->error("no_request"); return FALSE; }
+
 	// Make sure it's alphanumeric only
 	if (! ctype_alnum($search_request)) {
 		//BlockCrawler->site_content = $BlockCrawler->get_error("alphanumeric");
@@ -51,16 +53,9 @@ elseif (isset($_REQUEST["search"]))  {
 
 }
 
-
-
 // Build page
 echo $BlockCrawler->site_header();
 echo $BlockCrawler->site_content;
-?>
-
-
-
-<?php 
 echo $BlockCrawler->site_footer();
 ?>
 

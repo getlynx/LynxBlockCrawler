@@ -96,6 +96,9 @@ class BlockCrawler {
   {
     $err_txt = "";
 
+    // Search Errors
+    if ($err_key == "no_request")      { $err_txt = "You must provide a search request."; }
+
     // Block Height Errors
     if ($err_key == "no_height")       { $err_txt = "You must provide a block height."; }
     if ($err_key == "invalid_height")  { $err_txt = "Sorry, that is not a valid LYNX block number."; }
@@ -226,9 +229,12 @@ class BlockCrawler {
     array_push($html, '      <div class="col-12">');
     array_push($html, '        <div id="network_info" class="box-glow">');
     array_push($html, '          <div class="row">');
-    array_push($html, '            <div class="col-12 col-sm-4"><strong>Block Count:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
-    array_push($html, '            <div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
-    array_push($html, '            <div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Height:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Connected:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
+    $networkhashps = $this->WalletRPC->getnetworkhashps();
+    $realspeed = $this->WalletRPC->humanHashSpeed($networkhashps);
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Speed:</strong> <span class="text-glow">'. round($realspeed["hashrate"],2).' '.$realspeed["hashspeed"] .'</a></div>');
     array_push($html, '          </div>');
     array_push($html, '        </div>');
     array_push($html, '      </div>');

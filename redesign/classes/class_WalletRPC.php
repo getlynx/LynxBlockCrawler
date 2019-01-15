@@ -179,6 +179,49 @@ class WalletRPC {
     return $results;
   }
 
+  # # # # # # # # # # #
+  #                   #
+  #     == Util ==    #
+  #                   #
+  # # # # # # # # # # #
+
+  ################################################################################################
+  # getnetworkhashps
+  function getnetworkhashps($nblocks=FALSE, $height=FALSE)
+  {
+    $command["method"] = "getnetworkhashps";
+    if ($nblocks) { $command["params"][0] = $nblocks; }
+    if ($height) { $command["params"][1] = $height; }
+    $results = $this->run($command);
+    return $results;
+  }
+  function humanHashSpeed($networkhashps) {
+      $hashspeed = 'H';
+      $hashrate = $networkhashps;
+      if ($networkhashps < 1) {
+        $hashspeed = 'µH';
+        $hashrate = $networkhashps / 1000;
+      }
+      if ($networkhashps >= 1000) {
+        $hashspeed = 'KH';
+        $hashrate = $networkhashps / 1000;
+      }
+      if ($networkhashps >= 1000000) {
+        $hashspeed = 'MH';
+        $hashrate = $networkhashps / 1000 / 1000;
+      }
+      if ($networkhashps >= 1000000000) {
+        $hashspeed = 'GH';
+        $hashrate = $networkhashps / 1000 / 1000 / 1000;
+      }
+      if ($networkhashps >= 1000000000000) {
+        $hashspeed = 'TH';
+        $hashrate = $networkhashps / 1000 / 1000 / 1000 / 1000;
+      }
+      return array('hashrate'=>$hashrate, 'hashspeed'=>$hashspeed);
+  }
+
+
   # # # # # # # # # # # #
   #                     #
   #     == Wallet ==    #
