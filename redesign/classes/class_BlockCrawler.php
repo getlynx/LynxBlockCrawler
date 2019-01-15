@@ -22,6 +22,8 @@ class BlockCrawler {
   {
     $this->debug(" Class BlockCrawler(): Initializing...");
 
+    date_default_timezone_set('UTC');
+
     // Create temp RPC containers
     $rpc_user = "";
     $rpc_pass = "";
@@ -377,6 +379,8 @@ class BlockCrawler {
     {
       return $this->error("invalid_block_height");
     }
+
+    $raw_block["date"] = date('M/d/Y @ H:i:s', $raw_block["time"]);
     
     $html = [];
 
@@ -404,7 +408,7 @@ class BlockCrawler {
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-12 align-center">');
     array_push($html, '        <div class="box-glow">');
-    array_push($html, '          <span class="text-glow">'.$raw_block["time"].'</span> ');
+    array_push($html, '          <span class="text-glow">'.$raw_block["date"].'</span> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
