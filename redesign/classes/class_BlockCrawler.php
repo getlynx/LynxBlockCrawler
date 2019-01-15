@@ -544,12 +544,12 @@ class BlockCrawler {
     // Check for matching block hash...
     $raw_block = $this->WalletRPC->getblock($hash);
     echo $raw_block;
-    if ($raw_block != Null) { return $this->lookup_block($hash); }
+    if ($raw_block != Null) { return $this->lookup_block($hash, True); }
     
     // If none, check for matching tx hash...
     $raw_tx = $this->WalletRPC->getrawtransaction($hash);
     echo $raw_tx;
-    if ($raw_tx != Null) { return $this->lookup_block($hash); }
+    if ($raw_tx != Null) { return $this->lookup_txid($hash); }
     
     // If none, send error
     { return $this->error("invalid_hash"); }
