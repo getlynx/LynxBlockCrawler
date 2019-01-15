@@ -17,11 +17,13 @@ elseif (isset($_REQUEST["search"]))  {
 	
 	$search_request = $_REQUEST["search"];
 
+	echo "Search: ".$search_request;
+
 	if ($search_request == ""){ $BlockCrawler->error("no_request"); return FALSE; }
 
 	// Make sure it's alphanumeric only
 	if (! ctype_alnum($search_request)) {
-		//BlockCrawler->site_content = $BlockCrawler->get_error("alphanumeric");
+		BlockCrawler->site_content = $BlockCrawler->get_error("alphanumeric");
 		$BlockCrawler->debug("ERROR: query was not alphanumeric");
 		return FALSE;
 	}

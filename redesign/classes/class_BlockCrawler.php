@@ -98,6 +98,7 @@ class BlockCrawler {
 
     // Search Errors
     if ($err_key == "no_request")      { $err_txt = "You must provide a search request."; }
+    if ($err_key == "alphanumeric")    { $err_txt = "Invalid characters detected. Numbers and letters only!"; }
 
     // Block Height Errors
     if ($err_key == "no_height")       { $err_txt = "You must provide a block height."; }
@@ -370,6 +371,8 @@ class BlockCrawler {
       $raw_block = $this->WalletRPC->getblock($block_hash);
       if ($raw_block == Null) { return $this->error("invalid_height"); }
     }
+
+    
 
     $block_date = date('m/d/Y \@ H:i:s', $raw_block["time"]);
 
