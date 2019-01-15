@@ -363,14 +363,14 @@ class BlockCrawler {
 
     if ($is_hash) 
     {
-      if ($query == Null) {$this->error("no_hash"); return FALSE;}
+      if (empty($query)) {$this->error("no_hash"); return FALSE;}
       $raw_block = $this->WalletRPC->getblock($query);
-      if ($raw_block["time"] == Null) { return $this->error("invalid_hash"); }
+      if (!isset($raw_block["time"]) || empty($raw_block["time"])) { return $this->error("invalid_hash"); }
     } else { 
-      if ($query == Null) {$this->error("no_height"); return FALSE;}
+      if (empty($query)) {$this->error("no_height"); return FALSE;}
       $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
-      if ($raw_block["time"] == Null) { return $this->error("invalid_height"); }
+      if (!isset($raw_block["time"]) || empty($raw_block["time"])) { return $this->error("invalid_height"); }
     }
 
     
