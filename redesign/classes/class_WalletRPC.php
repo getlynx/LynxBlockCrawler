@@ -169,7 +169,7 @@ class WalletRPC {
   ################################################################################################
   # getrawtransaction
 
-  function getrawtransaction($txid="", $verbose=FALSE, $blockhash=FALSE)
+  function getrawtransaction($txid="", $verbose=1, $blockhash=FALSE)
   {
     $command["method"] = "getrawtransaction";
     $command["params"][0] = $txid;
