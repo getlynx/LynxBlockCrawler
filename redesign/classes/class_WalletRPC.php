@@ -179,23 +179,6 @@ class WalletRPC {
     return $results;
   }
 
-function getrawtransaction ($tx_id, $verbose=1)
-  {
-  //  The JSON-RPC request starts with a method name
-    $request_array["method"] = "getrawtransaction";
-
-  //  For getrawtransaction a txid is required  
-    $request_array["params"][0] = $tx_id;
-    $request_array["params"][1] = $verbose;
-
-  //  Send the request to the wallet
-    $info = wallet_fetch ($request_array);
-
-  //  This function returns a string containing the block 
-  //  hash value for the specified block in the chain
-    return ($info);
-  }
-
   # # # # # # # # # # # #
   #                     #
   #     == Wallet ==    #
