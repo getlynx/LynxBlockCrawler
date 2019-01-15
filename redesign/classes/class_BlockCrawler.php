@@ -521,7 +521,7 @@ class BlockCrawler {
   }
 
   // Decide what type of hash is being searched...
-  function lookup_hash($hash)
+  function check_hash($hash)
   {
     echo "Need to check if ".$hash." is a Block or TX hash...";
 

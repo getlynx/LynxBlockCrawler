@@ -9,17 +9,12 @@ $BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
 //$BlockCrawler = new BlockCrawler('./_resources/lynx.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
-
-if (isset($_REQUEST["hash"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
-
-if (isset($_REQUEST["txid"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_txid($_REQUEST["txid"]); }
-
-if (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["address"]); }
-
-if (isset($_REQUEST["height"])) { echo $_REQUEST["height"]; $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
-
-if (isset ($_REQUEST["search"]))
-{
+    if (isset($_REQUEST["hash"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
+elseif (isset($_REQUEST["txid"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_txid($_REQUEST["txid"]); }
+elseif (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["address"]); }
+elseif (isset($_REQUEST["height"]))  { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
+elseif (isset($_REQUEST["search"]))  {
+	
 	$search_request = $_REQUEST["search"];
 
 	// Make sure it's alphanumeric only
@@ -32,8 +27,8 @@ if (isset ($_REQUEST["search"]))
 	// Check query character length...
 	if (strlen($search_request) == 64) {
 		
-		// The query is a txid or blockhash...
-		$BlockCrawler->site_content = $BlockCrawler->lookup_hash($search_request);
+		// The query is either a txid or blockhash...
+		$BlockCrawler->site_content = $BlockCrawler->check_hash($search_request);
 		$BlockCrawler->debug("QUERY: ".$search_request." (hash)");
 
 	} else if (strlen($search_request) > 30) {
@@ -50,7 +45,7 @@ if (isset ($_REQUEST["search"]))
 	}
 } else {
 
-	// No query, display dashboard
+	// No query? Display dashboard
 	$BlockCrawler->debug("SHOW: Dashboard");
 	$BlockCrawler->site_content = $BlockCrawler->show_dashboard();
 
