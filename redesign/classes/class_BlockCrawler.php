@@ -130,7 +130,7 @@ class BlockCrawler {
   function site_search()
   {
     $html = [];
-    array_push($html, '<form method="post" action="./">');
+    array_push($html, '<form method="get" action="./">');
     array_push($html, '    <div class="form-group">');
     array_push($html, '        <input type="text" class="form-control" name="search" id="search" placeholder="Block Height / Block Hash / Tx ID ...">');
     array_push($html, '        <button id="button_search">GO!</button>');
