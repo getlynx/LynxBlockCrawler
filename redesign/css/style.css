@@ -56,7 +56,6 @@ body
 
 
 
-
 /* Helper Classes */
 
 .block { display: block; }
@@ -93,6 +92,8 @@ body
     -moz-animation: boxglow 6s ease-in-out infinite alternate;
     animation: boxglow 6s ease-in-out infinite alternate;
 }
+
+.word-break { word-break: break-all; }
 
 @-webkit-keyframes boxglow {
   from { box-shadow: 0 0 5px 0px rgba(30,50,255,.5), 0 0 10px 0px rgba(30,50,255,.5); }
@@ -403,7 +404,7 @@ button:hover,
     border: none;
     color: #0f0;
     font-weight: bold;
-    font-size: 80%;
+    font-size: 90%;
     font-family: monospace;
 }
 

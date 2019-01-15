@@ -697,10 +697,9 @@ foreach ($raw_tx["vin"] as $key => $txin)
 {
   array_push($html, '
     <div class="row">
-      <div class="col-12 align-center">
-        <div class="box-glow">
-          <span class="text-glow">Input #'.($key+1).'</span>
-          <br/>
+      <div class="col-12">
+        <span class="text-glow">Input #'.($key+1).'</span>
+        <div class="box-glow word-break">
   ');
   if (isset ($txin["coinbase"])) 
   {
@@ -752,11 +751,9 @@ foreach ($raw_tx["vout"] as $key => $txout)
 {
   array_push($html, '
     <div class="row">
-      <div class="col-12 align-center">
-        <div class="box-glow">
-          <span class="text-glow">Output #'.($key+1).'</span>
-          <br/><br/>
-
+      <div class="col-12">
+        <span class="text-glow">Output #'.($key+1).'</span>
+        <div class="box-glow word-break">
           <strong>TX Value: </strong>
           <span class="text-glow">'.$txout["value"].'</span>
           <br/>
@@ -771,7 +768,7 @@ foreach ($raw_tx["vout"] as $key => $txout)
           <br/>
           <strong>Script Pub Key (HEX): </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["hex"].'</span>
-          <br/><br/>
+          <br/>
   ');
 if (isset ($txout["scriptPubKey"]["addresses"]))
 {
@@ -797,9 +794,7 @@ array_push($html, '
   <br/>
   <div class="row">
     <div class="col-12 align-center">
-      <textarea id="raw_tx" class="box-glow" rows="20" cols="100%">
-        '.print_r($raw_tx, true).'
-      </textarea>
+      <textarea id="raw_tx" class="box-glow" rows="20" cols="100%">'.print_r($raw_tx, true).'</textarea>
     </div>
   </div>
 </div>
