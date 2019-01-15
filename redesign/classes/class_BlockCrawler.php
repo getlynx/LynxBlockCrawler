@@ -66,7 +66,7 @@ class BlockCrawler {
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
     $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
     $this->walletinfo     = $this->WalletRPC->getwalletinfo();
-    $this->networkhashps  = $this->WalletRPC->networkhashps();
+    $this->networkhashps  = $this->WalletRPC->getnetworkhashps();
     $this->site_content   = $this->show_dashboard();
   }
 
