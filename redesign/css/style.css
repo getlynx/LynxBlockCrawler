@@ -99,7 +99,7 @@ body
     to { box-shadow: 0 0 7px 0px rgba(60,90,255,.75), 0 0 12px 0px rgba(60,90,255,.75); }
 }
 
-#site_body .box-glow:hover 
+#site_body .box-glow.hover-box:hover 
 {
     -webkit-animation: boxglowhover 2s ease-in-out infinite alternate;
     -moz-animation: boxglowhover 2s ease-in-out infinite alternate;

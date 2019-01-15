@@ -30,8 +30,8 @@ class BlockCrawler {
     $rpc_addy = "";
     $rpc_port = "";
 
-    // Open lynx.conf (sitting well outside of WWW scope)
-    $conf = fopen($conf_file, "r") or die("Unable to read conf file...");
+    // Open lynx.conf (sitting outside of public scope)
+    $conf = fopen($conf_file, "r") or die("Unable to find config file...");
 
     // Iterate through each line until end-of-file
     while(!feof($conf)) {
@@ -68,7 +68,7 @@ class BlockCrawler {
     $this->site_content = $this->show_dashboard();
   }
 
-  // rounding to chopping too many decimal places (i.e. difficulty)
+  // Rounding to chopping too many decimal places (i.e. difficulty)
   function round_up($number, $precision = 8)
   {
     $fig = (int) str_pad('1', $precision, '0');
@@ -88,6 +88,49 @@ class BlockCrawler {
       if ( $output == "" ) { return FALSE; }
       if ( is_array( $output ) ) { $output = implode( ',', $output); }
       echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
+    }
+  }
+
+  // Return error messages to the main content area
+  function error($err_key)
+  {
+    $err_txt = "";
+
+    // Block Height Errors
+    if ($err_key == "no_height")       { $err_txt = "You must provide a block height."; }
+    if ($err_key == "invalid_height")  { $err_txt = "Sorry, that is not a valid LYNX block number."; }
+    
+    // Hash Errors
+    if ($err_key == "no_hash")         { $err_txt = "You must provide a block hash."; }
+    if ($err_key == "invalid_hash")    { $err_txt = "Sorry, that is not a valid LYNX hash."; }
+
+    // Address Errors
+    if ($err_key == "no_address")      { $err_txt = "You must provide an address."; }
+    if ($err_key == "invalid_address") { $err_txt = "Sorry, that is not a valid LYNX address."; }
+    
+
+    if ( $err_txt != "" )
+    {
+
+      $html = [];
+      array_push($html, '<div id="error" class="list-details">');
+      array_push($html, '  <div class="row">');
+      array_push($html, '    <div class="col-12">');
+      array_push($html, '      <h3>ERROR!</h3>');
+      array_push($html, '    </div>');
+      array_push($html, '  </div>');
+      array_push($html, '  <div class="row">');
+      array_push($html, '    <div class="col-12 align-center">');
+      array_push($html, '      <div class="box-glow">');
+      array_push($html, '        <span class="text-glow">'.$err_txt.'</span><br/>');
+      array_push($html, '        <strong>Please try your search again.</strong>');
+      array_push($html, '      </div>');
+      array_push($html, '    </div>');
+      array_push($html, '  </div>');
+      array_push($html, '</div>');
+      array_push($html, '<br/><br/>');
+
+      return join("", $html);
     }
   }
 
@@ -303,51 +346,25 @@ class BlockCrawler {
     return join("", $html);
   }
 
-  function error($err_key)
-  {
-    $err_txt = "";
-
-    if ($err_key == "invalid_block_height") { $err_txt = "Sorry, that is not a valid block height."; }
-
-    if ( $err_txt != "" )
-    {
-
-      $html = [];
-      array_push($html, '<div id="error" class="list-details">');
-      array_push($html, '  <div class="row">');
-      array_push($html, '    <div class="col-12">');
-      array_push($html, '      <h3>ERROR!</h3>');
-      array_push($html, '    </div>');
-      array_push($html, '  </div>');
-      array_push($html, '  <div class="row">');
-      array_push($html, '    <div class="col-12 align-center">');
-      array_push($html, '      <div class="box-glow">');
-      array_push($html, '        <span class="text-glow">'.$err_txt.'</span><br/>');
-      array_push($html, '        <strong>Please try your search again.</strong>');
-      array_push($html, '      </div>');
-      array_push($html, '    </div>');
-      array_push($html, '  </div>');
-      array_push($html, '</div>');
-      array_push($html, '<br/><br/>');
-
-      return join("", $html);
-    }
-  }
+  
 
   // Return the block detail page
-  function lookup_block($query, $is_hash=FALSE)
+  function lookup_block($query="", $is_hash=FALSE)
   {
+
     if ($is_hash) 
     {
+      if ($query == "") {$this->error("no_hash"); return FALSE;}
       $raw_block = $this->WalletRPC->getblock($query);
     } else { 
+      if ($query == "") {$this->error("no_height"); return FALSE;}
       $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
     }
 
     if ($raw_block == Null)
     {
-      return $this->error("invalid_block_height");
+      return $this->error("invalid_height");
     }
 
     $block_date = date('m/d/Y \@ H:i:s', $raw_block["time"]);
@@ -364,14 +381,20 @@ class BlockCrawler {
     array_push($html, '  <div class="d-block d-sm-none">');
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-6 align-center">');
-    array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
-    array_push($html, '        </div>');
+    if ($raw_block["previousblockhash"])
+    {
+      array_push($html, '        <div class="big-button">');
+      array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+      array_push($html, '        </div>');
+    }
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
-    array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
-    array_push($html, '        </div>');
+    if ($raw_block["nextblockhash"])
+    {
+      array_push($html, '        <div class="big-button">');
+      array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+      array_push($html, '        </div>');
+    }
     array_push($html, '      </div>');
     array_push($html, '    </div>');
     array_push($html, '    <br/>');
@@ -386,9 +409,12 @@ class BlockCrawler {
     array_push($html, '  <div class="d-none d-sm-block">');
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-3 align-center">');
-    array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
-    array_push($html, '        </div>');
+    if ($raw_block["previousblockhash"])
+    {
+      array_push($html, '        <div class="big-button">');
+      array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+      array_push($html, '        </div>');
+    }
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
     array_push($html, '        <div class="box-glow">');
@@ -396,16 +422,19 @@ class BlockCrawler {
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-3 align-center">');
-    array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
-    array_push($html, '        </div>');
+    if ($raw_block["nextblockhash"])
+    {
+      array_push($html, '        <div class="big-button">');
+      array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+      array_push($html, '        </div>');
+    }
     array_push($html, '      </div>');
     array_push($html, '    </div>');
     array_push($html, '  </div>');
     array_push($html, '  <br/>');
     array_push($html, '  <div class="row">');
     array_push($html, '    <div class="col-12 align-center">');
-    array_push($html, '      <div class="box-glow">');
+    array_push($html, '      <div class="box-glow hover-box">');
     array_push($html, '        <strong>Block Hash:</strong><br/>');
     array_push($html, '        '.$this->link_blockhash($raw_block["hash"]));
     array_push($html, '      </div>');
@@ -474,7 +503,7 @@ class BlockCrawler {
       array_push($html, '  <br/>');
       array_push($html, '  <div class="row">');
       array_push($html, '    <div class="col-12">');
-      array_push($html, '      <div class="box-glow">');
+      array_push($html, '      <div class="box-glow hover-box">');
       array_push($html, '        <ol>');
       foreach ($raw_block["tx"] as $index => $tx)
       {
@@ -506,6 +535,58 @@ class BlockCrawler {
     // If none, send error
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // Return the transaction detail page
   function lookup_txid($txid)
   {
@@ -514,22 +595,97 @@ class BlockCrawler {
     $html = [];
     array_push($html, '
 
-      <h3>TXID: <small> '.$raw_tx["txid"].'</small></h3>
+<div id="tx_details" class="list-details">
+  <div class="row">
+    <div class="col-12">
+      <h3>Tx Details</h3>
+    </div>
+  </div>
+  <br/>
 
-      <h3>Details</h3>
-      TX Version: '.$raw_tx["version"].'<br>
-      TX Time: '.date ("l F j, Y \@ H:i:s \(\U\T\C\)", $raw_tx["time"]).'<br>
-      Lock Time: '.$raw_tx["locktime"].'<br>
-      Confirmations: '.$raw_tx["confirmations"].'<br>
-      Block Hash: '.$this->link_blockhash($raw_tx["blockhash"]).'<br>
-    ');
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <strong>Transaction ID:</strong><br/>
+      <span class="text-glow">'.$raw_tx["txid"].'</span>
+    </div>
+  </div>
+  <br/>
 
-    if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
-    {
-      array_push($html, 'TX Message: '.htmlspecialchars($raw_tx["tx-comment"]).'<br>');
-    }
-    array_push($html, 'HEX Data: '.$raw_tx["hex"].'<br>');
-    array_push($html, '<h3>Inputs</h3>');
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <strong>Timestamp:</strong><br/>
+      <span class="text-glow">'.date ("l F j, Y \@ H:i:s \(\U\T\C\)", $raw_tx["time"]).'</span>
+    </div>
+  </div>
+  <br/>
+
+  <div class="row">
+    <div class="col-12 col-sm-4 box-glow align-center">
+      <strong>Version:</strong><br/>
+      <span class="text-glow">'.$raw_tx["version"].'</span>
+    </div>
+    <div class="col-12 col-sm-4 box-glow align-center">
+      <strong>Lock Time:</strong><br/>
+      <span class="text-glow">'.$raw_tx["locktime"].'</span>
+    </div>
+    <div class="col-12 col-sm-4 box-glow align-center">
+      <strong>Confirmations:</strong><br/>
+      <span class="text-glow">'.$raw_tx["confirmations"].'</span>
+    </div>
+  </div>
+  <br/>
+
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <strong>Block Hash:</strong><br/>
+      <span class="text-glow">'.$this->link_blockhash($raw_tx["blockhash"]).'</span>
+    </div>
+  </div>
+  <br/>
+
+');
+
+if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
+{
+  array_push($html, '
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <strong>Message:</strong><br/>
+      <span class="text-glow">'.htmlspecialchars($raw_tx["tx-comment"]).'</span>
+    </div>
+  </div>
+  <br/>
+  ');
+}
+array_push($html, '
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <strong>HEX Data:</strong><br/>
+      <span class="text-glow">'.$raw_tx["hex"].'</span>
+    </div>
+  </div>
+  </br>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Inputs</h3>
+    </div>
+  </div>
+  <br/>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+<hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
+');
+
     
     foreach ($raw_tx["vin"] as $key => $txin)
     {
