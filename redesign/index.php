@@ -19,7 +19,7 @@ elseif (isset($_REQUEST["search"]))  {
 
 	echo "Search: ".$search_request;
 
-	if ($search_request == ""){ $BlockCrawler->error("no_request"); return FALSE; }
+	if ($search_request == ""){ $BlockCrawler->site_content = $BlockCrawler->error("no_request");}
 
 	// Make sure it's alphanumeric only
 	if (! ctype_alnum($search_request)) {
@@ -34,13 +34,13 @@ elseif (isset($_REQUEST["search"]))  {
 		// The query is either a txid or blockhash...
 		$BlockCrawler->site_content = $BlockCrawler->check_hash($search_request);
 		$BlockCrawler->debug("QUERY: ".$search_request." (hash)");
-
+	/*
 	} else if (strlen($search_request) > 30) {
 
 		// The query is an address...
 		$BlockCrawler->site_content = $BlockCrawler->lookup_address($search_request);
 		$BlockCrawler->debug("QUERY: ".$search_request." (address)");
-
+	*/
 	} else {
 
 		// The query is a block height...
