@@ -17,8 +17,6 @@ elseif (isset($_REQUEST["search"]))  {
 	
 	$search_request = $_REQUEST["search"];
 
-	echo "Search: ".$search_request;
-
 	if ($search_request == ""){ $BlockCrawler->site_content = $BlockCrawler->error("no_request");}
 
 	// Make sure it's alphanumeric only
