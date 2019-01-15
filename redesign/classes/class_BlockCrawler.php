@@ -92,10 +92,10 @@ class BlockCrawler {
   }
 
   // Turn hashes into links for convenience
-  function link_blockhash ($hash) { return "<a href=\"".$_SERVER["PHP_SELF"]."?hash=".$hash."\" title=\"View Block Details\">".$hash."</a>"; }
-  function link_txid ($txid) { return "<a href=\"".$_SERVER["PHP_SELF"]."?txid=".$txid."\" title=\"View Transaction Details\">".$txid."</a>"; }
-  function link_address ($address) { return "<a href=\"".$_SERVER["PHP_SELF"]."?address=".$address."\" title=\"View Address Details\">".$address."</a>"; }
-  function link_blockheight ($height) { return "<a href=\"".$_SERVER["PHP_SELF"]."?height=".$height."\" title=\"View Block Details\">".$height."</a>"; }
+  function link_blockhash ($hash) { return "<a href=\"index.php?hash=".$hash."\" title=\"View Block Details\">".$hash."</a>"; }
+  function link_txid ($txid) { return "<a href=\"index.php?txid=".$txid."\" title=\"View Transaction Details\">".$txid."</a>"; }
+  function link_address ($address) { return "<a href=\"index.php?address=".$address."\" title=\"View Address Details\">".$address."</a>"; }
+  function link_blockheight ($height) { return "<a href=\"index.php?height=".$height."\" title=\"View Block Details\">".$height."</a>"; }
 
   // Site Menu
   function site_menu()
@@ -130,7 +130,7 @@ class BlockCrawler {
   function site_search()
   {
     $html = [];
-    array_push($html, '<form method="get" action="./">');
+    array_push($html, '<form method="get" action="index.php">');
     array_push($html, '    <div class="form-group">');
     array_push($html, '        <input type="text" class="form-control" name="search" id="search" placeholder="Block Height / Block Hash / Tx ID ...">');
     array_push($html, '        <button id="button_search">GO!</button>');
@@ -206,7 +206,7 @@ class BlockCrawler {
       <!-- DESKTOP Logo/Search -->
       <div class="d-none d-md-block">
         <div class="col-sm-12">
-          <a href="/"><img class="img-fluid" src="img/logo.png" /></a>
+          <a href="index.php"><img class="img-fluid" src="img/logo.png" /></a>
         </div>
         <div id="block_search">
           '. $this->site_search() .'
