@@ -5,8 +5,8 @@ define("DEBUG", TRUE);
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-//$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
-$BlockCrawler = new BlockCrawler('./_resources/lynx.conf');
+$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
+//$BlockCrawler = new BlockCrawler('./_resources/lynx.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
 
