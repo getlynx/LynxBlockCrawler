@@ -610,7 +610,7 @@ class BlockCrawler {
     <div class="col-12 align-center">
       <div class="box-glow hover-box">
         <strong>Transaction ID:</strong><br/>
-        <span class="text-glow">'.$this->link_txid(raw_tx["txid"]).'</span>
+        <span class="text-glow">'.$this->link_txid($raw_tx["txid"]).'</span>
       </div>
     </div>
   </div>
@@ -627,7 +627,7 @@ class BlockCrawler {
   <br/>
 
   <div class="row">
-    <div class="col-12 col-sm-4 lign-center">
+    <div class="col-12 col-sm-4 align-center">
       <div class="box-glow">
         <strong>Tx Version:</strong><br/>
         <span class="text-glow">'.$raw_tx["version"].'</span>
@@ -700,14 +700,14 @@ foreach ($raw_tx["vin"] as $key => $txin)
       <div class="col-12 align-center">
         <div class="box-glow">
           <span class="text-glow">Input #'.($key+1).'</span>
-          <br/><br/>
+          <br/>
   ');
   if (isset ($txin["coinbase"])) 
   {
     array_push($html, '
           <strong>Coinbase: </strong>
           <span class="text-glow">'.$txin["coinbase"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Sequence: </strong>
           <span class="text-glow">'.$txin["sequence"].'</span>
     ');
@@ -717,19 +717,18 @@ foreach ($raw_tx["vin"] as $key => $txin)
     array_push($html, '
           <strong>TX ID: </strong>
           <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
-          <br/><br/>
+          <br/>
           <strong>TX Output: </strong>
           <span class="text-glow">Input #'.$txin["vout"].'</span>
-          <br/><br/>
+          <br/>
           <strong>TX Sequence: </strong>
           <span class="text-glow">Input #'.$txin["sequence"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Script Sig (ASM): </strong>
           <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Script Sig (HEX): </strong>
           <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
-          <br/><br/>
     ');
   }
   array_push($html, '
@@ -760,19 +759,18 @@ foreach ($raw_tx["vout"] as $key => $txout)
 
           <strong>TX Value: </strong>
           <span class="text-glow">'.$txout["value"].'</span>
-          <br/><br/>
+          <br/>
           <strong>TX Type: </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["type"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Required Sigs: </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["reqSigs"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Script Pub Key (ASM): </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["asm"].'</span>
-          <br/><br/>
+          <br/>
           <strong>Script Pub Key (HEX): </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["hex"].'</span>
-          <br/><br/>
   ');
 if (isset ($txout["scriptPubKey"]["addresses"]))
 {
