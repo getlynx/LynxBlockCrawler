@@ -380,8 +380,8 @@ class BlockCrawler {
       return $this->error("invalid_block_height");
     }
 
-    $block_date = date('M/d/Y \@ H:i:s', $raw_block["time"]);
-    
+    $block_date = date('m/d/Y \@ H:i:s', $raw_block["time"]);
+
     $html = [];
 
     array_push($html, '<div id="block_details" class="list-details">');
