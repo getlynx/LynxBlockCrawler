@@ -10,13 +10,13 @@ $BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
 
-if (isset($_REQUEST["hash"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($hash, TRUE); }
+if (isset($_REQUEST["hash"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
 
-if (isset($_REQUEST["txid"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_txid($txid); }
+if (isset($_REQUEST["txid"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_txid($_REQUEST["txid"]); }
 
-if (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($address); }
+if (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["address"]); }
 
-if (isset($_REQUEST["height"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($height); }
+if (isset($_REQUEST["height"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
 
 if (isset ($_REQUEST["search"]))
 {

@@ -523,7 +523,17 @@ class BlockCrawler {
     return join("", $html);
   }
 
-  
+  // Return the transaction detail page
+  function lookup_txid($txid)
+  {
+    echo "Lookup TX: ".$txid;
+  }
+
+  // Return the transaction detail page
+  function lookup_address($address)
+  {
+    echo "Lookup Address: ".$address;
+  }
 
 
 
