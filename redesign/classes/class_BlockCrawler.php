@@ -10,6 +10,7 @@ class BlockCrawler {
   var $blockchaininfo;
   var $networkinfo;
   var $walletinfo;
+  var $networkhashps;
 
   var $site_header;
   var $site_content;
@@ -63,9 +64,10 @@ class BlockCrawler {
 
     // Populate info vars
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
-    $this->networkinfo = $this->WalletRPC->getnetworkinfo();
-    $this->walletinfo = $this->WalletRPC->getwalletinfo();
-    $this->site_content = $this->show_dashboard();
+    $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
+    $this->walletinfo     = $this->WalletRPC->getwalletinfo();
+    $this->networkhashps  = $this->WalletRPC->networkhashps();
+    $this->site_content   = $this->show_dashboard();
   }
 
   // Rounding to chopping too many decimal places (i.e. difficulty)
@@ -233,8 +235,7 @@ class BlockCrawler {
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Height:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Connected:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
-    $networkhashps = $this->WalletRPC->getnetworkhashps();
-    $realspeed = $this->WalletRPC->humanHashSpeed($networkhashps);
+    $realspeed = $this->WalletRPC->humanHashSpeed($this->networkhashps);
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Speed:</strong> <span class="text-glow">'. round($realspeed["hashrate"],2).' '.$realspeed["hashspeed"] .'</a></div>');
     array_push($html, '          </div>');
     array_push($html, '        </div>');
