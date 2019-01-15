@@ -130,7 +130,7 @@ class BlockCrawler {
   function site_search()
   {
     $html = [];
-    array_push($html, '<form method="post" action="'.$_SERVER["PHP_SELF"].'">');
+    array_push($html, '<form method="post" action="./">');
     array_push($html, '    <div class="form-group">');
     array_push($html, '        <input type="text" class="form-control" name="search" id="search" placeholder="Block Height / Block Hash / Tx ID ...">');
     array_push($html, '        <button id="button_search">GO!</button>');
@@ -392,12 +392,12 @@ class BlockCrawler {
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-6 align-center">');
     array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?block_hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
     array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?block_hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
@@ -414,7 +414,7 @@ class BlockCrawler {
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-3 align-center">');
     array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?block_hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+    array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
@@ -424,7 +424,7 @@ class BlockCrawler {
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-3 align-center">');
     array_push($html, '        <div class="big-button">');
-    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?block_hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+    array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
