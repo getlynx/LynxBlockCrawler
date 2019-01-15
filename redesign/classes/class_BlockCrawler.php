@@ -422,7 +422,7 @@ class BlockCrawler {
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
     array_push($html, '        <div class="box-glow">');
-    array_push($html, '          <span class="text-glow">'.$raw_block["time"].'</span> ');
+    array_push($html, '          <span class="text-glow">'.$block_date.'</span> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-3 align-center">');
