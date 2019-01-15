@@ -16,7 +16,7 @@ if (isset($_REQUEST["txid"])) { $BlockCrawler->site_content = $BlockCrawler->loo
 
 if (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["address"]); }
 
-if (isset($_REQUEST["height"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
+if (isset($_REQUEST["height"])) { echo $_REQUEST["height"]; $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
 
 if (isset ($_REQUEST["search"]))
 {

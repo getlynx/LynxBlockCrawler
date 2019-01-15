@@ -195,7 +195,7 @@ class BlockCrawler {
 
         <div id="network_info" class="box-glow">
           <div class="row">
-            <div class="col-12 col-sm-4"><strong>Block Count:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</span></div>
+            <div class="col-12 col-sm-4"><strong>Block Count:</strong> <a href="'.$_SERVER["PHP_SELF"].'?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>
             <div class="col-12 col-sm-4"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>
             <div class="col-12 col-sm-4"><strong>Connections:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>
           </div>
