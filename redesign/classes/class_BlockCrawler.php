@@ -771,12 +771,13 @@ foreach ($raw_tx["vout"] as $key => $txout)
           <br/>
           <strong>Script Pub Key (HEX): </strong>
           <span class="text-glow">'.$txout["scriptPubKey"]["hex"].'</span>
+          <br/><br/>
   ');
 if (isset ($txout["scriptPubKey"]["addresses"]))
 {
   foreach ($txout["scriptPubKey"]["addresses"] as $key => $address);
   {
-    array_push($html, '<strong>Address #'.($key+1).':</strong> <span class="text-glow">'.$address.'</span><br/><br/>');
+    array_push($html, '<strong>Address #'.($key+1).':</strong> <span class="text-glow">'.$address.'</span><br/>');
   }
 }
 array_push($html, '
@@ -795,12 +796,10 @@ array_push($html, '
   </div>
   <br/>
   <div class="row">
-    <div class="col-12 box-glow align-center">
-      <div class="box-glow">
-        <textarea id="raw_tx" rows="20" cols="100%">
-          '.print_r($raw_tx, true).'
-        </textarea>
-      </div>
+    <div class="col-12 align-center">
+      <textarea id="raw_tx" class="box-glow" rows="20" cols="100%">
+        '.print_r($raw_tx, true).'
+      </textarea>
     </div>
   </div>
 </div>

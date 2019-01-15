@@ -395,7 +395,17 @@ button:hover,
     padding: .5rem;
 }
 
-
+#raw_tx
+{
+    width: 100%;
+    background-color: transparent; 
+    background-image: url("../img/1x1_blk_trans75.png");
+    border: none;
+    color: #0f0;
+    font-weight: bold;
+    font-size: 80%;
+    font-family: monospace;
+}
 
 
 
