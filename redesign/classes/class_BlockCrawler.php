@@ -319,6 +319,8 @@ class BlockCrawler {
         <div id="feed_website" class="col-sm-6">
           <h3 class="header-glow"> <a target="_blank" href="https://getlynx.io">Website</a></h3>
           <div class="feed-box box-glow hover-box">
+            <script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=https%3A%2F%2Fgetlynx.io%2Ffeed%2F&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=1&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=%23ffffff&amp;titlebgcol=transparent&amp;titletxtcol=%23ffffff&amp;itembgcol=transparent&amp;itemtxtcol=%23336699&amp;ctl=0"></script>
+            <noscript>Please enable JavaScript.</noscript>
           </div>
         </div>
 
@@ -361,15 +363,12 @@ class BlockCrawler {
     {
       if ($query == "") {$this->error("no_hash"); return FALSE;}
       $raw_block = $this->WalletRPC->getblock($query);
+      if ($raw_block == Null) { return $this->error("invalid_hash"); }
     } else { 
       if ($query == "") {$this->error("no_height"); return FALSE;}
       $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
-    }
-
-    if ($raw_block == Null)
-    {
-      return $this->error("invalid_height");
+      if ($raw_block == Null) { return $this->error("invalid_height"); }
     }
 
     $block_date = date('m/d/Y \@ H:i:s', $raw_block["time"]);
@@ -527,61 +526,30 @@ class BlockCrawler {
     return join("", $html);
   }
 
+
+
+
+
+
+
+
+
   // Decide what type of hash is being searched...
   function check_hash($hash)
   {
-    $html = [];
-    array_push($html, "Need to check if ".$hash." is a Block or TX hash...");
-    return join("", $html);
     // Check for matching block hash...
-
+    $raw_block = $this->WalletRPC->getblock($hash);
+    echo $raw_block;
+    if ($raw_block != Null) { return $this->lookup_block($hash); }
+    
     // If none, check for matching tx hash...
-
+    $raw_tx = $this->WalletRPC->getrawtransaction($hash);
+    echo $raw_tx;
+    if ($raw_tx != Null) { return $this->lookup_block($hash); }
+    
     // If none, send error
+    { return $this->error("invalid_hash"); }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -598,6 +566,8 @@ class BlockCrawler {
     if ($query == "") {$this->error("no_hash"); return FALSE;}
     
     $raw_tx = $this->WalletRPC->getrawtransaction($query);
+
+    if ($raw_tx == Null) { return $this->error("invalid_hash"); }
     
     $html = [];
     array_push($html, '

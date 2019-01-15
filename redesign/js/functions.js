@@ -6,6 +6,7 @@ $(window).on("load", function() {
 
 });
 
+/*
 function feed_website() {
     $.ajax({
         url: 'https://www.rssdog.com/index.php?url=https%3A%2F%2Fgetlynx.io%2Ffeed%2F&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=1&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=%23ffffff&amp;titlebgcol=transparent&amp;titletxtcol=%23ffffff&amp;itembgcol=transparent&amp;itemtxtcol=%23336699&amp;ctl=0',
@@ -49,6 +50,7 @@ function load_reddit() {
     });
 };
 
+*/
 
 function mobile_menu_init() {
     $("#mobile_menu_btn").click(function() {
