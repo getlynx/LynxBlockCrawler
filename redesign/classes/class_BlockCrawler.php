@@ -676,7 +676,7 @@ if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
 }
 array_push($html, '
   <div class="row">
-    <div class="col-12 box-glow align-center">
+    <div class="col-12 align-center">
       <div class="box-glow">
         <strong>HEX Data:</strong><br/>
         <span class="text-glow">'.$raw_tx["hex"].'</span>
@@ -697,7 +697,7 @@ foreach ($raw_tx["vin"] as $key => $txin)
 {
   array_push($html, '
     <div class="row">
-      <div class="col-12 box-glow align-center">
+      <div class="col-12 align-center">
         <div class="box-glow">
           <span class="text-glow">Input #'.($key+1).'</span>
           <br/><br/>
@@ -753,7 +753,7 @@ foreach ($raw_tx["vout"] as $key => $txout)
 {
   array_push($html, '
     <div class="row">
-      <div class="col-12 box-glow align-center">
+      <div class="col-12 align-center">
         <div class="box-glow">
           <span class="text-glow">Output #'.($key+1).'</span>
           <br/><br/>
@@ -802,10 +802,12 @@ array_push($html, '
         <textarea id="raw_tx" rows="20" cols="100%">
           '.print_r($raw_tx, true).'
         </textarea>
+      </div>
+    </div>
+  </div>
+</div>
 ');
 
-    array_push($html, '</div>');
-    
     return join("", $html);
   }
 
