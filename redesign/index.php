@@ -33,13 +33,13 @@ if (isset ($_REQUEST["search"]))
 	if (strlen($search_request) == 64) {
 		
 		// The query is a txid or blockhash...
-		//$BlockCrawler->site_content = $BlockCrawler->lookup_hash($search_request);
+		$BlockCrawler->site_content = $BlockCrawler->lookup_hash($search_request);
 		$BlockCrawler->debug("QUERY: ".$search_request." (hash)");
 
 	} else if (strlen($search_request) > 30) {
 
 		// The query is an address...
-		//$BlockCrawler->site_content = $BlockCrawler->lookup_address($search_request);
+		$BlockCrawler->site_content = $BlockCrawler->lookup_address($search_request);
 		$BlockCrawler->debug("QUERY: ".$search_request." (address)");
 
 	} else {

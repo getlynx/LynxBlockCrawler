@@ -362,16 +362,13 @@ class BlockCrawler {
   }
 
   // Return the block detail page
-  function lookup_block($block_id, $is_hash=FALSE)
+  function lookup_block($query, $is_hash=FALSE)
   {
-    if ($is_hash == TRUE)
+    if ($is_hash) 
     {
-      $raw_block = getblock ($block_id);
-    }
-    
-    else
-    { 
-      $block_hash = $this->WalletRPC->getblockhash(intval($block_id));
+      $raw_block = $this->WalletRPC->getblock($query);
+    } else { 
+      $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
     }
 
@@ -521,6 +518,18 @@ class BlockCrawler {
     }
     
     return join("", $html);
+  }
+
+  // Decide what type of hash is being searched...
+  function lookup_hash($hash)
+  {
+    echo "Need to check if ".$hash." is a Block or TX hash...";
+
+    // Check for matching block hash...
+
+    // If none, check for matching tx hash...
+
+    // If none, send error
   }
 
   // Return the transaction detail page
