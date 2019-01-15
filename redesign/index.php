@@ -56,6 +56,6 @@ elseif (isset($_REQUEST["search"]))  {
 // Build page
 echo $BlockCrawler->site_header();
 echo $BlockCrawler->site_content;
-echo $BlockCrawler->site_footer();
-?>
+echo $BlockCrawler->site_footer(); 
 
+?>
