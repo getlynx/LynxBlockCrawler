@@ -5,8 +5,8 @@ define("DEBUG", TRUE);
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-//$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
-$BlockCrawler = new BlockCrawler('./_resources/test.conf');
+$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
+//$BlockCrawler = new BlockCrawler('./_resources/test.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
     if (isset($_REQUEST["hash"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
