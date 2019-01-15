@@ -475,7 +475,7 @@ class BlockCrawler {
     array_push($html, '    <div class="col-12 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Difficulty:</strong><br/>');
-    array_push($html, '        <span class="text-glow">0.'.$raw_block["difficulty"].'</span> ');
+    array_push($html, '        <span class="text-glow">0.'.number_format($raw_block["difficulty"], 8, '.', '').'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
     array_push($html, '  </div>');
