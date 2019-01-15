@@ -157,6 +157,7 @@ class BlockCrawler {
     array_push($html, '    <li><a target="_blank" href="https://discord.gg/yTfCs5J">Discord</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://twitter.com/GetLynxIo">Twitter</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://reddit.com/r/lynx">Reddit</a></li>');
+    array_push($html, '    <li><a target="_blank" href="https://www.youtube.com/channel/UCkoMBxbJQGUByNE3KKh9yxg">Youtube</a></li>');
 
     array_push($html, '    <li><a target="_blank" href="https://coinmarketcap.com/currencies/lynx">CoinMarketCap</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>');
@@ -588,9 +589,11 @@ class BlockCrawler {
 
 
   // Return the transaction detail page
-  function lookup_txid($txid)
+  function lookup_txid($query)
   {
-    $raw_tx = $this->WalletRPC->getrawtransaction($txid);
+    if ($query == "") {$this->error("no_hash"); return FALSE;}
+    
+    $raw_tx = $this->WalletRPC->getrawtransaction($query);
     
     $html = [];
     array_push($html, '
@@ -604,41 +607,53 @@ class BlockCrawler {
   <br/>
 
   <div class="row">
-    <div class="col-12 box-glow align-center">
-      <strong>Transaction ID:</strong><br/>
-      <span class="text-glow">'.$raw_tx["txid"].'</span>
+    <div class="col-12 align-center">
+      <div class="box-glow hover-box">
+        <strong>Transaction ID:</strong><br/>
+        <span class="text-glow">'.$this->link_txid(raw_tx["txid"]).'</span>
+      </div>
     </div>
   </div>
   <br/>
 
   <div class="row">
-    <div class="col-12 box-glow align-center">
-      <strong>Timestamp:</strong><br/>
-      <span class="text-glow">'.date ("l F j, Y \@ H:i:s \(\U\T\C\)", $raw_tx["time"]).'</span>
+    <div class="col-12 align-center">
+      <div class="box-glow">
+        <strong>Timestamp:</strong><br/>
+        <span class="text-glow">'.date ("l F j, Y \@ H:i:s \(\U\T\C\)", $raw_tx["time"]).'</span>
+      </div>
     </div>
   </div>
   <br/>
 
   <div class="row">
-    <div class="col-12 col-sm-4 box-glow align-center">
-      <strong>Version:</strong><br/>
-      <span class="text-glow">'.$raw_tx["version"].'</span>
+    <div class="col-12 col-sm-4 lign-center">
+      <div class="box-glow">
+        <strong>Tx Version:</strong><br/>
+        <span class="text-glow">'.$raw_tx["version"].'</span>
+      </div>
     </div>
-    <div class="col-12 col-sm-4 box-glow align-center">
-      <strong>Lock Time:</strong><br/>
-      <span class="text-glow">'.$raw_tx["locktime"].'</span>
+    <div class="col-12 col-sm-4 align-center">
+      <div class="box-glow">
+        <strong>Lock Time:</strong><br/>
+        <span class="text-glow">'.$raw_tx["locktime"].'</span>
+      </div>
     </div>
-    <div class="col-12 col-sm-4 box-glow align-center">
-      <strong>Confirmations:</strong><br/>
-      <span class="text-glow">'.$raw_tx["confirmations"].'</span>
+    <div class="col-12 col-sm-4 align-center">
+      <div class="box-glow">
+        <strong>Confirmations:</strong><br/>
+        <span class="text-glow">'.$raw_tx["confirmations"].'</span>
+      </div>
     </div>
   </div>
   <br/>
 
   <div class="row">
-    <div class="col-12 box-glow align-center">
-      <strong>Block Hash:</strong><br/>
-      <span class="text-glow">'.$this->link_blockhash($raw_tx["blockhash"]).'</span>
+    <div class="col-12 align-center">
+      <div class="box-glow hover-box">
+        <strong>Block Hash:</strong><br/>
+        <span class="text-glow">'.$this->link_blockhash($raw_tx["blockhash"]).'</span>
+      </div>
     </div>
   </div>
   <br/>
@@ -649,9 +664,11 @@ if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
 {
   array_push($html, '
   <div class="row">
-    <div class="col-12 box-glow align-center">
-      <strong>Message:</strong><br/>
-      <span class="text-glow">'.htmlspecialchars($raw_tx["tx-comment"]).'</span>
+    <div class="col-12 align-center">
+      <div class="box-glow">
+        <strong>Message:</strong><br/>
+        <span class="text-glow">'.htmlspecialchars($raw_tx["tx-comment"]).'</span>
+      </div>
     </div>
   </div>
   <br/>
@@ -660,8 +677,10 @@ if (isset ($raw_tx["tx-comment"]) && $raw_tx["tx-comment"] != "")
 array_push($html, '
   <div class="row">
     <div class="col-12 box-glow align-center">
-      <strong>HEX Data:</strong><br/>
-      <span class="text-glow">'.$raw_tx["hex"].'</span>
+      <div class="box-glow">
+        <strong>HEX Data:</strong><br/>
+        <span class="text-glow">'.$raw_tx["hex"].'</span>
+      </div>
     </div>
   </div>
   </br>
@@ -672,67 +691,121 @@ array_push($html, '
     </div>
   </div>
   <br/>
-
-
-
-  </div>
-</div>
-
-
-
-
-
-
-<hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
 ');
 
-    
-    foreach ($raw_tx["vin"] as $key => $txin)
-    {
-      array_push($html, 'Input #'.($key+1).'<br>');
+foreach ($raw_tx["vin"] as $key => $txin)
+{
+  array_push($html, '
+    <div class="row">
+      <div class="col-12 box-glow align-center">
+        <div class="box-glow">
+          <span class="text-glow">Input #'.($key+1).'</span>
+          <br/><br/>
+  ');
+  if (isset ($txin["coinbase"])) 
+  {
+    array_push($html, '
+          <strong>Coinbase: </strong>
+          <span class="text-glow">'.$txin["coinbase"].'</span>
+          <br/><br/>
+          <strong>Sequence: </strong>
+          <span class="text-glow">'.$txin["sequence"].'</span>
+    ');
+  }
+  else
+  {
+    array_push($html, '
+          <strong>TX ID: </strong>
+          <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
+          <br/><br/>
+          <strong>TX Output: </strong>
+          <span class="text-glow">Input #'.$txin["vout"].'</span>
+          <br/><br/>
+          <strong>TX Sequence: </strong>
+          <span class="text-glow">Input #'.$txin["sequence"].'</span>
+          <br/><br/>
+          <strong>Script Sig (ASM): </strong>
+          <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
+          <br/><br/>
+          <strong>Script Sig (HEX): </strong>
+          <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
+          <br/><br/>
+    ');
+  }
+  array_push($html, '
+        </div>
+      </div>
+    </div>
+    </br>
+  ');
+}
 
-      if (isset ($txin["coinbase"]))
-      {
-        array_push($html, 'Coinbase: '.$txin["coinbase"].'<br>');
-        array_push($html, 'Sequence: '.$txin["sequence"].'<br>');
-      }
-      else
-      {
-        array_push($html, 'TX ID: '.$this->link_txid($txin["txid"]).'<br>');
-        array_push($html, 'TX Output: '.$txin["vout"].'<br>');
-        array_push($html, 'TX Sequence: '.$txin["sequence"].'<br>');
-        array_push($html, 'Script Sig (ASM): '.$txin["scriptSig"]["asm"].'<br>');
-        array_push($html, 'Script Sig (HEX): '.$txin["scriptSig"]["hex"].'<br>');
-      }
-    }
+array_push($html, '
+   <div class="row">
+    <div class="col-12">
+      <h3>Outputs</h3>
+    </div>
+  </div>
+  <br/>
+');
 
-    array_push($html, '<h3>Outputs</h3>');
-    
-    foreach ($raw_tx["vout"] as $key => $txout)
-    {
-      array_push($html, '"Output #'.($key+1).'<br>');
-      array_push($html, 'TX Value: '.$txout["value"].'<br>');
-      array_push($html, 'TX Type: '.$txout["scriptPubKey"]["type"].'<br>');
-      array_push($html, 'Required Sigs: '.$txout["scriptPubKey"]["reqSigs"].'<br>');
-      array_push($html, 'Script Pub Key (ASM): '.$txout["scriptPubKey"]["asm"].'<br>');
-      array_push($html, 'Script Pub Key (HEX): '.$txout["scriptPubKey"]["hex"].'<br>');
-    
-      if (isset ($txout["scriptPubKey"]["addresses"]))
-      {
-        foreach ($txout["scriptPubKey"]["addresses"] as $key => $address);
-        {
-          array_push($html, 'Address #'.$key+1, $address.'<br>');
-        }
-      }
-      
-    }
-    
-    array_push($html, '<h3>Raw Data</h3>');
-    
-    array_push($html, '<textarea name="rawtrans" rows="20" cols="100%">');
-    array_push($html, print_r($raw_tx, true));
-    array_push($html, '</textarea>');
+foreach ($raw_tx["vout"] as $key => $txout)
+{
+  array_push($html, '
+    <div class="row">
+      <div class="col-12 box-glow align-center">
+        <div class="box-glow">
+          <span class="text-glow">Output #'.($key+1).'</span>
+          <br/><br/>
 
+          <strong>TX Value: </strong>
+          <span class="text-glow">'.$txout["value"].'</span>
+          <br/><br/>
+          <strong>TX Type: </strong>
+          <span class="text-glow">'.$txout["scriptPubKey"]["type"].'</span>
+          <br/><br/>
+          <strong>Required Sigs: </strong>
+          <span class="text-glow">'.$txout["scriptPubKey"]["reqSigs"].'</span>
+          <br/><br/>
+          <strong>Script Pub Key (ASM): </strong>
+          <span class="text-glow">'.$txout["scriptPubKey"]["asm"].'</span>
+          <br/><br/>
+          <strong>Script Pub Key (HEX): </strong>
+          <span class="text-glow">'.$txout["scriptPubKey"]["hex"].'</span>
+          <br/><br/>
+  ');
+if (isset ($txout["scriptPubKey"]["addresses"]))
+{
+  foreach ($txout["scriptPubKey"]["addresses"] as $key => $address);
+  {
+    array_push($html, '<strong>Address #'.($key+1).':</strong> <span class="text-glow">'.$address.'</span><br/><br/>');
+  }
+}
+array_push($html, '
+        </div>
+      </div>
+    </div>
+    </br>
+  ');
+}
+
+array_push($html, '
+   <div class="row">
+    <div class="col-12">
+      <h3>Raw Data</h3>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-12 box-glow align-center">
+      <div class="box-glow">
+        <textarea id="raw_tx" rows="20" cols="100%">
+          '.print_r($raw_tx, true).'
+        </textarea>
+');
+
+    array_push($html, '</div>');
+    
     return join("", $html);
   }
 
