@@ -495,7 +495,7 @@ class BlockCrawler {
   // Decide what type of hash is being searched...
   function check_hash($hash)
   {
-    $html = []
+    $html = [];
     array_push($html, "Need to check if ".$hash." is a Block or TX hash...");
     return join("", $html);
     // Check for matching block hash...
@@ -510,7 +510,7 @@ class BlockCrawler {
   {
     $raw_tx = $this->WalletRPC->getrawtransaction($txid);
     
-    $html = []
+    $html = [];
     array_push($html, '
 
       <h3>TXID: <small> '.$raw_tx["txid"].'</small></h3>
@@ -532,7 +532,7 @@ class BlockCrawler {
     
     foreach ($raw_tx["vin"] as $key => $txin)
     {
-      array_push($html, '"Input #'.$key+1.'<br>');
+      array_push($html, 'Input #'.($key+1).'<br>');
 
       if (isset ($txin["coinbase"]))
       {
@@ -553,7 +553,7 @@ class BlockCrawler {
     
     foreach ($raw_tx["vout"] as $key => $txout)
     {
-      array_push($html, '"Output #'.$key+1.'<br>');
+      array_push($html, '"Output #'.($key+1).'<br>');
       array_push($html, 'TX Value: '.$txout["value"].'<br>');
       array_push($html, 'TX Type: '.$txout["scriptPubKey"]["type"].'<br>');
       array_push($html, 'Required Sigs: '.$txout["scriptPubKey"]["reqSigs"].'<br>');
@@ -582,7 +582,7 @@ class BlockCrawler {
   // Return the transaction detail page
   function lookup_address($address)
   {
-    $html = []
+    $html = [];
     array_push($html, 'Lookup Address: '.$address);
     return join("", $html);
   }
