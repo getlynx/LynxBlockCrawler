@@ -141,10 +141,10 @@ class BlockCrawler {
   }
 
   // Turn hashes into links for convenience
-  function link_blockhash ($hash) { return "<a href=\"index.php?hash=".$hash."\" title=\"View Block Details\">".$hash."</a>"; }
-  function link_txid ($txid) { return "<a href=\"index.php?txid=".$txid."\" title=\"View Transaction Details\">".$txid."</a>"; }
-  function link_address ($address) { return "<a href=\"index.php?address=".$address."\" title=\"View Address Details\">".$address."</a>"; }
-  function link_blockheight ($height) { return "<a href=\"index.php?height=".$height."\" title=\"View Block Details\">".$height."</a>"; }
+  function link_blockhash ($hash) { return "<a href=\"/block/".$hash."\" title=\"View Block Details\">".$hash."</a>"; }
+  function link_txid ($txid) { return "<a href=\"/tx/".$txid."\" title=\"View Transaction Details\">".$txid."</a>"; }
+  function link_address ($address) { return "<a href=\"/address/".$address."\" title=\"View Address Details\">".$address."</a>"; }
+  function link_blockheight ($height) { return "<a href=\"/height/".$height."\" title=\"View Block Details\">".$height."</a>"; }
 
   // Site Menu
   function site_menu()
@@ -180,7 +180,7 @@ class BlockCrawler {
   function site_search()
   {
     $html = [];
-    array_push($html, '<form method="post" action="index.php">');
+    array_push($html, '<form method="post" action="/">');
     array_push($html, '    <div class="form-group">');
     array_push($html, '        <input type="text" class="form-control" name="search" id="search" placeholder="Block Height / Block Hash / Tx ID ...">');
     array_push($html, '        <button id="button_search">GO!</button>');
@@ -232,7 +232,7 @@ class BlockCrawler {
     array_push($html, '      <div class="col-12">');
     array_push($html, '        <div id="network_info" class="box-glow">');
     array_push($html, '          <div class="row">');
-    array_push($html, '            <div class="col-12 col-sm-3"><strong>Height:</strong> <a href="index.php?height='.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Height:</strong> <a href="/height/'.$this->blockchaininfo["blocks"].'">'. number_format($this->blockchaininfo["blocks"], 0, '.', ',') .'</a></div>');
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Connected:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
     $realspeed = $this->WalletRPC->humanHashSpeed($this->networkhashps);
@@ -243,7 +243,7 @@ class BlockCrawler {
     array_push($html, '      <!-- DESKTOP Logo/Search -->');
     array_push($html, '      <div class="d-none d-md-block">');
     array_push($html, '        <div class="col-sm-12">');
-    array_push($html, '          <a href="index.php"><img class="img-fluid" src="/img/logo.png" /></a>');
+    array_push($html, '          <a href="/"><img class="img-fluid" src="/img/logo.png" /></a>');
     array_push($html, '        </div>');
     array_push($html, '        <div id="block_search">');
     array_push($html, '          '. $this->site_search());
@@ -327,7 +327,7 @@ class BlockCrawler {
         <div id="feed_website" class="col-sm-6">
           <h3 class="header-glow"> <a target="_blank" href="https://getlynx.io">Website</a></h3>
           <div class="feed-box box-glow hover-box">
-            <script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=https%3A%2F%2Fgetlynx.io%2Ffeed%2F&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=1&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=%23ffffff&amp;titlebgcol=transparent&amp;titletxtcol=%23ffffff&amp;itembgcol=transparent&amp;itemtxtcol=%23336699&amp;ctl=0"></script>
+            <script type="text/javascript" language="javascript" src="https://www.rssdog.com?url=https%3A%2F%2Fgetlynx.io%2Ffeed%2F&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=1&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=%23ffffff&amp;titlebgcol=transparent&amp;titletxtcol=%23ffffff&amp;itembgcol=transparent&amp;itemtxtcol=%23336699&amp;ctl=0"></script>
             <noscript>Please enable JavaScript.</noscript>
           </div>
         </div>
@@ -335,7 +335,7 @@ class BlockCrawler {
         <div id="feed_reddit" class="col-sm-6">
           <h3 class="header-glow"> <a target="_blank" href="https://reddit.com/r/LYNX">/r/LYNX</a></h3>
           <div class="feed-box box-glow hover-box">
-            <script type="text/javascript" language="javascript" src="https://www.rssdog.com/index.php?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Flynx%2Fhot.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=0&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=inherit&amp;titlebgcol=transparent&amp;titletxtcol=inherit&amp;itembgcol=transparent&amp;itemtxtcol=inherit&amp;ctl=0"></script>
+            <script type="text/javascript" language="javascript" src="https://www.rssdog.com?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Flynx%2Fhot.rss&amp;mode=javascript&amp;showonly=&amp;maxitems=0&amp;showdescs=1&amp;desctrim=0&amp;descmax=0&amp;tabwidth=100%25&amp;excltitle=1&amp;showdate=1&amp;nofollow=1&amp;utf8=1&amp;linktarget=_blank&amp;textsize=small&amp;bordercol=transparent&amp;headbgcol=transparent&amp;headtxtcol=inherit&amp;titlebgcol=transparent&amp;titletxtcol=inherit&amp;itembgcol=transparent&amp;itemtxtcol=inherit&amp;ctl=0"></script>
             <noscript>Please enable JavaScript.</noscript>
           </div>
         </div>
