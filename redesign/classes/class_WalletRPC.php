@@ -135,8 +135,16 @@ class WalletRPC {
   {
     $command["method"] = "getblockhash";
     $command["params"][0] = $height;
-    $results = $this->run($command);
-    return $results;
+    if is_numeric($height)
+    {
+      $results = $this->run($command);
+      return $results;
+    }
+    else
+    {
+      return FALSE;
+    }
+    
   }
 
 

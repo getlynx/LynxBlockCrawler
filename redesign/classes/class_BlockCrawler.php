@@ -107,7 +107,7 @@ class BlockCrawler {
     if ($err_key == "invalid_height")  { $err_txt = "Sorry, that is not a valid LYNX block number."; }
     
     // Hash Errors
-    if ($err_key == "no_hash")         { $err_txt = "You must provide a block hash."; }
+    if ($err_key == "no_hash")         { $err_txt = "You must provide a block hash or transaction ID."; }
     if ($err_key == "invalid_hash")    { $err_txt = "Sorry, that is not a valid LYNX hash."; }
 
     // Address Errors
