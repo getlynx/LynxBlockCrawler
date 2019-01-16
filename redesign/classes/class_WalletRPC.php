@@ -86,7 +86,7 @@ class WalletRPC {
     //  to the calling code as a string.  
     if (isset ($return["error"]) || !empty($return["error"]))
     {
-      $this->debug('WalletRPC.Run(): --ERROR-- '.$return["error"]["message"].' (Error Code: '.$return["error"]["code"].')');
+      $this->debug('WalletRPC.Run(): --ERROR-- '.$return["error"]["message"].' (Error Code: '.$return["error"]["code"].') --COMMAND--> '.$command);
       return FALSE;
 
     }
