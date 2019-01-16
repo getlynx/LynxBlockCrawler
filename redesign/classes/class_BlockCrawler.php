@@ -32,7 +32,7 @@ class BlockCrawler {
     $rpc_port = "";
 
     // Open lynx.conf (sitting outside of public scope)
-    $conf = fopen($conf_file, "r") or die("Unable to find config file...");
+    $conf = fopen($conf_file, "r") or die("Cannot connect. Unable to read config file located at ".$conf_file."...");
 
     // Iterate through each line until end-of-file
     while(!feof($conf)) {
