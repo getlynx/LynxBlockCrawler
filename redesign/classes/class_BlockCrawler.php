@@ -386,6 +386,7 @@ class BlockCrawler {
     else 
     { 
       if (empty($query)) { return $this->error("no_height"); }
+      if (! is_numeric($query) ) { return $this->error("invalid_height"); }
       $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
       if (! $block_hash || ! $raw_block) { return $this->error("invalid_height"); }
