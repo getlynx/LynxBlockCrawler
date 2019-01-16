@@ -1,7 +1,7 @@
 <?php
 
 // Show debug console output?
-define("DEBUG", TRUE);
+define("DEBUG", FALSE);
 
 /* 
 EXAMPLES
@@ -12,7 +12,7 @@ BLOCK: 55971fc9e31bfcbd3cb61bca352cb8f5345f691f2b502b78ffdd31cf448d7722
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
+$BlockCrawler = new BlockCrawler('/var/www/crawler.conf');
 //$BlockCrawler = new BlockCrawler('./_resources/test.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
