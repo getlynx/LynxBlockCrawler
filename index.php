@@ -32,9 +32,17 @@ $$ |  $$\ $$ |     $$  __$$ |$$ | $$ | $$ |$$ |$$   ____|$$ |
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/* 
+EXAMPLES
+--------
+ TXID: 17be4183fe08a03942a9aa6b32c48ddcd70ac86a7d7281acb68413eda1a82cb4
+BLOCK: 55971fc9e31bfcbd3cb61bca352cb8f5345f691f2b502b78ffdd31cf448d7722
+*/
+
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
+//$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
+$BlockCrawler = new BlockCrawler("./_resources/test.conf");
 
 // Check for a $_REQUEST and set page content accordingly...
     if (isset($_REQUEST["hash"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }

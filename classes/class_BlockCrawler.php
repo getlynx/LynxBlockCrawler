@@ -550,7 +550,7 @@ class BlockCrawler {
 
     }
     
-    $BlockCrawler->debug("LOAD PAGE: Block Details");
+    $this->debug("LOAD PAGE: Block Details");
     return join("", $html);
   }
 
@@ -786,7 +786,7 @@ array_push($html, '
 </div>
 ');
   
-    $BlockCrawler->debug("LOAD PAGE: Transaction Details");
+    $this->debug("LOAD PAGE: Transaction Details");
     return join("", $html);
   }
 
@@ -795,7 +795,7 @@ array_push($html, '
   {
     $html = [];
     array_push($html, 'Address lookup coming soon...');
-    $BlockCrawler->debug("LOAD PAGE: Address Details");
+    $this->debug("LOAD PAGE: Address Details");
     return join("", $html);
   }
 
