@@ -21,7 +21,7 @@ class BlockCrawler {
 
   function __construct($conf_file)
   {
-    $this->debug(" Class BlockCrawler(): Initializing...");
+    $this->debug("Class BlockCrawler(): Initializing...");
 
     date_default_timezone_set('UTC');
 
@@ -84,10 +84,10 @@ class BlockCrawler {
   }
 
   // Debug output to console
-  function debug($output="")
+  function debug($output)
   {
     if (DEBUG) {
-      if ( $output == "" ) { return FALSE; }
+      if ( empty($output) ) { return FALSE; }
       if ( is_array( $output ) ) { $output = implode( ',', $output); }
       echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
     }

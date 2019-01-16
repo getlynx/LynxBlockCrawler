@@ -24,10 +24,10 @@ class WalletRPC {
   }
 
   // Debug output to console
-  function debug($output="")
+   function debug($output)
   {
     if (DEBUG) {
-      if ( $output == "" ) { return FALSE; }
+      if ( empty($output) ) { return FALSE; }
       if ( is_array( $output ) ) { $output = implode( ',', $output); }
       echo "<script>console.log( 'DEBUG --> " . $output . "' );</script>";
     }
