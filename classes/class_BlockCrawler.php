@@ -201,7 +201,7 @@ class BlockCrawler {
     array_push($html, '  <meta http-equiv="X-UA-Compatible" content="IE=edge">');
     array_push($html, '  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />');
     array_push($html, '  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />');
-    array_push($html, '  <link rel="stylesheet" media="screen" href="css/style.css" />');
+    array_push($html, '  <link rel="stylesheet" media="screen" href="/css/style.css" />');
     array_push($html, '  <link rel="shortcut icon" href="http://austincaine.com/lynx/blockcrawler/redesign/img/lynx256.png" />');
     array_push($html, '</head>');
     array_push($html, '<body class="loading">');
@@ -243,7 +243,7 @@ class BlockCrawler {
     array_push($html, '      <!-- DESKTOP Logo/Search -->');
     array_push($html, '      <div class="d-none d-md-block">');
     array_push($html, '        <div class="col-sm-12">');
-    array_push($html, '          <a href="index.php"><img class="img-fluid" src="img/logo.png" /></a>');
+    array_push($html, '          <a href="index.php"><img class="img-fluid" src="/img/logo.png" /></a>');
     array_push($html, '        </div>');
     array_push($html, '        <div id="block_search">');
     array_push($html, '          '. $this->site_search());
@@ -256,7 +256,7 @@ class BlockCrawler {
     array_push($html, '      <!-- MOBILE Logo/Search -->');
     array_push($html, '      <div class="col-12 d-block d-md-none">');
     array_push($html, '        <div class="col-sm-12">');
-    array_push($html, '          <a href="/"><img class="img-fluid" src="img/logo_mobile.png" /></a>');
+    array_push($html, '          <a href="/"><img class="img-fluid" src="/img/logo_mobile.png" /></a>');
     array_push($html, '        </div>');
     array_push($html, '        <div id="block_search_mobile" class="col-12">');
     array_push($html, '          '. $this->site_search());
@@ -265,6 +265,12 @@ class BlockCrawler {
     array_push($html, '    </div>');
     array_push($html, '    <div id="site_body">');
     return join("", $html);
+  }
+
+  // Site Content
+  function site_content()
+  {
+    return $this->site_content;
   }
 
   // Site Footer
@@ -544,6 +550,7 @@ class BlockCrawler {
 
     }
     
+    $BlockCrawler->debug("LOAD PAGE: Block Details");
     return join("", $html);
   }
 
@@ -778,7 +785,8 @@ array_push($html, '
   </div>
 </div>
 ');
-
+  
+    $BlockCrawler->debug("LOAD PAGE: Transaction Details");
     return join("", $html);
   }
 
@@ -786,7 +794,8 @@ array_push($html, '
   function lookup_address($address)
   {
     $html = [];
-    array_push($html, 'Address: '.$address);
+    array_push($html, 'Address lookup coming soon...');
+    $BlockCrawler->debug("LOAD PAGE: Address Details");
     return join("", $html);
   }
 

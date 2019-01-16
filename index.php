@@ -1,138 +1,90 @@
 <?php
 
-	require_once ("bc_daemon.php");
-	require_once ("bc_layout.php");
+// Show debug console output?
+define("DEBUG", FALSE);
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+$$\   $$\     $$\ $$\   $$\ $$\   $$\                               
+$$ |  \$$\   $$  |$$$\  $$ |$$ |  $$ |                              
+$$ |   \$$\ $$  / $$$$\ $$ |\$$\ $$  |                              
+$$ |    \$$$$  /  $$ $$\$$ | \$$$$  /                               
+$$ |     \$$  /   $$ \$$$$ | $$  $$<                                
+$$ |      $$ |    $$ |\$$$ |$$  /\$$\                               
+$$$$$$$$\ $$ |    $$ | \$$ |$$ /  $$ |                              
+\________|\__|    \__|  \__|\__|  \__|                              
+$$$$$$$\  $$\                     $$\                               
+$$  __$$\ $$ |                    $$ |                              
+$$ |  $$ |$$ | $$$$$$\   $$$$$$$\ $$ |  $$\                         
+$$$$$$$\ |$$ |$$  __$$\ $$  _____|$$ | $$  |                        
+$$  __$$\ $$ |$$ /  $$ |$$ /      $$$$$$  /                         
+$$ |  $$ |$$ |$$ |  $$ |$$ |      $$  _$$<                          
+$$$$$$$  |$$ |\$$$$$$  |\$$$$$$$\ $$ | \$$\                         
+\_______/ \__| \______/  \_______|\__|  \__|                        
+ $$$$$$\                                   $$\                      
+$$  __$$\                                  $$ |                     
+$$ /  \__| $$$$$$\  $$$$$$\  $$\  $$\  $$\ $$ | $$$$$$\   $$$$$$\   
+$$ |      $$  __$$\ \____$$\ $$ | $$ | $$ |$$ |$$  __$$\ $$  __$$\  
+$$ |      $$ |  \__|$$$$$$$ |$$ | $$ | $$ |$$ |$$$$$$$$ |$$ |  \__| 
+$$ |  $$\ $$ |     $$  __$$ |$$ | $$ | $$ |$$ |$$   ____|$$ |       
+\$$$$$$  |$$ |     \$$$$$$$ |\$$$$$\$$$$  |$$ |\$$$$$$$\ $$ |   by  
+ \______/ \__|      \_______| \_____\____/ \__| \_______|\__| auscoi
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// Include and instantiate the BlockCrawler class 
+require_once ("./classes/class_BlockCrawler.php");
+$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
+
+// Check for a $_REQUEST and set page content accordingly...
+    if (isset($_REQUEST["hash"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
+elseif (isset($_REQUEST["txid"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_txid($_REQUEST["txid"]); }
+elseif (isset($_REQUEST["address"])) { $BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["address"]); }
+elseif (isset($_REQUEST["height"]))  { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["height"]); }
+elseif (isset($_REQUEST["search"]))  {
 	
-	
-//	If a block hash was provided the block detail is shown
-	if (isset ($_REQUEST["block_hash"]))
-	{
-		site_header ("Lynx Explorer - Block Detail Page");
-		
-		block_detail ($_REQUEST["block_hash"], TRUE);
+	// Make sure there's a request...
+	if (empty($_REQUEST["search"])) 
+	{ 
+		$BlockCrawler->site_content = $BlockCrawler->error("no_request");
 	}
-	
-//	If a block height is provided the block detail is shown
-	elseif (isset ($_REQUEST["block_height"]))
+	// Make sure it's alphanumeric only...
+	elseif (! ctype_alnum($_REQUEST["search"])) 
 	{
-		site_header ("Lynx Explorer - Block Detail Page");
-		
-		block_detail ($_REQUEST["block_height"]);
+		$BlockCrawler->site_content = $BlockCrawler->error("alphanumeric");
 	}
-	
-//	If a TXid was provided the TX Detail is shown
-	elseif (isset ($_REQUEST["transaction"]))
+	// Check query character length...
+	elseif (strlen($_REQUEST["search"]) == 64) 
 	{
-		site_header ("Lynx Explorer - Transaction Detail Page");
-		
-		tx_detail ($_REQUEST["transaction"]);
+		// The query is either a txid or blockhash
+		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (hash)");
+		$BlockCrawler->site_content = $BlockCrawler->check_hash($_REQUEST["search"]);
 	}
-	
-//	If there were no request parameters the menu is shown
-	else
+	/* 
+	elseif (strlen($_REQUEST["search"]) > 30) 
 	{
-		site_header ("Lynx Explorer");
-		
-		echo "	<div id=\"node_info\">\n";
-		echo "\n";
-		
-		$network_info = getinfo ();
-		
-		echo "		<div class=\"node_detail\">\n";
-		echo "			<span class=\"node_desc\">Block Count:</span><br>\n";
-		echo "			<a href=\"/?block_height=".$network_info["blocks"]."\">".$network_info["blocks"]."</a>\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		echo "		<div class=\"node_detail\">\n";
-		echo "			<span class=\"node_desc\">Difficulty:</span><br>\n";
-		echo "			".$network_info["difficulty"]."\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		echo "		<div class=\"node_detail\">\n";
-		echo "			<span class=\"node_desc\">Connections:</span><br>\n";
-		echo "			".$network_info["connections"]."\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		$net_speed = getnetworkhashps ();
-		$realspeed = humanHashSpeed($net_speed);
-		if ($net_speed != "")
-		{
-			echo "		<div class=\"node_detail\">\n";
-			echo "			<span class=\"node_desc\">Network H/s:</span><br>\n";
-			echo "			".round($realspeed["hashrate"],2)." ".$realspeed["hashspeed"]."/s\n";
-			echo "		</div>\n";
-			echo "\n";
-		}
-		
-		echo "	</div>\n";
-		echo "\n";
-
-		echo "	<div id=\"site_menu\">\n";
-		echo "\n";
-		
-		echo "		<div class=\"menu_item\">\n";
-		echo "			<span class=\"menu_desc\">Enter a Block Index / Height</span><br>\n";
-		echo "			<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"post\">\n";
-		echo "				<input class=\"textfield\" type=\"text\" name=\"block_height\" value=\"".$network_info["blocks"]."\" size=\"40\">\n";
-		echo "				<input class=\"button\" type=\"submit\" name=\"submit\" value=\"Jump To Block\">\n";
-		echo "			</form>\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		echo "		<div class=\"menu_item\">\n";
-		echo "			<span class=\"menu_desc\">Enter A Block Hash</span><br>\n";
-		echo "			<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"post\">\n";
-		echo "				<input class=\"textfield\" type=\"text\" name=\"block_hash\" size=\"40\">\n";
-		echo "				<input class=\"button\" type=\"submit\" name=\"submit\" value=\"Jump To Block\">\n";
-		echo "			</form>\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		echo "		<div class=\"menu_item\">\n";
-		echo "			<span class=\"menu_desc\">Enter A Transaction ID</span><br>\n";
-		echo "			<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"post\">\n";
-		echo "				<input class=\"textfield\" type=\"text\" name=\"transaction\" size=\"40\">\n";
-		echo "				<input class=\"button\" type=\"submit\" name=\"submit\" value=\"Jump To TX\">\n";
-		echo "			</form>\n";
-		echo "		</div>\n";
-		echo "\n";
-
-		echo "	</div>\n";
-		echo "\n";
+		// The query is an address
+		$BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["search"]);
+		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (address)");
 	}
-	
-	
-	site_footer ();
+	*/ 
+	else {
+		// The query is a block height
+		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (block height)");
+		$BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["search"]);
+	}
+} 
+else 
+{
 
-/******************************************************************************
-	This script is Copyright © 2013 Jake Paysnoe.
-	I hereby release this script into the public domain.
-	Jake Paysnoe Jun 26, 2013
-******************************************************************************/
-
-function humanHashSpeed($hashPerSecond) {
-		$hashspeed = 'H';
-		$hashrate = $hashPerSecond;
-		if ($hashPerSecond >= 1000) {
-			$hashspeed = 'KH';
-			$hashrate = $hashPerSecond / 1000;
-		}
-		if ($hashPerSecond >= 1000000) {
-			$hashspeed = 'MH';
-			$hashrate = $hashPerSecond / 1000 / 1000;
-		}
-		if ($hashPerSecond >= 1000000000) {
-			$hashspeed = 'GH';
-			$hashrate = $hashPerSecond / 1000 / 1000 / 1000;
-		}
-		if ($hashPerSecond >= 1000000000000) {
-			$hashspeed = 'TH';
-			$hashrate = $hashPerSecond / 1000 / 1000 / 1000 / 1000;
-		}
-		return array('hashrate'=>$hashrate, 'hashspeed'=>$hashspeed);
+	// No query? Display dashboard instead!
+	$BlockCrawler->debug("LOAD PAGE: Dashboard");
+	$BlockCrawler->site_content = $BlockCrawler->show_dashboard();
 }
+
+// Build page
+echo $BlockCrawler->site_header();
+echo $BlockCrawler->site_content();
+echo $BlockCrawler->site_footer(); 
 
 ?>
