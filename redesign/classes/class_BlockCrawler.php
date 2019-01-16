@@ -543,10 +543,12 @@ class BlockCrawler {
   {
     // Check for matching block hash...
     $return = $this->WalletRPC->getblock($hash);
+    echo $return."<br><br>";
     if (!isset ($return["error"]) || empty($return["error"])) { return $this->lookup_block($hash, True); }
     
     // If none, check for matching tx hash...
     $return = $this->WalletRPC->getrawtransaction($hash);
+    echo $return;
     if (!isset ($return["error"]) || empty($return["error"])) { return $this->lookup_txid($hash); }
     
     // If none, send error
