@@ -12,8 +12,8 @@ BLOCK: 984b30fc9bb5e5ff424ad7f4ec1930538a7b14a2d93e58ad7976c23154ea4a76
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-//$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
-$BlockCrawler = new BlockCrawler('./_resources/test.conf');
+$BlockCrawler = new BlockCrawler('/var/www/lynx.conf');
+//$BlockCrawler = new BlockCrawler('./_resources/test.conf');
 
 // Check for a $_REQUEST and set page content accordingly...
     if (isset($_REQUEST["hash"]))    { $BlockCrawler->site_content = $BlockCrawler->lookup_block($_REQUEST["hash"], TRUE); }
