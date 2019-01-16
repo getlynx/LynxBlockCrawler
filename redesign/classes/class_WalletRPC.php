@@ -34,10 +34,10 @@ class WalletRPC {
   }
 
   // Returns Array on success
-  function run($command="")
+  function run($command)
   {
     // Command must be supplied
-    if ($command == ""){return FALSE;}
+    if (empty($command)) {return FALSE;}
 
     //  Encode the request as JSON for the wallet
     $jdata = json_encode($command);
@@ -86,7 +86,7 @@ class WalletRPC {
     //  to the calling code as a string.  
     if (isset ($return["error"]) || !empty($return["error"]))
     {
-      $this->debug('WalletRPC.Run(): --ERROR-- '.$return["error"]["message"].' (Error Code: '.$return["error"]["code"].') --COMMAND--> '.$command);
+      $this->debug('WalletRPC.Run(): --ERROR-- '.$return["error"]["message"].' (Error Code: '.$return["error"]["code"].') --COMMAND--> '.$jdata);
       return FALSE;
 
     }
