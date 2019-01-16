@@ -6,8 +6,8 @@ define("DEBUG", TRUE);
 /* 
 EXAMPLES
 --------
- TXID: c2adb964220f170f6c4fe9002f0db19a6f9c9608f6f765ba0629ac3897028de5
-BLOCK: 984b30fc9bb5e5ff424ad7f4ec1930538a7b14a2d93e58ad7976c23154ea4a76
+ TXID: 17be4183fe08a03942a9aa6b32c48ddcd70ac86a7d7281acb68413eda1a82cb4
+BLOCK: 55971fc9e31bfcbd3cb61bca352cb8f5345f691f2b502b78ffdd31cf448d7722
 */
 
 // Include and instantiate the BlockCrawler class 

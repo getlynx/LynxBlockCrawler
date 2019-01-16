@@ -1,6 +1,6 @@
 $(window).on("load", function() {
 
-    //load_reddit();
+    //feed_reddit();
 
     mobile_menu_init();
 
@@ -19,7 +19,7 @@ function feed_website() {
     });
 }
 
-function load_reddit() {
+function feed_reddit() {
     console.log("Getting LYNX Reddit RSS...");
     rssurl = "https://www.reddit.com/r/lynx/hot.rss";
     $.get(rssurl, function(data) {

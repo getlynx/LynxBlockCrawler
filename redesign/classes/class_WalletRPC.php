@@ -42,7 +42,7 @@ class WalletRPC {
     //  Encode the request as JSON for the wallet
     $jdata = json_encode($command);
 
-    $this->debug(" WalletRPC.Run(): ".$jdata);
+    $this->debug("WalletRPC.Run(): ".$jdata);
 
     //  Create curl connection object
     $coind = curl_init();
@@ -86,9 +86,10 @@ class WalletRPC {
     //  to the calling code as a string.  
     if (isset ($return["error"]) || !empty($return["error"]))
     {
-      return $return["error"]["message"]."(Error Code: ".$return["error"]["code"].")";
-    }
+      $this->debug("WalletRPC.Run(): --ERROR-- ".$return["error"]["message"]."(Error Code: ".$return["error"]["code"].")";
+      return FALSE;
 
+    }
     //  If there was no error the result is returned to the calling code
     else
     {

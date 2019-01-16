@@ -355,30 +355,46 @@ class BlockCrawler {
     return join("", $html);
   }
 
+
+  // Determine what type of hash is being searched...
+  function check_hash($hash)
+  {
+    // Check for matching block hash...
+    $return = $this->WalletRPC->getblock($hash);
+    if ($return) { return $this->lookup_block($hash, True); }
+    
+    // If FALSE, check for matching tx hash...
+    $return = $this->WalletRPC->getrawtransaction($hash);
+    if ($return) { return $this->lookup_txid($hash); }
+    
+    // If FALSE, send error
+    { return $this->error("invalid_hash"); }
+  }
+
+
   
 
   // Return the block detail page
   function lookup_block($query="", $is_hash=FALSE)
   {
-
     if ($is_hash) 
     {
-      if (empty($query)) {$this->error("no_hash"); return FALSE;}
+      if (empty($query)) { return $this->error("no_hash"); }
       $raw_block = $this->WalletRPC->getblock($query);
-      if (!isset($raw_block["time"]) || empty($raw_block["time"])) { return $this->error("invalid_hash"); }
-    } else { 
-      if (empty($query)) {$this->error("no_height"); return FALSE;}
+      if (! $raw_block) { return $this->error("invalid_hash"); }
+    } 
+    else 
+    { 
+      if (empty($query)) { return $this->error("no_height"); }
       $block_hash = $this->WalletRPC->getblockhash(intval($query));
       $raw_block = $this->WalletRPC->getblock($block_hash);
-      if (!isset($raw_block["time"]) || empty($raw_block["time"])) { return $this->error("invalid_height"); }
+      if (! $block_hash || ! $raw_block) { return $this->error("invalid_height"); }
     }
 
+    $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
-
-    $block_date = date('m/d/Y \@ H:i:s', $raw_block["time"]);
-
     $html = [];
-
+    
     array_push($html, '<div id="block_details" class="list-details">');
     array_push($html, '  <div class="row">');
     array_push($html, '    <div class="col-12">');
@@ -409,7 +425,7 @@ class BlockCrawler {
     array_push($html, '    <div class="row">');
     array_push($html, '      <div class="col-12 align-center">');
     array_push($html, '        <div class="box-glow">');
-    array_push($html, '          <span class="text-glow">'.$block_date.'</span> ');
+    array_push($html, '          <span class="text-glow">'.$timestamp.'</span> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
@@ -426,7 +442,7 @@ class BlockCrawler {
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-6 align-center">');
     array_push($html, '        <div class="box-glow">');
-    array_push($html, '          <span class="text-glow">'.$block_date.'</span> ');
+    array_push($html, '          <span class="text-glow">'.$timestamp.'</span> ');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '      <div class="col-3 align-center">');
@@ -538,22 +554,6 @@ class BlockCrawler {
 
 
 
-  // Decide what type of hash is being searched...
-  function check_hash($hash)
-  {
-    // Check for matching block hash...
-    $return = $this->WalletRPC->getblock($hash);
-    echo $return."<br><br>";
-    if (!isset ($return["error"]) || empty($return["error"])) { return $this->lookup_block($hash, True); }
-    
-    // If none, check for matching tx hash...
-    $return = $this->WalletRPC->getrawtransaction($hash);
-    echo $return;
-    if (!isset ($return["error"]) || empty($return["error"])) { return $this->lookup_txid($hash); }
-    
-    // If none, send error
-    { return $this->error("invalid_hash"); }
-  }
 
 
 
@@ -567,11 +567,11 @@ class BlockCrawler {
   // Return the transaction detail page
   function lookup_txid($query)
   {
-    if ($query == "") {$this->error("no_hash"); return FALSE;}
+    if ($query == "") { return $this->error("no_hash"); }
     
     $raw_tx = $this->WalletRPC->getrawtransaction($query);
 
-    if ($raw_tx == Null) { return $this->error("invalid_hash"); }
+    if (! $raw_tx) { return $this->error("invalid_hash"); }
     
     $html = [];
     array_push($html, '
@@ -785,7 +785,7 @@ array_push($html, '
   function lookup_address($address)
   {
     $html = [];
-    array_push($html, 'Lookup Address: '.$address);
+    array_push($html, 'Address: '.$address);
     return join("", $html);
   }
 
