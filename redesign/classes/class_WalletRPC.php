@@ -57,7 +57,7 @@ class WalletRPC {
     //  Provide the username and password for the connection
     curl_setopt($coind, CURLOPT_USERPWD, $this->rpc_user.":".$this->rpc_pass);
 
-    //  JSON-RPC Header for the wallet
+    //  JSON-RPC header for the wallet
     curl_setopt($coind, CURLOPT_HTTPHEADER, array ("Content-type: application/json"));
 
     //  Prepare curl for a POST request
@@ -84,7 +84,7 @@ class WalletRPC {
 
     //  If an error message was received the message is returned
     //  to the calling code as a string.  
-    if (isset ($return["error"]) || $return["error"] != "")
+    if (isset ($return["error"]) || !empty($return["error"]))
     {
       return $return["error"]["message"]."(Error Code: ".$return["error"]["code"].")";
     }
