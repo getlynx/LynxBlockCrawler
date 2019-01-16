@@ -131,10 +131,11 @@ class WalletRPC {
   ################################################################################################
   # getblockhash
 
-  function getblockhash($height=0)
+  function getblockhash($height=FALSE)
   {
     $command["method"] = "getblockhash";
     $command["params"][0] = $height;
+    echo $height;
     if ( is_numeric($height) )
     {
       $results = $this->run($command);
