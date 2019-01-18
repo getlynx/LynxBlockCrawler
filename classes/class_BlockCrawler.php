@@ -63,9 +63,10 @@ class BlockCrawler {
     $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
     // Populate info vars
+    $this->databaseinfo   = $this->WalletRPC->getdatabaseinfo();
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
     $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
-    //$this->walletinfo     = $this->WalletRPC->getwalletinfo();
+    $this->walletinfo     = $this->WalletRPC->getwalletinfo();
     $this->networkhashps  = $this->WalletRPC->getnetworkhashps();
     $this->site_content   = $this->show_dashboard();
   }
@@ -799,6 +800,52 @@ array_push($html, '
     return join("", $html);
   }
 
+
+
+
+
+
+
+
+  ///////////////////////////////
+  //                           //
+  //  BLOCKCHAIN--2--DATABASE  //
+  //                           //
+  ///////////////////////////////
+
+  // Look up latest database info
+  function getdatabaseinfo() {
+    // TODO
+    $info["block"] = 0;
+    return $info;
+  }
+
+  // Chain blocks are immutable, only bother writing NEW blocks
+  function syncdatabase() {
+    $latest_chain_block = $this->blockchaininfo["blocks"];
+    $latest_db_block = $this->databaseinfo["blocks"]; // <-- TODO
+    $i = $latest_db_block;
+    while ($i <= $latest_chain_block) {
+      $block_hash = $this->WalletRPC->getblockhash(intval($query));
+      $raw_block = $this->WalletRPC->getblock($block_hash);
+      $this->updatedatabase($raw_block); // <-- TODO
+      $i++;
+    }
+
+  // Write new data to the database
+  function updatedatabase($raw_block) {
+    // TODO
+
+/***
+
+DB TABLES:
+----------
+blocks          // block data, primary_key = block_height
+transactions    // tx data, primary_key = tx_id, same data on tx detail page
+addresses       // primary_key = public_address ... txs_in, txs_out, total_in, total_out
+
+***/
+  }
 
 
 
