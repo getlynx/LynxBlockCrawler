@@ -34,8 +34,8 @@ $$ |  $$\ $$ |     $$  __$$ |$$ | $$ | $$ |$$ |$$   ____|$$ |
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
-//$BlockCrawler = new BlockCrawler("./_resources/test.conf"); // FOR DEBUGGING...
+//$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
+$BlockCrawler = new BlockCrawler("./_resources/test.conf"); // FOR DEBUGGING...
 /* 
 DEBUG EXAMPLES
 --------------
@@ -67,14 +67,12 @@ elseif (isset($_REQUEST["search"]))  {
 		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (hash)");
 		$BlockCrawler->site_content = $BlockCrawler->check_hash($_REQUEST["search"]);
 	}
-	/* 
 	elseif (strlen($_REQUEST["search"]) > 30) 
 	{
 		// The query is an address
-		$BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["search"]);
 		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (address)");
+		$BlockCrawler->site_content = $BlockCrawler->lookup_address($_REQUEST["search"]);
 	}
-	*/ 
 	else {
 		// The query is a block height
 		$BlockCrawler->debug("QUERY: ".$_REQUEST["search"]." (block height)");
@@ -83,7 +81,6 @@ elseif (isset($_REQUEST["search"]))  {
 } 
 else 
 {
-
 	// No query? Display dashboard instead!
 	$BlockCrawler->debug("LOAD PAGE: Dashboard");
 	$BlockCrawler->site_content = $BlockCrawler->show_dashboard();
