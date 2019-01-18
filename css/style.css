@@ -84,6 +84,8 @@ body
     vertical-align: middle;
     float: none;
 }
+
+
 .box-glow
 {
     background-color: transparent; 
@@ -381,8 +383,10 @@ button:hover,
 .list-details .box-glow
 {
     padding: .5rem;
-    overflow-x: auto;
     border-radius: .5rem;
+    word-break: break-all;
+    font-size: 90%;
+
 }
 
 .list-details .big-button
@@ -408,6 +412,10 @@ button:hover,
     font-family: monospace;
 }
 
+#tx_inouts .box-glow
+{
+    font-size: 75%;
+}
 
 
 /*****************

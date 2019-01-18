@@ -670,57 +670,58 @@ array_push($html, '
     </div>
   </div>
   </br>
-
-  <div class="row">
-    <div class="col-12">
-      <h3>Inputs</h3>
+  <section id="tx_inouts">
+    <div class="row">
+      <div class="col-12">
+        <h3>Inputs</h3>
+      </div>
     </div>
-  </div>
-  <br/>
+    <br/>
 ');
 
 foreach ($raw_tx["vin"] as $key => $txin)
 {
   array_push($html, '
-    <div class="row">
-      <div class="col-12">
-        <span class="text-glow">Input #'.($key+1).'</span>
-        <div class="box-glow word-break">
+      <div class="row">
+        <div class="col-12">
+          <span class="text-glow">Input #'.($key+1).'</span>
+          <div class="box-glow word-break">
   ');
   if (isset ($txin["coinbase"])) 
   {
     array_push($html, '
-          <strong>Coinbase: </strong>
-          <span class="text-glow">'.$txin["coinbase"].'</span>
-          <br/>
-          <strong>Sequence: </strong>
-          <span class="text-glow">'.$txin["sequence"].'</span>
+            <strong>Coinbase: </strong>
+            <span class="text-glow">'.$txin["coinbase"].'</span>
+            <br/>
+            <strong>Sequence: </strong>
+            <span class="text-glow">'.$txin["sequence"].'</span>
     ');
   }
   else
   {
     array_push($html, '
-          <strong>TX ID: </strong>
-          <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
-          <br/>
-          <strong>TX Output: </strong>
-          <span class="text-glow">Input #'.$txin["vout"].'</span>
-          <br/>
-          <strong>TX Sequence: </strong>
-          <span class="text-glow">Input #'.$txin["sequence"].'</span>
-          <br/>
-          <strong>Script Sig (ASM): </strong>
-          <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
-          <br/>
-          <strong>Script Sig (HEX): </strong>
-          <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
+            <strong>TX ID: </strong>
+            <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
+            <br/>
+            <strong>TX Output: </strong>
+            <span class="text-glow">Input #'.$txin["vout"].'</span>
+            <br/>
+            <strong>TX Sequence: </strong>
+            <span class="text-glow">Input #'.$txin["sequence"].'</span>
+            <br/>
+            <strong>Script Sig (ASM): </strong>
+            <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
+            <br/>
+            <strong>Script Sig (HEX): </strong>
+            <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
     ');
   }
   array_push($html, '
+          </div>
         </div>
       </div>
-    </div>
-    </br>
+      </br>
+    </section>      
   ');
 }
 
