@@ -220,9 +220,9 @@ class Block2Redis {
 		if (isset ($raw_output["scriptPubKey"]["addresses"]))
 		{
 			$addresses = '"addresses":{';
-			foreach ($raw_output["scriptPubKey"]["addresses"] as $address)
+			foreach ($raw_output["scriptPubKey"]["addresses"] as $key => $address)
 			{
-				$addresses = $addresses."'".$address."',";
+				$addresses = $addresses.'"'.$key.'":"'.$address.'",';
 			}
 			$addresses = $addresses."}";
 		}
