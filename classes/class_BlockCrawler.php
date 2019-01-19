@@ -17,6 +17,7 @@ class BlockCrawler {
   var $site_footer;
 
   var $WalletRPC;
+  var $Block2Redis;
 
 
   function __construct($conf_file)
@@ -63,11 +64,14 @@ class BlockCrawler {
     $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
     // Populate info vars
+    $this->databaseinfo   = $this->WalletRPC->getdatabaseinfo();
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
     $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
-    //$this->walletinfo     = $this->WalletRPC->getwalletinfo();
+    $this->walletinfo     = $this->WalletRPC->getwalletinfo();
     $this->networkhashps  = $this->WalletRPC->getnetworkhashps();
     $this->site_content   = $this->show_dashboard();
+
+    $this->Blockchain2Redis
   }
 
   // Rounding to chopping too many decimal places (i.e. difficulty)
@@ -291,9 +295,9 @@ class BlockCrawler {
     array_push($html, '<script src="https://code.jquery.com/jquery-2.2.4.js"></script>');
     array_push($html, '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>');
     array_push($html, '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>');
-    array_push($html, '<script src="js/particles.js"></script>');
-    array_push($html, '<script src="js/xml2json.js"></script>');
-    array_push($html, '<script src="js/functions.js"></script>');
+    array_push($html, '<script src="/js/particles.js"></script>');
+    array_push($html, '<script src="/js/xml2json.js"></script>');
+    array_push($html, '<script src="/js/functions.js"></script>');
     array_push($html, '<script>
       // Load Particles.js background
       (function() {
@@ -309,7 +313,7 @@ class BlockCrawler {
           })
       })
       }).call(this);
-      $(window).on("load", function() { particlesJS.load("particles-js", "js/particlesjs-config.json"); });
+      $(window).on("load", function() { particlesJS.load("particles-js", "/js/particlesjs-config.json"); });
     ');
     array_push($html, '</script>');
     array_push($html, '</body>');
@@ -415,7 +419,7 @@ class BlockCrawler {
     if ($raw_block["previousblockhash"])
     {
       array_push($html, '        <div class="big-button">');
-      array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+      array_push($html, '          <a class="button" title="View Previous Block" href="/block/'.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
       array_push($html, '        </div>');
     }
     array_push($html, '      </div>');
@@ -423,7 +427,7 @@ class BlockCrawler {
     if ($raw_block["nextblockhash"])
     {
       array_push($html, '        <div class="big-button">');
-      array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+      array_push($html, '          <a class="button" title="View Next Block" href="/block/'.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
       array_push($html, '        </div>');
     }
     array_push($html, '      </div>');
@@ -443,7 +447,7 @@ class BlockCrawler {
     if ($raw_block["previousblockhash"])
     {
       array_push($html, '        <div class="big-button">');
-      array_push($html, '          <a class="button" title="View Previous Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
+      array_push($html, '          <a class="button" title="View Previous Block" href="/block/'.$raw_block["previousblockhash"].'">&laquo; Prev</a> ');
       array_push($html, '        </div>');
     }
     array_push($html, '      </div>');
@@ -456,7 +460,7 @@ class BlockCrawler {
     if ($raw_block["nextblockhash"])
     {
       array_push($html, '        <div class="big-button">');
-      array_push($html, '          <a class="button" title="View Next Block" href="'.$_SERVER["PHP_SELF"].'?hash='.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
+      array_push($html, '          <a class="button" title="View Next Block" href="/block/'.$raw_block["nextblockhash"].'">Next &raquo;</a> ');
       array_push($html, '        </div>');
     }
     array_push($html, '      </div>');
@@ -509,7 +513,7 @@ class BlockCrawler {
     array_push($html, '    <div class="col-12 col-sm-4 align-center">');
     array_push($html, '      <div class="box-glow">');
     array_push($html, '        <strong>Difficulty:</strong><br/>');
-    array_push($html, '        <span class="text-glow">0.'.number_format($raw_block["difficulty"], 8, '.', '').'</span> ');
+    array_push($html, '        <span class="text-glow">0.'.number_format($raw_block["difficulty"], 12, '.', '').'</span> ');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
     array_push($html, '  </div>');
@@ -670,58 +674,57 @@ array_push($html, '
     </div>
   </div>
   </br>
-  <section id="tx_inouts">
-    <div class="row">
-      <div class="col-12">
-        <h3>Inputs</h3>
-      </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Inputs</h3>
     </div>
-    <br/>
+  </div>
+  <br/>
 ');
 
 foreach ($raw_tx["vin"] as $key => $txin)
 {
   array_push($html, '
-      <div class="row">
-        <div class="col-12">
-          <span class="text-glow">Input #'.($key+1).'</span>
-          <div class="box-glow word-break">
+    <div class="row">
+      <div class="col-12">
+        <span class="text-glow">Input #'.($key+1).'</span>
+        <div class="box-glow word-break">
   ');
   if (isset ($txin["coinbase"])) 
   {
     array_push($html, '
-            <strong>Coinbase: </strong>
-            <span class="text-glow">'.$txin["coinbase"].'</span>
-            <br/>
-            <strong>Sequence: </strong>
-            <span class="text-glow">'.$txin["sequence"].'</span>
+          <strong>Coinbase: </strong>
+          <span class="text-glow">'.$txin["coinbase"].'</span>
+          <br/>
+          <strong>Sequence: </strong>
+          <span class="text-glow">'.$txin["sequence"].'</span>
     ');
   }
   else
   {
     array_push($html, '
-            <strong>TX ID: </strong>
-            <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
-            <br/>
-            <strong>TX Output: </strong>
-            <span class="text-glow">Input #'.$txin["vout"].'</span>
-            <br/>
-            <strong>TX Sequence: </strong>
-            <span class="text-glow">Input #'.$txin["sequence"].'</span>
-            <br/>
-            <strong>Script Sig (ASM): </strong>
-            <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
-            <br/>
-            <strong>Script Sig (HEX): </strong>
-            <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
+          <strong>TX ID: </strong>
+          <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
+          <br/>
+          <strong>TX Output: </strong>
+          <span class="text-glow">Input #'.$txin["vout"].'</span>
+          <br/>
+          <strong>TX Sequence: </strong>
+          <span class="text-glow">Input #'.$txin["sequence"].'</span>
+          <br/>
+          <strong>Script Sig (ASM): </strong>
+          <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
+          <br/>
+          <strong>Script Sig (HEX): </strong>
+          <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
     ');
   }
   array_push($html, '
-          </div>
         </div>
       </div>
-      </br>
-    </section>      
+    </div>
+    </br>
   ');
 }
 
@@ -800,6 +803,52 @@ array_push($html, '
     return join("", $html);
   }
 
+
+
+
+
+
+
+
+  ///////////////////////////////
+  //                           //
+  //  BLOCKCHAIN--2--DATABASE  //
+  //                           //
+  ///////////////////////////////
+
+  // Look up latest database info
+  function getdatabaseinfo() {
+    // TODO
+    $info["block"] = 0;
+    return $info;
+  }
+
+  // Chain blocks are immutable, only bother writing NEW blocks
+  function syncdatabase() {
+    $latest_chain_block = $this->blockchaininfo["blocks"];
+    $latest_db_block = $this->databaseinfo["blocks"]; // <-- TODO
+    $i = $latest_db_block;
+    while ($i <= $latest_chain_block) {
+      $block_hash = $this->WalletRPC->getblockhash(intval($query));
+      $raw_block = $this->WalletRPC->getblock($block_hash);
+      $this->updatedatabase($raw_block); // <-- TODO
+      $i++;
+    }
+
+  // Write new data to the database
+  function updatedatabase($raw_block) {
+    // TODO
+
+/***
+
+DB TABLES:
+----------
+blocks          // block data, primary_key = block_height
+transactions    // tx data, primary_key = tx_id, same data on tx detail page
+addresses       // primary_key = public_address ... txs_in, txs_out, total_in, total_out
+
+***/
+  }
 
 
 

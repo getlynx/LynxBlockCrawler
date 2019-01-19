@@ -98,6 +98,27 @@ class WalletRPC {
   }
 
   
+  // for custom and on-the-fly wallet commands
+  function raw_command($method=NULL, $args=NULL)
+  {
+    // gotta give it SOMETHING...
+    if (isset($method))
+    {
+      // assemble!
+      $command["method"] = $method;
+      foreach ($args as $k => $v)
+      {
+        $command["params"][$k] = $v;
+      }
+      // run command
+      $results = $this->run($command);
+
+      //return results
+      return $results;
+    }
+  }
+
+
 
 
   # # # # # # # # # # # # # #
