@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 
 Rescan last 200 blocks from latest height each time
@@ -91,7 +91,7 @@ class Block2Redis {
   var $blockchaininfo;
   var $height;
 
-  function __construct()
+  function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port)
   {
     // check that Redis is isntalled and operating
 
@@ -100,13 +100,13 @@ class Block2Redis {
     // if not, insert new --> COIN::Blockchain
 
   	// TODO: get latest db height
-    $this->height = 0;
+    $this->height = $this->height();
 
-    // Include and instantiate the WalletRPC class using RPC creds pulled from conf
+	// Include and instantiate the WalletRPC class
     require_once ("class_WalletRPC.php");
     $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
-    // Populate info vars
+    // Get blockchain info for height
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 	
 	// check latest scanned height versus actual height    
@@ -128,6 +128,15 @@ class Block2Redis {
 		}
 		
 		
+	}
+
+	// return latest database height
+	function height() {
+		// get array of REDIS hkeys matching "block::*" (maybe using hScan)
+		// copy to new array parsing out "block::"
+		// sort by value, largest first
+		// return first index
+		return 0;
 	}
 
 	// assemble a new block to insert
@@ -207,19 +216,19 @@ class Block2Redis {
 	function build_output($raw_output) {
 		
 		// pre-render address list if any are found
-		$addresses = ""
+		$addresses = "";
 		if (isset ($raw_output["scriptPubKey"]["addresses"]))
 		{
-			$addresses = "'addresses':{"
-			foreach ($raw_output["scriptPubKey"]["addresses"] as $address);
+			$addresses = "'addresses':{";
+			foreach ($raw_output["scriptPubKey"]["addresses"] as $address)
 			{
-				$addresses = $addresses."'".$address."',"
+				$addresses = $addresses."'".$address."',";
 			}
-			$addresses = $addresses."}"
+			$addresses = $addresses."}";
 		}
 
 		// redis hash data
-		$rdata = {
+		$rdata = 
 			"output::".$raw_output["scriptPubKey"]["hex"].":{
 				'value':'".$raw_output["value"]."',
 				'type':'".$raw_output["scriptPubKey"]["type"]."',
@@ -228,7 +237,6 @@ class Block2Redis {
 				'hex':'".$raw_output["scriptPubKey"]["hex"]."',
 				".$addresses."
 			}";
-		}
 
 		// minify
 		$rdata = str_replace(' ', '', preg_replace('/\n/', '', $rdata));

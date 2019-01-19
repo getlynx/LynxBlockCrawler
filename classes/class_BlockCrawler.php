@@ -64,14 +64,15 @@ class BlockCrawler {
     $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
     // Populate info vars
-    $this->databaseinfo   = $this->WalletRPC->getdatabaseinfo();
+    $this->databaseinfo   = $this->getdatabaseinfo();
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
     $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
     $this->walletinfo     = $this->WalletRPC->getwalletinfo();
     $this->networkhashps  = $this->WalletRPC->getnetworkhashps();
     $this->site_content   = $this->show_dashboard();
 
-    $this->Blockchain2Redis
+    require_once ("class_Block2Redis.php");
+    $this->Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
   }
 
   // Rounding to chopping too many decimal places (i.e. difficulty)
@@ -834,6 +835,7 @@ array_push($html, '
       $this->updatedatabase($raw_block); // <-- TODO
       $i++;
     }
+  }
 
   // Write new data to the database
   function updatedatabase($raw_block) {
