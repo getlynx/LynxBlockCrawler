@@ -229,7 +229,7 @@ class Block2Redis {
 
 		// redis hash data
 		$rdata = 
-			"output::".$raw_output["scriptPubKey"]["hex"].":{
+			"{
 				'value':'".$raw_output["value"]."',
 				'type':'".$raw_output["scriptPubKey"]["type"]."',
 				'sigs':'".$raw_output["scriptPubKey"]["reqSigs"]."',
@@ -239,9 +239,8 @@ class Block2Redis {
 			}";
 
 		// minify
-		$rdata = str_replace(' ', '', preg_replace('/\n/', '', $rdata));
-
-		echo $rdata;
+		$rdata['key'] = "output::".$raw_output["scriptPubKey"]["hex"];
+		$rdata['value'] = preg_replace('/\s/', '', $rdata);
 		
 		return $rdata;
 	}
