@@ -37,7 +37,7 @@ class WalletRPC {
   function run($command)
   {
     // Command must be supplied
-    if (empty($command)) {return FALSE;}
+    if (empty($command)) { return FALSE; }
 
     //  Encode the request as JSON for the wallet
     $jdata = json_encode($command);
