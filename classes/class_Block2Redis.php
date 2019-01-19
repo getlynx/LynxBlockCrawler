@@ -219,7 +219,7 @@ class Block2Redis {
 		$addresses = "";
 		if (isset ($raw_output["scriptPubKey"]["addresses"]))
 		{
-			$addresses = "'addresses':{";
+			$addresses = '"addresses":{';
 			foreach ($raw_output["scriptPubKey"]["addresses"] as $address)
 			{
 				$addresses = $addresses."'".$address."',";
@@ -235,7 +235,7 @@ class Block2Redis {
 				"sigs":"'.$raw_output["scriptPubKey"]["reqSigs"].'",
 				"asm":"'.$raw_output["scriptPubKey"]["asm"].'",
 				"hex":"'.$raw_output["scriptPubKey"]["hex"].'",
-				".$addresses."
+				'.$addresses.'
 			}';
 
 		// minify
