@@ -743,7 +743,7 @@ foreach ($raw_tx["vout"] as $key => $txout)
   $output = $this->Block2Redis->build_output($txout);
   echo $output["key"].'<br>';
   echo $output["value"].'<br>';
-  echo json_decode($output["value"], true);
+  var_dump(json_decode($output["value"], true));
 
   array_push($html, '
     <div class="row">
