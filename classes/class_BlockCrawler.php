@@ -403,6 +403,10 @@ class BlockCrawler {
       if (! $block_hash || ! $raw_block) { return $this->error("invalid_height"); }
     }
 
+    $block = $this->Block2Redis->build_block($raw_block);
+    echo $block["key"].'<br>';
+    echo $block["value"].'<br>';
+
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
     $html = [];
@@ -743,7 +747,6 @@ foreach ($raw_tx["vout"] as $key => $txout)
   $output = $this->Block2Redis->build_output($txout);
   echo $output["key"].'<br>';
   echo $output["value"].'<br>';
-  var_dump(json_decode($output["value"], true));
 
   array_push($html, '
     <div class="row">
