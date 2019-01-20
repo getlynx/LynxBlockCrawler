@@ -119,7 +119,7 @@ class Block2Redis {
 				$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
 				
 				// collect each tx into its own key
-				//$this->process_tx();
+				$this->process_tx();
 			}
 			$txs = $txs."}";
 		}
@@ -171,8 +171,11 @@ class Block2Redis {
 	// assemble a new transaction to insert
 	function process_tx() {
 
+		var_dump($this->raw_tx);
+
 		// pre-render inputs and outputs
 		$inputs = '"inputs":{';
+		/*
 		foreach ($this->raw_tx["vin"] as $key => $raw_input)
 		{
 			$comma = ($key == 0) ? "" : ",";
@@ -183,9 +186,11 @@ class Block2Redis {
 			// collect each input into its own key
 			//$this->process_input($raw_input);
 		}
+		*/
 		$inputs = $inputs."}";
 		
 		$outputs = '"outputs":{';
+		/*
 		foreach ($this->raw_tx["vout"] as $key => $raw_output)
 		{
 			$comma = ($key == 0) ? "" : ",";
@@ -194,6 +199,7 @@ class Block2Redis {
 			// collect each output into its own key
 			//$this->process_input($raw_output);
 		}
+		*/
 		$outputs = $outputs."}";
 
 		$tx_comment = ( array_key_exists("tx-comment", $this->raw_tx) ) ? htmlspecialchars($this->raw_tx["tx-comment"]) : "";
