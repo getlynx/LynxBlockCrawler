@@ -66,7 +66,7 @@ class Block2Redis {
 			$start_at++;
 
 			// debug stop at 10
-			if ($start_at == 10) { break; }
+			if ($start_at == 250) { break; }
 	    }	
 
 
