@@ -402,11 +402,11 @@ class BlockCrawler {
       $raw_block = $this->WalletRPC->getblock($block_hash);
       if (! $block_hash || ! $raw_block) { return $this->error("invalid_height"); }
     }
-
+/*
     $block = $this->Block2Redis->build_block($raw_block);
     echo $block["key"].'<br>';
     echo $block["value"].'<br>';
-
+*/
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
     $html = [];
