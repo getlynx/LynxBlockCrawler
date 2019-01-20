@@ -119,7 +119,7 @@ class Block2Redis {
 				$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
 				
 				// collect each tx into its own key
-				$this->process_tx();
+				//$this->process_tx();
 			}
 			$txs = $txs."}";
 		}
