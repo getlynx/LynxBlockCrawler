@@ -1,19 +1,3 @@
-<style>
-body 
-{
-	word-break: break-all;
-	font-family: Verdana;
-	background: #000;
-	color: #0f0;
-}
-blockquote
-{
-	border: 1px solid #ff0;
-	margin: 15px;
-	padding: 15px;
-}
-</style>
-
 <?php
 
 /*

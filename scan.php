@@ -1,3 +1,21 @@
+<style>
+body 
+{
+  word-break: break-all;
+  font-family: Verdana;
+  background: #000;
+  color: #999;
+  font-size: small;
+}
+blockquote
+{
+  border: 1px solid #ff0;
+  margin: 15px;
+  padding: 15px;
+}
+</style>
+
+
 <?php
   
   // Show debug console output?
