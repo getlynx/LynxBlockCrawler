@@ -362,12 +362,6 @@ class Block2Redis {
 			$rdata["key"] = "output::".$hex;
 			$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
-
-			// clear the raw data container
-			$this->raw_output = [];
-
-
-
 			// debug: call it back and spit it out
 			$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote><h4>Output (".$hex.")</h4>".$output_data."</blockquote>";
