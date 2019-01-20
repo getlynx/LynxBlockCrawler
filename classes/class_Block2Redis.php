@@ -112,7 +112,7 @@ class Block2Redis {
 	// check latest scanned height versus actual height    
     if ($this->height < $this->blockchaininfo["blocks"]) 
   	{ 
-  		$this->crawl(200); 
+  		//$this->crawl(200); 
   	}
 
   }
@@ -125,7 +125,7 @@ class Block2Redis {
 		
 
 		// build output
-		$output = $this->Block2Redis->build_output($txout);
+		//$output = $this->Block2Redis->build_output($txout);
 		
 		
 	}
