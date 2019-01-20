@@ -217,7 +217,7 @@ class Block2Redis {
 
 				// collect each output into its own key
 				$this->raw_output = $raw_output;
-				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
+				$outputs = $outputs.$comma.'"hex":"'.$raw_output["scriptPubKey"]["hex"].'"';
 				//$this->process_output();
 				$this->raw_output = [];
 				//var_dump($this->raw_output);
