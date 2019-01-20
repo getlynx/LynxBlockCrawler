@@ -187,7 +187,7 @@ class Block2Redis {
 
 	// insert a key into Redis
 	function add_key($rdata) {
-		$Redis->hSet($this->RKEY, $rdata["key"], $rdata);
+		$this->Redis->hSet($this->RKEY, $rdata["key"], $rdata);
 	}
 
 	// assemble a new block to insert
