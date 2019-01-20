@@ -120,42 +120,16 @@ class Block2Redis {
 	function getheight() 
 	{
 	   	if ($this->Redis->exists($this->RKEY)) {
-
-	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
-	   		$it = 0;
-	   		$pattern = "block::*";
-	   		$keys = $this->Redis->hScan($this->RKEY, $it, $pattern);
-	   		echo $keys;
-	   		$nums = [];
-	   		foreach ($keys as $k => $v)
-	   		{
-	   			// copy to new array parsing out "block::"
-	   			$num = explode("::", $v);
-	   			if ($num[0] == "block") {
-		   			array_push($nums, $num[1]);
-	   			}
-	   		}
-	   		
-	   		if (count($nums) > 0){
-
-		   		// sort by value, largest first
-		   		$nums = rsort($nums);
-
-		   		// return first index
-		   		return $nums[0];
-		   	}
+	   		if ($this->Redis->hexists($this->RKEY, "height")) {
+	   			return $this->Redis->hget($this->RKEY, "height");
+			}
 		}
-
-		
-		
-		
 		return 0;
 	}
 
-
   	// rescan the chain for any new blocks, starting backwards a bit
-	function scan($rewind_by) {
-		
+	function scan($rewind_by)
+	{	
 		$start_at = $this->height - $rewind_by;
 		$start_at = ($start_at < 0) ? 0 : $start_at;
 
@@ -175,9 +149,6 @@ class Block2Redis {
 			if ($start_at == 10) { break; }
 
 			$start_at++;
-
-			
-
 
 	    }	
 
@@ -237,6 +208,8 @@ class Block2Redis {
 		
 		// send block data to Redis
 		$this->add_key($rdata);
+
+		$this->Redis->hset($this->RKEY, "height", $raw_block["height"]);
 
 		return $rdata;
 	}
