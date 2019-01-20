@@ -423,7 +423,7 @@ class BlockCrawler {
     $block = $this->Block2Redis->build_block($raw_block);
     echo $block["key"].'<br>';
     echo $block["data"].'<br>';
-    var_dump($block["data"]);
+    var_dump(json_decode($block["data"], true));
 
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
@@ -773,6 +773,7 @@ foreach ($raw_tx["vout"] as $key => $txout)
   $output = $this->Block2Redis->build_output($txout);
   echo $output["key"].'<br>';
   echo $output["data"].'<br>';
+  var_dump(json_decode($output["data"], true));
 
   array_push($html, '
     <div class="row">
