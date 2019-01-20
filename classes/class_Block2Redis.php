@@ -236,9 +236,8 @@ class Block2Redis {
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote>".$tx_data."</blockquote>";
 
-		}
-		
-	} else { echo "<blockquote>NULL TX</blockquote>"; }
+		} else { echo "<blockquote>NULL TX</blockquote>"; }
+	} 
 
 /*
 
