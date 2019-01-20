@@ -164,8 +164,8 @@ class Block2Redis {
 			// update db height value
 			$this->Redis->hSet($this->RKEY, "height", $height);
 
-
-			
+			// Clean up!
+			function clearcontainers()
 
 			// debug: call it back and spit it out
 			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
