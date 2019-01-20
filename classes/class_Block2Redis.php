@@ -157,7 +157,7 @@ class Block2Redis {
 	    {
 	    	echo "<hr> Block ".$this->height."<br>";
 			
-			$block_hash = $this->WalletRPC->getblockhash(intval($this->height));
+			$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$raw_block = $this->WalletRPC->getblock($block_hash);
 			$new_block = $this->build_block($raw_block);
 			
