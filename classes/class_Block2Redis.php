@@ -159,8 +159,8 @@ class Block2Redis {
 			
 			$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$raw_block = $this->WalletRPC->getblock($block_hash);
-			$new_block = $this->build_block($raw_block);
-			
+			$new_block = $this->process_block($raw_block);
+
 			var_dump(json_decode($new_block["data"], TRUE));
 
 			if ($start_at == 10) { break; }
@@ -191,7 +191,7 @@ class Block2Redis {
 	}
 
 	// assemble a new block to insert
-	function build_block($raw_block) {
+	function process_block($raw_block) {
 
 		// pre-render tx list if any are found
 		$txs = "";
@@ -202,6 +202,8 @@ class Block2Redis {
 			{
 				$comma = ($key == 0) ? "" : ",";
 				$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
+				$raw_tx = $this->WalletRPC->getrawtransaction($tx);
+				$new_tx = $this->process_tx($raw_tx);
 			}
 			$txs = $txs."}";
 		}
@@ -224,11 +226,14 @@ class Block2Redis {
 		$rdata["key"] = "block::".$raw_block["height"];
 		$rdata["data"] = preg_replace("/\s/", "", $jdata);
 		
+		// send block data to Redis
+		$this->add_key($rdata);
+
 		return $rdata;
 	}
 
 	// assemble a new transaction to insert
-	function build_tx($raw_tx) {
+	function process_tx($raw_tx) {
 		/*
 			"tx::7b5f3e5dc24...e203bb2ebbbf3":"{
 				'date':'1234567890',
