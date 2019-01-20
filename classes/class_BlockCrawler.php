@@ -406,6 +406,7 @@ class BlockCrawler {
     $block = $this->Block2Redis->build_block($raw_block);
     echo $block["key"].'<br>';
     echo $block["value"].'<br>';
+    var_dump($block);
 
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
