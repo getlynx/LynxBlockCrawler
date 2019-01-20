@@ -2,9 +2,15 @@
 body 
 {
 	word-break: break-all;
-	font-family: monospace;
+	font-family: Verdana;
 	background: #000;
 	color: #0f0;
+}
+blockquote
+{
+	border: 1px solid #ff0;
+	margin: 15px;
+	padding: 15px;
 }
 </style>
 
@@ -327,6 +333,8 @@ class Block2Redis {
 	// assemble a new transaction OUTPUTS to insert
 	function process_output() {
 		
+		$hex = $this->raw_output["scriptPubKey"]["hex"]
+
 		// pre-render address list if any are found
 		$addresses = "";
 		if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
@@ -347,12 +355,12 @@ class Block2Redis {
 				"type":"'.$this->raw_output["scriptPubKey"]["type"].'",
 				"sigs":"'.$this->raw_output["scriptPubKey"]["reqSigs"].'",
 				"asm":"'.$this->raw_output["scriptPubKey"]["asm"].'",
-				"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'",
+				"hex":"'.$hex.'",
 				'.$addresses.'
 			}';
 
 		// minify
-		$rdata["key"] = "output::".$this->raw_output["scriptPubKey"]["hex"];
+		$rdata["key"] = "output::".$hex;
 		$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
 		// send block data to Redis
@@ -365,7 +373,7 @@ class Block2Redis {
 
 		// debug: call it back and spit it out
 		$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<blockquote><h4>Output (".$jdata["hex"].")</h4>".$output_data."</blockquote>";
+		echo "<blockquote><h4>Output (".$hex.")</h4>".$output_data."</blockquote>";
 	}
 
 	// assemble new address data to insert
