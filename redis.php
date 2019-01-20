@@ -12,5 +12,5 @@
    $redis->set("tutorial-name", "Redis tutorial"); 
    
    // Get the stored data and print it 
-   echo "Stored string in redis:: " .$redis→get("tutorial-name"); 
+   echo "Stored string in redis:: " .$redis->get("tutorial-name"); 
 ?>
