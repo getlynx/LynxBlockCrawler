@@ -60,10 +60,11 @@ class Block2Redis {
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
+	    	$this->clearcontainers();
 	    	$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$this->raw_block = $this->WalletRPC->getblock($block_hash);
 			$this->process_block();
-			$this->clearcontainers();
+			$this->raw_block = [];
 			$start_at++;
 
 			// debug stop at 10
@@ -135,10 +136,11 @@ class Block2Redis {
 				{
 					$comma = ($key == 0) ? "" : ",";
 					$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
-					$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
 					
 					// collect each tx into its own key
+					$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
 					$this->process_tx();
+					$this->raw_tx = [];
 				}
 				$txs = $txs."}";
 			}
@@ -194,26 +196,30 @@ class Block2Redis {
 
 			// pre-render inputs and outputs
 			$inputs = '"inputs":{';
-			foreach ($this->raw_tx["vin"] as $key => $this->raw_input)
+			foreach ($this->raw_tx["vin"] as $key => $raw_input)
 			{
 				$comma = ($key == 0) ? "" : ",";
+				$this->raw_input = $raw_input;
 				$input_id = ( array_key_exists("coinbase", $this->raw_input) ) ? $this->raw_input["coinbase"] : $this->raw_input["scriptSig"]["hex"];
 				$input_type = ( array_key_exists("coinbase", $this->raw_input) ) ? "coinbase" : "hex";
-				$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
-
+				
 				// collect each input into its own key
+				$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
 				$this->process_input();
+				$this->raw_input = [];
 			}
 			$inputs = $inputs."}";
 			
 			$outputs = '"outputs":{';
-			foreach ($this->raw_tx["vout"] as $key => $this->raw_output)
+			foreach ($this->raw_tx["vout"] as $key => $raw_output)
 			{
 				$comma = ($key == 0) ? "" : ",";
-				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 
 				// collect each output into its own key
+				$this->raw_output = $raw_output;
+				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 				$this->process_output();
+				$this->raw_output = [];
 			}
 			$outputs = $outputs."}";
 
