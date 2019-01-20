@@ -101,8 +101,9 @@ class Block2Redis {
    	$this->Redis = new Redis(); 
    	$this->Redis->connect('127.0.0.1', 6379);
 
-  	// TODO: get latest db height
-    $this->height = $this->height();
+  	// get the latest db height
+    $this->RKEY = $coin."::Blockchain";
+  	$this->height = $this->height();
 
 	// Include and instantiate the WalletRPC class
     require_once ("class_WalletRPC.php");
@@ -111,8 +112,7 @@ class Block2Redis {
     // Get blockchain info for height
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 	
-	$this->RKEY = $coin."::Blockchain";
-  	 
+	 
 
 
 
@@ -164,18 +164,25 @@ class Block2Redis {
 
 	// return latest database height
 	function height() {
-		// get array of REDIS hkeys matching "block::*" (maybe using hScan)
-		   	// Get existing db height
+		echo "Get existing db height";
+	   	
 	   	if ($this->Redis->exists($this->RKEY)) {
-	   		echo "EXISTS!";
-	   		$this->dbinfo = $Redis->hScan($this->RKEY, 0, "block::");
-	   		var_dump($this->dbinfo);
+
+	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
+	   		$keys = $Redis->hScan($this->RKEY, 0, "block::");
+	   		foreach ($keys as $k => $v)
+	   		{
+	   			$num = explode("::", $v);
+	   			$nums[] = $num[1];
+	   		}
+	   		$nums = sort($nums);
+	   		echo "Latest DB Block is ".$nums[0];
 	   	}
 
 		// copy to new array parsing out "block::"
 		// sort by value, largest first
 		// return first index
-		return 0;
+		return $nums[0];
 	}
 
 	// insert a key into Redis
