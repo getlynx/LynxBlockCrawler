@@ -101,9 +101,16 @@ class Block2Redis {
    	$this->Redis = new Redis(); 
    	$this->Redis->connect('127.0.0.1', 6379);
 
+   	echo $this->Redis->ping();
+
   	// get the latest db height
     $this->RKEY = $coin."::Blockchain";
+
+    echo $this->RKEY."<br>";
+
   	$this->height = $this->height();
+
+	echo $this->height."<br>";
 
 	// Include and instantiate the WalletRPC class
     require_once ("class_WalletRPC.php");
