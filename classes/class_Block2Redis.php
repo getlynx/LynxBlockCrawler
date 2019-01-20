@@ -219,7 +219,7 @@ class Block2Redis {
 				$this->raw_output = $raw_output;
 				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 				$this->process_output();
-				echo $this->raw_output;
+				var_dump($this->raw_output);
 				unset($this->raw_output);
 			}
 			$outputs = $outputs."}";
@@ -251,7 +251,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h3>TxID ".$txid."</h3>".$tx_data."</blockquote>";
+			echo "<blockquote><h3>TXID: ".$txid."</h3>".$tx_data."</blockquote>";
 
 		} else { echo "<blockquote>NULL TX</blockquote>"; }
 	} 
