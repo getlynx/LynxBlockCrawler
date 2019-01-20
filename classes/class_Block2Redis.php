@@ -125,21 +125,25 @@ class Block2Redis {
 	   		$it = NULL;
 	   		$pattern = "block::*";
 	   		$keys = $this->Redis->hScan($this->RKEY, $it, $pattern);
+	   		$nums = [];
 	   		foreach ($keys as $k => $v)
 	   		{
 	   			// copy to new array parsing out "block::"
 	   			$num = explode("::", $v);
 	   			if ($num[0] == "block") {
-		   			$nums[] = $num[1];
+		   			array_push($nums, $num[1]);
 	   			}
 	   		}
 	   		
-	   		// sort by value, largest first
-	   		$nums = rsort($nums);
+	   		if (count($nums) > 0){
 
-	   		// return first index
-	   		return $nums[0];
-	   	}
+		   		// sort by value, largest first
+		   		$nums = rsort($nums);
+
+		   		// return first index
+		   		return $nums[0];
+		   	}
+		}
 
 		
 		
