@@ -219,7 +219,6 @@ class Block2Redis {
 				$this->raw_output = $raw_output;
 				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 				$this->process_output();
-				var_dump($this->raw_output);
 				$this->raw_output = [];
 				var_dump($this->raw_output);
 			}
@@ -329,7 +328,8 @@ class Block2Redis {
 	function process_output() {
 		
 		if ( $this->raw_output ) 
-		{
+		{	
+			var_dump($this->raw_output);
 
 			$hex = $this->raw_output["scriptPubKey"]["hex"];
 
