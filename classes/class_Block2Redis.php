@@ -43,11 +43,7 @@ class Block2Redis {
 		$this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 
 		// Set raw data containers as arrays
-		$this->raw_block = [];
-		$this->raw_tx = [];
-		$this->raw_input = [];
-		$this->raw_output = [];
-		$this->raw_address = [];
+		$this->clearcontainers();
 
 	}
 
@@ -98,16 +94,24 @@ class Block2Redis {
 		$this->Redis->hSet($this->RKEY, $rdata["key"], $rdata["data"]);
 	}
 
+	function clearcontainers() {
+		$this->raw_block = [];
+		$this->raw_tx = [];
+		$this->raw_input = [];
+		$this->raw_output = [];
+		$this->raw_address = [];
+	}
+
 
 
 
 /*
 
-####   #       ###    ####  #   #   ####
-#   #  #      #   #  #      #  #   #    
-####   #      #   #  #      ###     ### 
-#   #  #      #   #  #      #  #       #
-####   #####   ###    ####  #   #  #### 
+####   #       ###    ####  #   # 
+#   #  #      #   #  #      #  #   
+####   #      #   #  #      ###   
+#   #  #      #   #  #      #  #   
+####   #####   ###    ####  #   # 
 
 */
 
@@ -160,8 +164,6 @@ class Block2Redis {
 			// update db height value
 			$this->Redis->hSet($this->RKEY, "height", $height);
 
-			// clear the raw data container
-			$this->raw_block = [];
 
 			
 
@@ -174,11 +176,11 @@ class Block2Redis {
 
 /*
 
-#####  #   #   ####
-  #     # #   #    
-  #      #     ### 
-  #     # #       #
-  #    #   #  #### 
+#####  #   #  
+  #     # #  
+  #      #    
+  #     # #    
+  #    #   #  
 
 */
 
@@ -237,8 +239,6 @@ class Block2Redis {
 			// send data to Redis
 			$this->add_key($rdata);
 
-			// clear the raw data container
-			$this->raw_tx = [];
 
 
 
@@ -251,117 +251,142 @@ class Block2Redis {
 
 /*
 
-#####  #   #  ####   #   #  #####   ####
-  #    ##  #  #   #  #   #    #    #
-  #    # # #  ####   #   #    #     ###
-  #    #  ##  #      #   #    #        #
-#####  #   #  #       ###     #    ####
+#####  #   #  ####   #   #  #####
+  #    ##  #  #   #  #   #    # 
+  #    # # #  ####   #   #    # 
+  #    #  ##  #      #   #    #  
+#####  #   #  #       ###     # 
 
 */
 
-	// assemble a new transaction INPUTS to insert
+	// assemble a new transaction INPUT to insert
 	function process_input() {
 
-		// redis hash data
-		// check if coinbase or not
-		if (array_key_exists("coinbase", $this->raw_input))
+		if ( $this->raw_input ) 
 		{
-			$jdata = 
-			'{
-				"cb":"'.$this->raw_input["coinbase"].'",
-				"seq":"'.$this->raw_input["sequence"].'",
-				
-			}';
-			$rdata["key"] = "input::".$this->raw_input["coinbase"];
-		} 
-		else 
-		{
-			$jdata = 
-			'{
-				"seq":"'.$this->raw_input["sequence"].'",
-				"txid":"'.$this->raw_input["txid"].'",
-				"out":"'.$this->raw_input["vout"].'",
-				"asm":"'.$this->raw_input["scriptSig"]["asm"].'",
-				"hex":"'.$this->raw_input["scriptSig"]["hex"].'",
-			}';
-			$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
-		}
 
-		// minify
+			// redis hash data
+			// check if coinbase or not
+			if (array_key_exists("coinbase", $this->raw_input))
+			{
+				$jdata = 
+				'{
+					"cb":"'.$this->raw_input["coinbase"].'",
+					"seq":"'.$this->raw_input["sequence"].'",
+					
+				}';
+				$rdata["key"] = "input::".$this->raw_input["coinbase"];
+			} 
+			else 
+			{
+				$jdata = 
+				'{
+					"seq":"'.$this->raw_input["sequence"].'",
+					"txid":"'.$this->raw_input["txid"].'",
+					"out":"'.$this->raw_input["vout"].'",
+					"asm":"'.$this->raw_input["scriptSig"]["asm"].'",
+					"hex":"'.$this->raw_input["scriptSig"]["hex"].'",
+				}';
+				$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
+			}
+
+			// minify
+			
+			$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+			// send block data to Redis
+			$this->add_key($rdata);
+
+
+
+
+			// debug: call it back and spit it out
+			$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
 		
-		$rdata["data"] = preg_replace('/\s/', '', $jdata);
-
-		// send block data to Redis
-		$this->add_key($rdata);
-
-		// clear the raw data container
-		$this->raw_input = [];
-
-
-
-		// debug: call it back and spit it out
-		$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
+		} else { echo "<blockquote>NULL INPUT</blockquote>"; }
 	}
 
 /*
 
- ###   #   #  #####  ####   #   #  #####   ####
-#   #  #   #    #    #   #  #   #    #    #
-#   #  #   #    #    ####   #   #    #     ###
-#   #  #   #    #    #      #   #    #        #
- ###    ###     #    #       ###     #    ####
+ ###   #   #  #####  ####   #   #  #####
+#   #  #   #    #    #   #  #   #    #
+#   #  #   #    #    ####   #   #    # 
+#   #  #   #    #    #      #   #    #  
+ ###    ###     #    #       ###     #
 
 */
 
-	// assemble a new transaction OUTPUTS to insert
+	// assemble a new transaction OUTPUT to insert
 	function process_output() {
 		
-		$hex = $this->raw_output["scriptPubKey"]["hex"];
-
-		// pre-render address list if any are found
-		$addresses = "";
-		if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
+		if ( $this->raw_output ) 
 		{
-			$addresses = '"addresses":{';
-			foreach ($this->raw_output["scriptPubKey"]["addresses"] as $key => $address)
+
+			$hex = $this->raw_output["scriptPubKey"]["hex"];
+
+			// pre-render address list if any are found
+			$addresses = "";
+			if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
 			{
-				$comma = ($key == 0) ? "" : ",";
-				$addresses = $addresses.$comma.'"'.$key.'":"'.$address.'"';
+				$addresses = '"addresses":{';
+				foreach ($this->raw_output["scriptPubKey"]["addresses"] as $key => $address)
+				{
+					$comma = ($key == 0) ? "" : ",";
+					$addresses = $addresses.$comma.'"'.$key.'":"'.$address.'"';
+					$this->raw_address["address"] = $address;
+					$this->raw_address["txid"] = $this->raw_tx["txid"];
+					
+					// collect each address into its own key
+					$this->process_address();
+
+					// clear out for the next
+					$this->raw_address = [];
+				}
+
+				$addresses = $addresses."}";
 			}
-			$addresses = $addresses."}";
-		}
 
-		// redis hash data
-		$jdata = 
-			'{
-				"value":"'.$this->raw_output["value"].'",
-				"type":"'.$this->raw_output["scriptPubKey"]["type"].'",
-				"sigs":"'.$this->raw_output["scriptPubKey"]["reqSigs"].'",
-				"asm":"'.$this->raw_output["scriptPubKey"]["asm"].'",
-				"hex":"'.$hex.'",
-				'.$addresses.'
-			}';
+			// redis hash data
+			$jdata = 
+				'{
+					"value":"'.$this->raw_output["value"].'",
+					"type":"'.$this->raw_output["scriptPubKey"]["type"].'",
+					"sigs":"'.$this->raw_output["scriptPubKey"]["reqSigs"].'",
+					"asm":"'.$this->raw_output["scriptPubKey"]["asm"].'",
+					"hex":"'.$hex.'",
+					'.$addresses.'
+				}';
 
-		// minify
-		$rdata["key"] = "output::".$hex;
-		$rdata["data"] = preg_replace('/\s/', '', $jdata);
+			// minify
+			$rdata["key"] = "output::".$hex;
+			$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
-		// send block data to Redis
-		$this->add_key($rdata);
 
-		// clear the raw data container
-		$this->raw_output = [];
+			// clear the raw data container
+			$this->raw_output = [];
 
 
 
-		// debug: call it back and spit it out
-		$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<blockquote><h4>Output (".$hex.")</h4>".$output_data."</blockquote>";
+			// debug: call it back and spit it out
+			$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			echo "<blockquote><h4>Output (".$hex.")</h4>".$output_data."</blockquote>";
+		
+		} else { echo "<blockquote>NULL OUTPUT</blockquote>"; }
 	}
 
+/*
+  
+ ###   ####   ####   ####   #####   ####   ####
+#   #  #   #  #   #  #   #  #      #      #    
+#####  #   #  #   #  ####   ####    ###    ### 
+#   #  #   #  #   #  #  #   #          #      #
+#   #  ####   ####   #   #  #####  ####   ####
+
+*/
+
 	// assemble new address data to insert
-	function build_address($raw_address) {
+	function process_address() {
 		/*
 			"address::KT5kYQXjvubU2F7cHWtNdfe9LPPyJX1dKp":"{
 				'txs':{
@@ -369,18 +394,63 @@ class Block2Redis {
 				}
 			}",
 		*/
-	}
+		if ( $this->raw_address ) 
+		{
+			$address = $this->raw_address["address"];
+			$akey = "address::".$address;
+			$txid = $this->raw_address["txid"];
 
-	// insert or update the Redis address data
-	function update_address() {
+			// find matching address key and read existing tx list
+			$txs = $this->Redis->hGet($this->RKEY, $akey);
+			if ($txs)
+			{
+				val_dump(json_decode($txs, TRUE));
+			}			
+
+
+			// toss out any duplicate transactions
+
+			// update list with new txids
+
+			// send back to Redis
+
+			/*
+
+			// pre-render address list if any are found
+			$txs = "";
+			if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
+			{
+				$addresses = '"txs":{';
+				foreach ($this->raw_output["scriptPubKey"]["addresses"] as $key => $address)
+				{
+					$comma = ($key == 0) ? "" : ",";
+					$addresses = $addresses.$comma.'"'.$key.'":"'.$address.'"';
+				}
+				$addresses = $addresses."}";
+			}
+
+			// redis hash data
+			$jdata = 
+				'{
+					'.$txs.'
+				}';
+
+			// minify
+			$rdata["key"] = "output::".$hex;
+			$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+			// send block data to Redis
+			$this->add_key($rdata);
+
+			// clear the raw data container
+			$this->raw_output = [];
+
+			*/
+
+			// debug: call it back and spit it out
+			echo "<blockquote><h4>Address</h4>".$this->raw_address["address"]."</blockquote>";
 		
-		// find matching address key and tx list
-
-		// toss out any duplicate transactions
-
-		// update list with new txids
-
-		// send back to Redis
+		} else { echo "<blockquote>NULL ADDRESS</blockquote>"; }
 	}
 
 
