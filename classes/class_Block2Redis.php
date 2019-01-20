@@ -333,7 +333,7 @@ class Block2Redis {
 	// assemble a new transaction OUTPUTS to insert
 	function process_output() {
 		
-		$hex = $this->raw_output["scriptPubKey"]["hex"]
+		$hex = $this->raw_output["scriptPubKey"]["hex"];
 
 		// pre-render address list if any are found
 		$addresses = "";
