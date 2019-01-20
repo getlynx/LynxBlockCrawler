@@ -134,10 +134,12 @@ class Block2Redis {
 	    	echo "Block ".$this->height."<br>";
 			
 			$block_hash = $this->WalletRPC->getblockhash(intval($this->height));
-			$raw_block = $this->WalletRPC->getblock($block_hash);
-			$new_block = $this->build_block($raw_block);
+			echo $block_hash;
+			//$raw_block = $this->WalletRPC->getblock($block_hash);
+
+			//$new_block = $this->build_block($raw_block);
 			
-			var_dump(json_decode($new_block["data"], TRUE));
+			//var_dump(json_decode($new_block["data"], TRUE));
 
 			
 			if ($this->height == 10): break;
