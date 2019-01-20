@@ -140,7 +140,7 @@ class Block2Redis {
 			var_dump(json_decode($new_block["data"], TRUE));
 
 			
-			if ($this->height == 10) {break};
+			if ($this->height == 10) { break; }
 
 			$this->height++;
 
