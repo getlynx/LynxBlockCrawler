@@ -114,7 +114,8 @@ class Block2Redis {
 	// assemble a new block to insert
 	function process_block() {
 
-		if (count($this->raw_block) > 0) {
+		if ( $this->raw_block ) 
+		{
 
 			// pre-render tx list if any are found
 			$txs = "";
@@ -182,7 +183,7 @@ class Block2Redis {
 	// assemble a new transaction to insert
 	function process_tx() {
 
-		if (count($this->raw_tx) > 0)
+		if ( $this->raw_tx )
 		{
 
 			var_dump($this->raw_tx);
