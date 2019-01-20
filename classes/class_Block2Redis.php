@@ -157,6 +157,38 @@ class Block2Redis {
 			}",
 		*/
 
+		// pre-render address list if any are found
+		$txs = "";
+		if ( array_key_exists("tx", $raw_block) )
+    	{
+			$txs = '"txs":{';
+			foreach ($raw_block["tx"] as $key => $tx)
+			{
+				$comma = ($key == 0) ? "" : ",";
+				$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
+			}
+			$txs = $txs."}";
+		}
+
+		// redis hash data
+		$jdata = 
+			'{
+				"time":"'.$raw_output["time"].'",
+				"hash":"'.$raw_output["hash"].'",
+				"ver":"'.$raw_output["version"].'",
+				"size:"'.$raw_output["size"].'",
+				"bits":"'.$raw_output["bits"].'",
+				"nonce":"'.$raw_output["nonce"].'",
+				"diff":"'.$raw_output["difficulty"].'",
+				"root":"'.$raw_output["merkleroot"].'",
+				'.$txs.'
+			}';
+
+		// minify
+		$rdata['key'] = "block::".$raw_output["height"];
+		$rdata['value'] = preg_replace('/\s/', '', $jdata);
+		
+		return $rdata;
 	}
 
 	// insert the block into Redis

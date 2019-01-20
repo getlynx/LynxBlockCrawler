@@ -72,7 +72,7 @@ class BlockCrawler {
     $this->site_content   = $this->show_dashboard();
 
     require_once ("class_Block2Redis.php");
-    $this->Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
+    //$this->Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
   }
 
   // Rounding to chopping too many decimal places (i.e. difficulty)
