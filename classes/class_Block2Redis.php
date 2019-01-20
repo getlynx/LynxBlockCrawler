@@ -203,13 +203,13 @@ class Block2Redis {
 			$inputs = $inputs."}";
 			
 			$outputs = '"outputs":{';
-			foreach ($this->raw_tx["vout"] as $key => $raw_output)
+			foreach ($this->raw_tx["vout"] as $key => $this->raw_output)
 			{
 				$comma = ($key == 0) ? "" : ",";
-				$outputs = $outputs.$comma.'"hex":"'.$raw_output["scriptPubKey"]["hex"].'"';
+				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 
 				// collect each output into its own key
-				//$this->process_input($raw_output);
+				$this->process_output();
 			}
 			$outputs = $outputs."}";
 
@@ -284,14 +284,14 @@ class Block2Redis {
 */
 
 	// assemble a new transaction OUTPUTS to insert
-	function process_output($raw_output) {
+	function process_output() {
 		
 		// pre-render address list if any are found
 		$addresses = "";
-		if (isset ($raw_output["scriptPubKey"]["addresses"]))
+		if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
 		{
 			$addresses = '"addresses":{';
-			foreach ($raw_output["scriptPubKey"]["addresses"] as $key => $address)
+			foreach ($this->raw_output["scriptPubKey"]["addresses"] as $key => $address)
 			{
 				$comma = ($key == 0) ? "" : ",";
 				$addresses = $addresses.$comma.'"'.$key.'":"'.$address.'"';
@@ -302,20 +302,25 @@ class Block2Redis {
 		// redis hash data
 		$jdata = 
 			'{
-				"value":"'.$raw_output["value"].'",
-				"type":"'.$raw_output["scriptPubKey"]["type"].'",
-				"sigs":"'.$raw_output["scriptPubKey"]["reqSigs"].'",
-				"asm":"'.$raw_output["scriptPubKey"]["asm"].'",
-				"hex":"'.$raw_output["scriptPubKey"]["hex"].'",
+				"value":"'.$this->raw_output["value"].'",
+				"type":"'.$this->raw_output["scriptPubKey"]["type"].'",
+				"sigs":"'.$this->raw_output["scriptPubKey"]["reqSigs"].'",
+				"asm":"'.$this->raw_output["scriptPubKey"]["asm"].'",
+				"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'",
 				'.$addresses.'
 			}';
 
 		// minify
-		$rdata["key"] = "output::".$raw_output["scriptPubKey"]["hex"];
+		$rdata["key"] = "output::".$this->raw_output["scriptPubKey"]["hex"];
 		$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
 		// send block data to Redis
 		$this->add_key($rdata);
+
+		// clear the raw data container
+		$this->raw_output = [];
+
+
 
 		// debug: call it back and spit it out
 		$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
