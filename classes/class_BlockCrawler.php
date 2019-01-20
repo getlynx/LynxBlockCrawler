@@ -71,8 +71,8 @@ class BlockCrawler {
     $this->networkhashps  = $this->WalletRPC->getnetworkhashps();
     $this->site_content   = $this->show_dashboard();
 
-    require_once ("class_Block2Redis.php");
-    $this->Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
+    //require_once ("class_Block2Redis.php");
+    //$this->Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
   }
 
   // Rounding to chopping too many decimal places (i.e. difficulty)
@@ -420,11 +420,6 @@ class BlockCrawler {
       if (! $block_hash || ! $raw_block) { return $this->error("invalid_height"); }
     }
 
-    $block = $this->Block2Redis->build_block($raw_block);
-    echo $block["key"].'<br>';
-    echo $block["data"].'<br>';
-    var_dump(json_decode($block["data"], true));
-
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
     $html = [];
@@ -770,11 +765,6 @@ array_push($html, '
 
 foreach ($raw_tx["vout"] as $key => $txout)
 {
-  $output = $this->Block2Redis->build_output($txout);
-  echo $output["key"].'<br>';
-  echo $output["data"].'<br>';
-  var_dump(json_decode($output["data"], true));
-
   array_push($html, '
     <div class="row">
       <div class="col-12">
