@@ -744,11 +744,10 @@ array_push($html, '
 
 foreach ($raw_tx["vout"] as $key => $txout)
 {
-  /*
   $output = $this->Block2Redis->build_output($txout);
   echo $output["key"].'<br>';
   echo $output["value"].'<br>';
-  */
+
   array_push($html, '
     <div class="row">
       <div class="col-12">
