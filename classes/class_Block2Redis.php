@@ -133,7 +133,7 @@ class Block2Redis {
 		$start_at = $this->height - $rewind_by;
 		$start_at = ($start_at < 0) ? 0 : $start_at;
 
-		echo "Scanning...<br/><br/>";
+		echo "Scanning from block ".$start_at."...<br/><br/>";
 
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
