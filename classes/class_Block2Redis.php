@@ -220,7 +220,7 @@ class Block2Redis {
 				$this->raw_output = "taco";
 				$outputs = $outputs.$comma.'"hex":"'.$this->raw_output["scriptPubKey"]["hex"].'"';
 				$this->process_output();
-				$this->raw_output = "taco";
+				unset($this->raw_output);
 			}
 			$outputs = $outputs."}";
 
