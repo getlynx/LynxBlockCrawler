@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Duplicates an entire blockchain within a single Redis hash key
+ * Crawls a blockchain and indexes it all to a single Redis hash
  */
 
 class Block2Redis {
@@ -268,7 +268,10 @@ class Block2Redis {
 				"seq":"'.$this->raw_input["sequence"].'",
 				
 			}';
-		} else {
+			$rdata["key"] = "input::".$this->raw_input["coinbase"];
+		} 
+		else 
+		{
 			$jdata = 
 			'{
 				"seq":"'.$this->raw_input["sequence"].'",
@@ -277,10 +280,11 @@ class Block2Redis {
 				"asm":"'.$this->raw_input["scriptSig"]["asm"].'",
 				"hex":"'.$this->raw_input["scriptSig"]["hex"].'",
 			}';
+			$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
 		}
 
 		// minify
-		$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
+		
 		$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
 		// send block data to Redis
