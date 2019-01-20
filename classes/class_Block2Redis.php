@@ -63,10 +63,13 @@ class Block2Redis {
 	    	$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$this->raw_block = $this->WalletRPC->getblock($block_hash);
 			$this->process_block();
+			$this->clearcontainers();
 			$start_at++;
 
 			// debug stop at 10
 			if ($start_at == 250) { break; }
+			// Clean up!
+			
 	    }	
 
 
@@ -163,9 +166,6 @@ class Block2Redis {
 
 			// update db height value
 			$this->Redis->hSet($this->RKEY, "height", $height);
-
-			// Clean up!
-			$this->clearcontainers();
 
 			// debug: call it back and spit it out
 			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
