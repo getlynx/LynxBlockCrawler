@@ -258,18 +258,26 @@ class Block2Redis {
 	// assemble a new transaction INPUTS to insert
 	function process_input() {
 
-		$coinbase = (array_key_exists("coinbase", $this->raw_input)) ? $this->raw_input["coinbase"] : "";
-
 		// redis hash data
-		$jdata = 
+		// check if coinbase or not
+		if (array_key_exists("coinbase", $this->raw_input))
+		{
+			$jdata = 
 			'{
-				"cb":"'.$coinbase.'",
+				"cb":"'.$this->raw_input["coinbase"].'",
+				"seq":"'.$this->raw_input["sequence"].'",
+				
+			}';
+		} else {
+			$jdata = 
+			'{
 				"seq":"'.$this->raw_input["sequence"].'",
 				"txid":"'.$this->raw_input["txid"].'",
 				"out":"'.$this->raw_input["vout"].'",
 				"asm":"'.$this->raw_input["scriptSig"]["asm"].'",
 				"hex":"'.$this->raw_input["scriptSig"]["hex"].'",
 			}';
+		}
 
 		// minify
 		$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
