@@ -109,20 +109,48 @@ class Block2Redis {
     // Get blockchain info for height
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 	
-	// check latest scanned height versus actual height    
-    if ($this->height < $this->blockchaininfo["blocks"]) 
-  	{ 
-  		//$this->crawl(200); 
-  	}
+	
+  	
+
+
+
+
+
+
+
 
   }
 
   	// rescan the chain for any new blocks, starting backwards a bit
-	function crawl($rewind_by) {
+	function scan($rewind_by) {
 		
-		$start_at = $this->blockchaininfo["blocks"] - $rewind_by;
+		//$start_at = $this->blockchaininfo["blocks"] - $rewind_by;
 
-		
+		echo "Scanning...<br/><br/>";
+
+		// check latest scanned height versus actual height    
+	    while ($this->height < $this->blockchaininfo["blocks"]) 
+	    {
+	    	echo "Block ".$this->height."<br>";
+			/*
+			$block_hash = $this->WalletRPC->getblockhash(intval($this->height));
+			$raw_block = $this->WalletRPC->getblock($block_hash);
+			
+			if (! $raw_block) { return $this->error("invalid_height"); }
+
+			$new_block = $this->build_block($raw_block);
+			*/
+
+
+			$this->height++;
+
+
+	    }	
+
+
+
+
+
 
 		// build output
 		//$output = $this->Block2Redis->build_output($txout);
