@@ -171,7 +171,7 @@ class Block2Redis {
 
 		// minify
 		$rdata['key'] = "block::".$raw_block["height"];
-		$rdata['value'] = preg_replace('/\s/', '', $jdata);
+		$rdata['data'] = preg_replace('/\s/', '', $jdata);
 		
 		return $rdata;
 	}
@@ -259,7 +259,7 @@ class Block2Redis {
 
 		// minify
 		$rdata['key'] = "output::".$raw_output["scriptPubKey"]["hex"];
-		$rdata['value'] = preg_replace('/\s/', '', $jdata);
+		$rdata['data'] = preg_replace('/\s/', '', $jdata);
 		
 		return $rdata;
 	}
