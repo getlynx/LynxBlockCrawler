@@ -42,6 +42,13 @@ class Block2Redis {
 		// Get blockchain info for height
 		$this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 
+		// Set raw data containers as arrays
+		$this->raw_block = [];
+		$this->raw_tx = [];
+		$this->raw_input = [];
+		$this->raw_output = [];
+		$this->raw_address = [];
+
 	}
 
   	// scan the chain and record any new blocks
@@ -107,55 +114,59 @@ class Block2Redis {
 	// assemble a new block to insert
 	function process_block() {
 
-		// pre-render tx list if any are found
-		$txs = "";
-		if ( array_key_exists("tx", $this->raw_block) )
-    	{
-			$txs = '"txs":{';
-			foreach ($this->raw_block["tx"] as $key => $tx)
-			{
-				$comma = ($key == 0) ? "" : ",";
-				$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
-				$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
-				
-				// collect each tx into its own key
-				$this->process_tx();
+		if (count($this->raw_block) > 0) {
+
+			// pre-render tx list if any are found
+			$txs = "";
+			if ( array_key_exists("tx", $this->raw_block) )
+	    	{
+				$txs = '"txs":{';
+				foreach ($this->raw_block["tx"] as $key => $tx)
+				{
+					$comma = ($key == 0) ? "" : ",";
+					$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
+					$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
+					
+					// collect each tx into its own key
+					$this->process_tx();
+				}
+				$txs = $txs."}";
 			}
-			$txs = $txs."}";
-		}
 
-		// redis hash data
-		$jdata = 
-			'{
-				"time":"'.$this->raw_block["time"].'",
-				"hash":"'.$this->raw_block["hash"].'",
-				"ver":"'.$this->raw_block["version"].'",
-				"size":"'.$this->raw_block["size"].'",
-				"bits":"'.$this->raw_block["bits"].'",
-				"nonce":"'.$this->raw_block["nonce"].'",
-				"diff":"'.$this->raw_block["difficulty"].'",
-				"root":"'.$this->raw_block["merkleroot"].'",
-				'.$txs.'
-			}';
+			// redis hash data
+			$jdata = 
+				'{
+					"time":"'.$this->raw_block["time"].'",
+					"hash":"'.$this->raw_block["hash"].'",
+					"ver":"'.$this->raw_block["version"].'",
+					"size":"'.$this->raw_block["size"].'",
+					"bits":"'.$this->raw_block["bits"].'",
+					"nonce":"'.$this->raw_block["nonce"].'",
+					"diff":"'.$this->raw_block["difficulty"].'",
+					"root":"'.$this->raw_block["merkleroot"].'",
+					'.$txs.'
+				}';
 
-		// minify
-		$rdata["key"] = "block::".$this->raw_block["height"];
-		$rdata["data"] = preg_replace("/\s/", "", $jdata);
-		
-		// send data to Redis
-		$this->add_key($rdata);
+			// minify
+			$rdata["key"] = "block::".$this->raw_block["height"];
+			$rdata["data"] = preg_replace("/\s/", "", $jdata);
+			
+			// send data to Redis
+			$this->add_key($rdata);
 
-		// update db height value
-		$this->Redis->hSet($this->RKEY, "height", $this->raw_block["height"]);
+			// update db height value
+			$this->Redis->hSet($this->RKEY, "height", $this->raw_block["height"]);
 
-		// clear the raw data container
-		$this->raw_block = [];
+			// clear the raw data container
+			$this->raw_block = [];
 
-		
+			
 
-		// debug: call it back and spit it out
-		$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<hr>".$block_data;
+			// debug: call it back and spit it out
+			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			echo "<hr>".$block_data;
+
+		} else { echo "<hr>NULL BLOCK"; }
 	}
 
 /*
@@ -171,7 +182,7 @@ class Block2Redis {
 	// assemble a new transaction to insert
 	function process_tx() {
 
-		if (isset($this->raw_tx))
+		if (count($this->raw_tx) > 0)
 		{
 
 			var_dump($this->raw_tx);
