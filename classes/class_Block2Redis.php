@@ -186,19 +186,17 @@ class Block2Redis {
 		if ( $this->raw_tx )
 		{
 
-			var_dump($this->raw_tx);
-
 			// pre-render inputs and outputs
 			$inputs = '"inputs":{';
-			foreach ($this->raw_tx["vin"] as $key => $raw_input)
+			foreach ($this->raw_tx["vin"] as $key => $this->raw_input)
 			{
 				$comma = ($key == 0) ? "" : ",";
-				$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
-				$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
+				$input_id = ( array_key_exists("coinbase", $this->raw_input) ) ? $this->raw_input["coinbase"] : $this->raw_input["scriptSig"]["hex"];
+				$input_type = ( array_key_exists("coinbase", $this->raw_input) ) ? "coinbase" : "hex";
 				$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
 
 				// collect each input into its own key
-				//$this->process_input($raw_input);
+				$this->process_input();
 			}
 			$inputs = $inputs."}";
 			
@@ -258,19 +256,36 @@ class Block2Redis {
 */
 
 	// assemble a new transaction INPUTS to insert
-	function process_input($raw_input) {
-		/*
-			"input::038326270472f4...1000000000000000":"{
-				value':'1',
-				'type':'pubkeyhash',
-				'sigs':'1',
-				'asm':'OP_DUP OP_HASH160 d9f...43349 OP_EQUALVERIFY OP_CHECKSIG',
-				'hex':'76a914d9fc995d9...0687474334988ac',
-				'addresses':{
-					'KT5kYQXjv...dfe9LPPyJX1dKp',
-				}
-			}",
-		*/
+	function process_input() {
+
+		$coinbase = (array_key_exists("coinbase", $this->raw_input)) ? $this->raw_input["coinbase"] : "";
+
+		// redis hash data
+		$jdata = 
+			'{
+				"cb":"'.$coinbase.'",
+				"seq":"'.$this->raw_input["sequence"].'",
+				"txid":"'.$this->raw_input["txid"].'",
+				"out":"'.$this->raw_input["vout"].'",
+				"asm":"'.$this->raw_input["scriptSig"]["asm"].'",
+				"hex":"'.$this->raw_input["scriptSig"]["hex"].'",
+			}';
+
+		// minify
+		$rdata["key"] = "input::".$this->raw_input["scriptPubKey"]["hex"];
+		$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+		// send block data to Redis
+		$this->add_key($rdata);
+
+		// clear the raw data container
+		$this->raw_input = [];
+
+
+
+		// debug: call it back and spit it out
+		$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+		echo "<blockquote>".$input_data."</blockquote>";
 	}
 
 /*
