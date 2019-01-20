@@ -171,7 +171,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<h2>(above) Block # ".$height."</h2><hr>".$block_data;
+			echo $block_data."<h2>(above) Block # ".$height."</h2><hr>";
 
 		} else { echo "<hr>NULL BLOCK"; }
 	}
