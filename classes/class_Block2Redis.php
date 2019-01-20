@@ -206,7 +206,7 @@ class Block2Redis {
 			foreach ($this->raw_tx["vout"] as $key => $raw_output)
 			{
 				$comma = ($key == 0) ? "" : ",";
-				$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
+				$outputs = $outputs.$comma.'"hex":"'.$raw_output["scriptSig"]["hex"].'"';
 
 				// collect each output into its own key
 				//$this->process_input($raw_output);
