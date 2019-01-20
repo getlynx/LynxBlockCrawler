@@ -90,9 +90,8 @@ class Block2Redis {
 
   var $Redis;
   var $WalletRPC;
-  var $dbinfo = FALSE;
-  var $blockchaininfo = FALSE;
-  var $height = 0;
+  var $blockchaininfo;
+  var $height;
   var $RKEY;
 
 	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
@@ -104,9 +103,9 @@ class Block2Redis {
 		// get the latest db height
 		$this->RKEY = $coin."::Blockchain";
 
-		$this->height = $this->getheight ();
+		$this->height = $this->getheight();
 
-		echo $this->height."<br>";
+		echo "Latest DB Block is ".$this->height."<br><br>";
 
 		// Include and instantiate the WalletRPC class
 		require_once ("class_WalletRPC.php");
@@ -120,8 +119,6 @@ class Block2Redis {
  	// return latest database height
 	function getheight() 
 	{
-		echo "Get existing db height";
-	   	
 	   	if ($this->Redis->exists($this->RKEY)) {
 
 	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
@@ -135,7 +132,6 @@ class Block2Redis {
 	   		
 	   		// sort by value, largest first
 	   		$nums = rsort($nums);
-	   		echo "Latest DB Block is ".$nums[0];
 
 	   		// return first index
 	   		return $nums[0];
@@ -151,14 +147,15 @@ class Block2Redis {
   	// rescan the chain for any new blocks, starting backwards a bit
 	function scan($rewind_by) {
 		
-		//$start_at = $this->blockchaininfo["blocks"] - $rewind_by;
+		$start_at = $this->height - $rewind_by;
+		$start_at = ($start_at < 0) ? 0 : $start_at;
 
 		echo "Scanning...<br/><br/>";
 
 		// check latest scanned height versus actual height    
-	    while ($this->height < $this->blockchaininfo["blocks"]) 
+	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
-	    	echo "Block ".$this->height."<br>";
+	    	echo "<hr> Block ".$this->height."<br>";
 			
 			$block_hash = $this->WalletRPC->getblockhash(intval($this->height));
 			$raw_block = $this->WalletRPC->getblock($block_hash);
@@ -166,10 +163,9 @@ class Block2Redis {
 			
 			var_dump(json_decode($new_block["data"], TRUE));
 
-			
-			if ($this->height == 10) { break; }
+			if ($start_at == 10) { break; }
 
-			$this->height++;
+			$start_at++;
 
 			
 
