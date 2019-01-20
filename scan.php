@@ -13,7 +13,7 @@
   $Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
 
-  $Block2Redis->scan(0);
+ // $Block2Redis->scan(0);
 
 
 

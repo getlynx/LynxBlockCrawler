@@ -88,16 +88,18 @@ COIN::Blockchain
 
 class Block2Redis {
 
-  var $blockchaininfo;
-  var $height;
+  var $Redis;
+  var $WalletRPC;
+  var $dbinfo = FALSE;
+  var $blockchaininfo = FALSE;
+  var $height = 0;
+  var $RKEY;
 
-  function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port)
+  function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
   {
-    // check that Redis is isntalled and operating
-
-    // check if blockchain key exists
-
-    // if not, insert new --> COIN::Blockchain
+    // Connect to Redis server on localhost 
+   	$this->Redis = new Redis(); 
+   	$this->Redis->connect('127.0.0.1', 6379);
 
   	// TODO: get latest db height
     $this->height = $this->height();
@@ -109,8 +111,8 @@ class Block2Redis {
     // Get blockchain info for height
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 	
-	
-  	
+	$this->RKEY = $coin."::Blockchain";
+  	 
 
 
 
@@ -163,10 +165,22 @@ class Block2Redis {
 	// return latest database height
 	function height() {
 		// get array of REDIS hkeys matching "block::*" (maybe using hScan)
+		   	// Get existing db height
+	   	if ($this->Redis->exists($this->RKEY)) {
+	   		echo "EXISTS!";
+	   		$this->dbinfo = $Redis->hScan($this->RKEY, 0, "block::");
+	   		var_dump($this->dbinfo);
+	   	}
+
 		// copy to new array parsing out "block::"
 		// sort by value, largest first
 		// return first index
 		return 0;
+	}
+
+	// insert a key into Redis
+	function add_key($rdata) {
+		$Redis->hSet($this->RKEY, $rdata["key"], $rdata);
 	}
 
 	// assemble a new block to insert
@@ -200,15 +214,10 @@ class Block2Redis {
 			}';
 
 		// minify
-		$rdata['key'] = "block::".$raw_block["height"];
-		$rdata['data'] = preg_replace('/\s/', '', $jdata);
+		$rdata["key"] = "block::".$raw_block["height"];
+		$rdata["data"] = preg_replace("/\s/", "", $jdata);
 		
 		return $rdata;
-	}
-
-	// insert the block into Redis
-	function add_block() {
-
 	}
 
 	// assemble a new transaction to insert
@@ -234,11 +243,6 @@ class Block2Redis {
 		*/
 	}
 
-	// insert the transaction into Redis
-	function add_tx() {
-
-	}
-
 	// assemble a new transaction INPUTS to insert
 	function build_input($raw_input) {
 		/*
@@ -253,11 +257,6 @@ class Block2Redis {
 				}
 			}",
 		*/
-	}
-
-	// insert the transaction INPUTS into Redis
-	function add_input() {
-
 	}
 
 	// assemble a new transaction OUTPUTS to insert
@@ -292,11 +291,6 @@ class Block2Redis {
 		$rdata['data'] = preg_replace('/\s/', '', $jdata);
 		
 		return $rdata;
-	}
-
-	// insert the transaction OUTPUTS into Redis
-	function add_output() {
-
 	}
 
 	// assemble new address data to insert
