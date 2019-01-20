@@ -141,23 +141,8 @@ class Block2Redis {
 
 	// assemble a new block to insert
 	function build_block($raw_block) {
-		/*
-			"block::$height":"{
-				'date':'$date',
-				'hash':'9ba939488a68ba53...772275073917',
-				'ver':'536870912',
-				'size':'243',
-				'bits':'1c39660b',
-				'nonce':'527982446',
-				'diff':'4.45997062',
-				'root':'7b5f3e5dc24...e203bb2ebbbf3',
-				'txs':{
-					'7b5f3e5dc24...e203bb2ebbbf3'
-				}
-			}",
-		*/
 
-		// pre-render address list if any are found
+		// pre-render tx list if any are found
 		$txs = "";
 		if ( array_key_exists("tx", $raw_block) )
     	{
@@ -173,19 +158,19 @@ class Block2Redis {
 		// redis hash data
 		$jdata = 
 			'{
-				"time":"'.$raw_output["time"].'",
-				"hash":"'.$raw_output["hash"].'",
-				"ver":"'.$raw_output["version"].'",
-				"size:"'.$raw_output["size"].'",
-				"bits":"'.$raw_output["bits"].'",
-				"nonce":"'.$raw_output["nonce"].'",
-				"diff":"'.$raw_output["difficulty"].'",
-				"root":"'.$raw_output["merkleroot"].'",
+				"time":"'.$raw_block["time"].'",
+				"hash":"'.$raw_block["hash"].'",
+				"ver":"'.$raw_block["version"].'",
+				"size:"'.$raw_block["size"].'",
+				"bits":"'.$raw_block["bits"].'",
+				"nonce":"'.$raw_block["nonce"].'",
+				"diff":"'.$raw_block["difficulty"].'",
+				"root":"'.$raw_block["merkleroot"].'",
 				'.$txs.'
 			}';
 
 		// minify
-		$rdata['key'] = "block::".$raw_output["height"];
+		$rdata['key'] = "block::".$raw_block["height"];
 		$rdata['value'] = preg_replace('/\s/', '', $jdata);
 		
 		return $rdata;
