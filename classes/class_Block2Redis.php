@@ -161,26 +161,32 @@ class Block2Redis {
 
 		// pre-render inputs and outputs
 		$inputs = '"inputs":{';
-		foreach ($raw_tx["vin"] as $key => $raw_input)
+		if (array_key_exists("vin",$raw_tx))
 		{
-			$comma = ($key == 0) ? "" : ",";
-			$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
-			$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
-			$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
+			foreach ($raw_tx["vin"] as $key => $raw_input)
+			{
+				$comma = ($key == 0) ? "" : ",";
+				$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
+				$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
+				$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
 
-			// collect each input into its own key
-			$this->process_input($raw_input);
+				// collect each input into its own key
+				$this->process_input($raw_input);
+			}
 		}
 		$inputs = $inputs."}";
-
+		
 		$outputs = '"outputs":{';
-		foreach ($raw_tx["vout"] as $key => $raw_output)
+		if (array_key_exists("vin",$raw_tx))
 		{
-			$comma = ($key == 0) ? "" : ",";
-			$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
+			foreach ($raw_tx["vout"] as $key => $raw_output)
+			{
+				$comma = ($key == 0) ? "" : ",";
+				$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
 
-			// collect each output into its own key
-			$this->process_input($raw_output);
+				// collect each output into its own key
+				$this->process_input($raw_output);
+			}
 		}
 		$outputs = $outputs."}";
 
