@@ -251,7 +251,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h3>TX Raw:</h3>".var_dump(json_decode($this->raw_tx, true))."</br></br><h3>TX Redis: ".$txid."</h3>".$tx_data."</blockquote>";
+			echo "<blockquote><h3>TX Raw:</h3>".var_dump($this->raw_tx)."</br></br><h3>TX Redis: ".$txid."</h3>".$tx_data."</blockquote>";
 
 		} else { echo "<blockquote>NULL TX</blockquote>"; }
 	} 
