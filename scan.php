@@ -9,8 +9,10 @@
   $rpc_addy = "127.0.0.1";
   $rpc_port = "9332";
 
+  $coin = "LYNX";
+
   require_once ("classes/class_Block2Redis.php");
-  $Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
+  $Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin);
 
 
   $Block2Redis->scan(200);

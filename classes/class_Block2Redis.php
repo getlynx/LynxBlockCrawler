@@ -1,86 +1,4 @@
 <?php
-/*
-
-Rescan last 200 blocks from latest height each time
-
-Block Conf = calculate based on # of blocks ahead of this one
-
-Seperate address rescanner that loops through all existing in db and updates their data
-
-COIN::Blockchain 
-{
-
-
-
-	"block::2565763":"{
-		'date':'1234567890',
-		'hash':'9ba939488a68ba53...772275073917',
-		'ver':'536870912',
-		'size':'243',
-		'bits':'1c39660b',
-		'nonce':'527982446',
-		'diff':'4.45997062',
-		'root':'7b5f3e5dc24...e203bb2ebbbf3',
-		'txs':{
-			'7b5f3e5dc24...e203bb2ebbbf3'
-		}
-	}",
-
-
-
-	"tx::7b5f3e5dc24...e203bb2ebbbf3":"{
-		'date':'1234567890',
-		'ver':'1',
-		'lock':'0',
-		'block':'9ba939488...5314772275073917',
-		'hex':'0100000001000...88ac00000000',
-		'inputs':{
-			{
-				'038326270472f4...1000000000000000', # <-- either coinbase OR hex depending
-			},
-		},
-		'outputs':{
-			{
-				'hex':'76a914d9fc995d9...0687474334988ac',
-			},
-		}
-	}",
-
-
-
-	"input::038326270472f4...1000000000000000":"{
-		value':'1',
-		'type':'pubkeyhash',
-		'sigs':'1',
-		'asm':'OP_DUP OP_HASH160 d9f...43349 OP_EQUALVERIFY OP_CHECKSIG',
-		'hex':'76a914d9fc995d9...0687474334988ac',
-		'addresses':{
-			'KT5kYQXjv...dfe9LPPyJX1dKp',
-		}
-	}",
-
-
-
-	"output::76a914d9fc995d9...0687474334988ac":"{
-		'value':'1',
-		'type':'pubkeyhash',
-		'sigs':'1',
-		'asm':'OP_DUP OP_HASH160 d9f...43349 OP_EQUALVERIFY OP_CHECKSIG',
-		'hex':'76a914d9fc995d9...0687474334988ac',
-		'addresses':{
-			'KT5kYQXjv...dfe9LPPyJX1dKp',
-		}
-	}",
-
-
-
-	"address::KT5kYQXjvubU2F7cHWtNdfe9LPPyJX1dKp":"{
-		'txs':{
-			'7b5f3e5dc24...e203bb2ebbbf3'
-		}
-	}",
-
-*/
 
 /*
  * Duplicates an entire blockchain within a single Redis hash key
@@ -88,11 +6,14 @@ COIN::Blockchain
 
 class Block2Redis {
 
-  var $Redis;
-  var $WalletRPC;
-  var $blockchaininfo;
-  var $height;
-  var $RKEY;
+	// Redis containers
+	var $Redis;
+	var $RKEY;
+	var $dbheight;
+	
+	// Wallet containers
+	var $WalletRPC;
+	var $blockchaininfo;
 
 	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
 	{
@@ -103,9 +24,9 @@ class Block2Redis {
 		// get the latest db height
 		$this->RKEY = $coin."::Blockchain";
 
-		$this->height = $this->getheight();
+		$this->dbheight = $this->getdbheight();
 
-		echo "Latest DB Block is ".$this->height."<br><br>";
+		echo "Latest DB Block is ".$this->dbheight."<br><br>";
 
 		// Include and instantiate the WalletRPC class
 		require_once ("class_WalletRPC.php");
@@ -116,21 +37,12 @@ class Block2Redis {
 
 	}
 
- 	// return latest database height
-	function getheight() 
-	{
-	   	if ($this->Redis->exists($this->RKEY)) {
-	   		if ($this->Redis->hexists($this->RKEY, "height")) {
-	   			return $this->Redis->hget($this->RKEY, "height");
-			}
-		}
-		return 0;
-	}
+  	// scan the chain and record any new blocks
+  	// overwriting backwards a bit each time
 
-  	// rescan the chain for any new blocks, starting backwards a bit
 	function scan($rewind_by)
 	{	
-		$start_at = $this->height - $rewind_by;
+		$start_at = $this->dbheight - $rewind_by;
 		$start_at = ($start_at < 0) ? 0 : $start_at;
 
 		echo "Scanning from block ".$start_at."...<br/><br/>";
@@ -144,7 +56,7 @@ class Block2Redis {
 			$start_at++;
 
 			// debug stop at 10
-			if ($start_at == 300) { break; }
+			if ($start_at == 10) { break; }
 	    }	
 
 
@@ -158,12 +70,32 @@ class Block2Redis {
 		
 	}
 
-
+ 	// return latest database height
+	function getdbheight() 
+	{
+	   	if ($this->Redis->exists($this->RKEY))
+	   		if ($this->Redis->hexists($this->RKEY, "height"))
+	   			return $this->Redis->hget($this->RKEY, "height");
+		return 0;
+	}
 
 	// insert a key into Redis
 	function add_key($rdata) {
 		$this->Redis->hSet($this->RKEY, $rdata["key"], $rdata["data"]);
 	}
+
+
+
+
+/*
+
+####   #       ###    ####  #   #   ####
+#   #  #      #   #  #      #  #   #    
+####   #      #   #  #      ###     ### 
+#   #  #      #   #  #      #  #       #
+####   #####   ###    ####  #   #  #### 
+
+*/
 
 	// assemble a new block to insert
 	function process_block($raw_block) {
@@ -178,7 +110,9 @@ class Block2Redis {
 				$comma = ($key == 0) ? "" : ",";
 				$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
 				$raw_tx = $this->WalletRPC->getrawtransaction($tx);
-				$new_tx = $this->process_tx($raw_tx);
+				
+				// collect each tx into its own key
+				$this->process_tx($raw_tx);
 			}
 			$txs = $txs."}";
 		}
@@ -207,35 +141,87 @@ class Block2Redis {
 		// update db height value
 		$this->Redis->hSet($this->RKEY, "height", $raw_block["height"]);
 
+		// debug: call it back and spit it out
 		$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 		echo "<hr>".$block_data;
 	}
 
+/*
+
+#####  #   #   ####
+  #     # #   #    
+  #      #     ### 
+  #     # #       #
+  #    #   #  #### 
+
+*/
+
 	// assemble a new transaction to insert
 	function process_tx($raw_tx) {
-		/*
-			"tx::7b5f3e5dc24...e203bb2ebbbf3":"{
-				'date':'1234567890',
-				'ver':'1',
-				'lock':'0',
-				'block':'9ba939488...5314772275073917',
-				'hex':'0100000001000...88ac00000000',
-				'inputs':{
-					{
-						'038326270472f4...1000000000000000', # <-- either coinbase OR hex depending
-					},
-				},
-				'outputs':{
-					{
-						'hex':'76a914d9fc995d9...0687474334988ac',
-					},
-				}
-			}",
-		*/
+
+		// pre-render inputs and outputs
+		$inputs = '"inputs":{';
+		foreach ($raw_tx["vin"] as $key => $raw_input)
+		{
+			$comma = ($key == 0) ? "" : ",";
+			$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
+			$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
+			$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
+
+			// collect each input into its own key
+			$this->process_input($raw_input);
+		}
+		$inputs = $inputs."}";
+
+		$outputs = '"outputs":{';
+		foreach ($raw_tx["vout"] as $key => $raw_output)
+		{
+			$comma = ($key == 0) ? "" : ",";
+			$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
+
+			// collect each output into its own key
+			$this->process_input($raw_output);
+		}
+		$outputs = $outputs."}";
+
+		// redis hash data
+		$jdata = 
+			'{
+				"time":"'.$raw_tx["time"].'",
+				"ver":"'.$raw_tx["version"].'",
+				"lock":"'.$raw_tx["locktime"].'",
+				"block":"'.$raw_tx["blockhash"].'",
+				"hex":"'.$raw_tx["hex"].'",
+				"msg":"'.htmlspecialchars($raw_tx["tx-comment"]).'",
+				"intype":"'.$input_type.'",
+				'.$inputs.',
+				'.$outputs.'
+			}';
+
+		// minify
+		$rdata["key"] = "tx::".$raw_tx["txid"];
+		$rdata["data"] = preg_replace("/\s/", "", $jdata);
+		
+		// send block data to Redis
+		$this->add_key($rdata);
+
+		// debug: call it back and spit it out
+		$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+		echo "<blockquote>".$tx_data."</blockquote>";
 	}
 
+/*
+
+#####  #   #  ####   #   #  #####   ####
+  #    ##  #  #   #  #   #    #    #
+  #    # # #  ####   #   #    #     ###
+  #    #  ##  #      #   #    #        #
+#####  #   #  #       ###     #    ####
+
+*/
+
 	// assemble a new transaction INPUTS to insert
-	function build_input($raw_input) {
+	function process_input($raw_input) {
 		/*
 			"input::038326270472f4...1000000000000000":"{
 				value':'1',
@@ -250,8 +236,18 @@ class Block2Redis {
 		*/
 	}
 
+/*
+
+ ###   #   #  #####  ####   #   #  #####   ####
+#   #  #   #    #    #   #  #   #    #    #
+#   #  #   #    #    ####   #   #    #     ###
+#   #  #   #    #    #      #   #    #        #
+ ###    ###     #    #       ###     #    ####
+
+*/
+
 	// assemble a new transaction OUTPUTS to insert
-	function build_output($raw_output) {
+	function process_output($raw_output) {
 		
 		// pre-render address list if any are found
 		$addresses = "";
@@ -278,10 +274,15 @@ class Block2Redis {
 			}';
 
 		// minify
-		$rdata['key'] = "output::".$raw_output["scriptPubKey"]["hex"];
-		$rdata['data'] = preg_replace('/\s/', '', $jdata);
-		
-		return $rdata;
+		$rdata["key"] = "output::".$raw_output["scriptPubKey"]["hex"];
+		$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+		// send block data to Redis
+		$this->add_key($rdata);
+
+		// debug: call it back and spit it out
+		$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+		echo "<blockquote>".$output_data."</blockquote>";
 	}
 
 	// assemble new address data to insert

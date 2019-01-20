@@ -739,16 +739,16 @@ foreach ($raw_tx["vin"] as $key => $txin)
           <span class="text-glow">'.$this->link_txid($txin["txid"]).'</span>
           <br/>
           <strong>TX Output: </strong>
-          <span class="text-glow">Input #'.$txin["vout"].'</span>
+          <span class="text-glow">'.$txin["vout"].'</span>
           <br/>
           <strong>TX Sequence: </strong>
-          <span class="text-glow">Input #'.$txin["sequence"].'</span>
+          <span class="text-glow">'.$txin["sequence"].'</span>
           <br/>
           <strong>Script Sig (ASM): </strong>
-          <span class="text-glow">Input #'.$txin["scriptSig"]["asm"].'</span>
+          <span class="text-glow">'.$txin["scriptSig"]["asm"].'</span>
           <br/>
           <strong>Script Sig (HEX): </strong>
-          <span class="text-glow">Input #'.$txin["scriptSig"]["hex"].'</span>
+          <span class="text-glow">'.$txin["scriptSig"]["hex"].'</span>
     ');
   }
   array_push($html, '
