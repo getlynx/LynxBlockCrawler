@@ -138,18 +138,13 @@ class Block2Redis {
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
-	    	echo "<hr> Block ".$start_at."<br>";
-			
-			$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
+	    	$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$raw_block = $this->WalletRPC->getblock($block_hash);
-			$new_block = $this->process_block($raw_block);
-
-			var_dump(json_decode($new_block["data"], TRUE));
-
-			if ($start_at == 10) { break; }
-
+			$this->process_block($raw_block);
 			$start_at++;
 
+			// debug stop at 10
+			if ($start_at == 10) { break; }
 	    }	
 
 
@@ -209,9 +204,10 @@ class Block2Redis {
 		// send block data to Redis
 		$this->add_key($rdata);
 
-		$this->Redis->hset($this->RKEY, "height", $raw_block["height"]);
+		// update db height value
+		$this->Redis->hSet($this->RKEY, "height", $raw_block["height"]);
 
-		return $rdata;
+		echo "<hr>".$this->Redis-hGet($this->RKEY, $rdata["key"]);
 	}
 
 	// assemble a new transaction to insert
