@@ -95,40 +95,58 @@ class Block2Redis {
   var $height = 0;
   var $RKEY;
 
-  function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
-  {
-    // Connect to Redis server on localhost 
-   	$this->Redis = new Redis(); 
-   	$this->Redis->connect('127.0.0.1', 6379);
+	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
+	{
+		// Connect to Redis server on localhost 
+		$this->Redis = new Redis(); 
+		$this->Redis->connect('127.0.0.1', 6379);
 
-   	echo $this->Redis->ping();
+		// get the latest db height
+		$this->RKEY = $coin."::Blockchain";
 
-  	// get the latest db height
-    $this->RKEY = $coin."::Blockchain";
+		$this->height = $this->getheight ();
 
-    echo $this->RKEY."<br>";
+		echo $this->height."<br>";
 
-  	$this->height = $this->height();
+		// Include and instantiate the WalletRPC class
+		require_once ("class_WalletRPC.php");
+		$this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
-	echo $this->height."<br>";
+		// Get blockchain info for height
+		$this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 
-	// Include and instantiate the WalletRPC class
-    require_once ("class_WalletRPC.php");
-    $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
+	}
 
-    // Get blockchain info for height
-    $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
-	
-	 
+ 	// return latest database height
+	function getheight() 
+	{
+		echo "Get existing db height";
+	   	
+	   	if ($this->Redis->exists($this->RKEY)) {
 
+	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
+	   		$keys = $Redis->hScan($this->RKEY, 0, "block::");
+	   		foreach ($keys as $k => $v)
+	   		{
+	   			// copy to new array parsing out "block::"
+	   			$num = explode("::", $v);
+	   			$nums[] = $num[1];
+	   		}
+	   		
+	   		// sort by value, largest first
+	   		$nums = rsort($nums);
+	   		echo "Latest DB Block is ".$nums[0];
 
+	   		// return first index
+	   		return $nums[0];
+	   	}
 
+		
+		
+		
+		return 0;
+	}
 
-
-
-
-
-  }
 
   	// rescan the chain for any new blocks, starting backwards a bit
 	function scan($rewind_by) {
@@ -169,28 +187,7 @@ class Block2Redis {
 		
 	}
 
-	// return latest database height
-	function height() {
-		echo "Get existing db height";
-	   	
-	   	if ($this->Redis->exists($this->RKEY)) {
 
-	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
-	   		$keys = $Redis->hScan($this->RKEY, 0, "block::");
-	   		foreach ($keys as $k => $v)
-	   		{
-	   			$num = explode("::", $v);
-	   			$nums[] = $num[1];
-	   		}
-	   		$nums = sort($nums);
-	   		echo "Latest DB Block is ".$nums[0];
-	   	}
-
-		// copy to new array parsing out "block::"
-		// sort by value, largest first
-		// return first index
-		return $nums[0];
-	}
 
 	// insert a key into Redis
 	function add_key($rdata) {
