@@ -122,7 +122,9 @@ class Block2Redis {
 	   	if ($this->Redis->exists($this->RKEY)) {
 
 	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
-	   		$keys = $this->Redis->hScan($this->RKEY, NULL, "block::*");
+	   		$it = NULL;
+	   		$pattern = "block::*";
+	   		$keys = $this->Redis->hScan($this->RKEY, $it, $pattern);
 	   		foreach ($keys as $k => $v)
 	   		{
 	   			// copy to new array parsing out "block::"
