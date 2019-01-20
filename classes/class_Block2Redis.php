@@ -122,12 +122,14 @@ class Block2Redis {
 	   	if ($this->Redis->exists($this->RKEY)) {
 
 	   		// get array of REDIS hkeys matching "block::*" (maybe using hScan)	
-	   		$keys = $this->Redis->hScan($this->RKEY, "block::*");
+	   		$keys = $this->Redis->hkeys($this->RKEY);
 	   		foreach ($keys as $k => $v)
 	   		{
 	   			// copy to new array parsing out "block::"
 	   			$num = explode("::", $v);
-	   			$nums[] = $num[1];
+	   			if ($num[0] == "block") {
+		   			$nums[] = $num[1];
+	   			}
 	   		}
 	   		
 	   		// sort by value, largest first
