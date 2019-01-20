@@ -383,7 +383,24 @@ class BlockCrawler {
   }
 
 
-  
+
+
+
+
+
+
+
+
+
+/*
+
+####   #       ###    ####  #   #
+#   #  #      #   #  #      #  #
+####   #      #   #  #      ###
+#   #  #      #   #  #      #  #
+####   #####   ###    ####  #   #
+
+*/
 
   // Return the block detail page
   function lookup_block($query="", $is_hash=FALSE)
@@ -405,8 +422,8 @@ class BlockCrawler {
 
     $block = $this->Block2Redis->build_block($raw_block);
     echo $block["key"].'<br>';
-    echo $block["value"].'<br>';
-    var_dump($block);
+    echo $block["data"].'<br>';
+    var_dump($block["data"]);
 
     $timestamp = date('m/d/Y \@ H:i:s', $raw_block["time"]);
     
@@ -579,7 +596,15 @@ class BlockCrawler {
 
 
 
+/*
 
+#####  #   #
+  #     # #
+  #      #
+  #     # #
+  #    #   #
+
+*/
 
 
   // Return the transaction detail page
@@ -747,7 +772,7 @@ foreach ($raw_tx["vout"] as $key => $txout)
 {
   $output = $this->Block2Redis->build_output($txout);
   echo $output["key"].'<br>';
-  echo $output["value"].'<br>';
+  echo $output["data"].'<br>';
 
   array_push($html, '
     <div class="row">
