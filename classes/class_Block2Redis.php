@@ -161,7 +161,7 @@ class Block2Redis {
 				"time":"'.$raw_block["time"].'",
 				"hash":"'.$raw_block["hash"].'",
 				"ver":"'.$raw_block["version"].'",
-				"size":'.$raw_block["size"].'",
+				"size":"'.$raw_block["size"].'",
 				"bits":"'.$raw_block["bits"].'",
 				"nonce":"'.$raw_block["nonce"].'",
 				"diff":"'.$raw_block["difficulty"].'",
