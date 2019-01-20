@@ -207,7 +207,8 @@ class Block2Redis {
 		// update db height value
 		$this->Redis->hSet($this->RKEY, "height", $raw_block["height"]);
 
-		echo "<hr>".$this->Redis-hGet($this->RKEY, $rdata["key"]);
+		$block_data = $this->Redis-hGet($this->RKEY, $rdata["key"]);
+		echo "<hr>".$block_data;
 	}
 
 	// assemble a new transaction to insert
