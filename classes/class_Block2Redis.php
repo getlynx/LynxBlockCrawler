@@ -15,6 +15,13 @@ class Block2Redis {
 	var $WalletRPC;
 	var $blockchaininfo;
 
+	// Raw data containers
+	var $raw_block;
+	var $raw_tx;
+	var $raw_input;
+	var $raw_output;
+	var $raw_address;
+
 	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
 	{
 		// Connect to Redis server on localhost 
@@ -51,8 +58,8 @@ class Block2Redis {
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
 	    	$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
-			$raw_block = $this->WalletRPC->getblock($block_hash);
-			$this->process_block($raw_block);
+			$this->raw_block = $this->WalletRPC->getblock($block_hash);
+			$this->process_block();
 			$start_at++;
 
 			// debug stop at 10
@@ -98,21 +105,21 @@ class Block2Redis {
 */
 
 	// assemble a new block to insert
-	function process_block($raw_block) {
+	function process_block() {
 
 		// pre-render tx list if any are found
 		$txs = "";
-		if ( array_key_exists("tx", $raw_block) )
+		if ( array_key_exists("tx", $this->raw_block) )
     	{
 			$txs = '"txs":{';
-			foreach ($raw_block["tx"] as $key => $tx)
+			foreach ($this->raw_block["tx"] as $key => $tx)
 			{
 				$comma = ($key == 0) ? "" : ",";
 				$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
-				$raw_tx = $this->WalletRPC->getrawtransaction($tx);
+				$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
 				
 				// collect each tx into its own key
-				$this->process_tx($raw_tx);
+				$this->process_tx();
 			}
 			$txs = $txs."}";
 		}
@@ -120,26 +127,31 @@ class Block2Redis {
 		// redis hash data
 		$jdata = 
 			'{
-				"time":"'.$raw_block["time"].'",
-				"hash":"'.$raw_block["hash"].'",
-				"ver":"'.$raw_block["version"].'",
-				"size":"'.$raw_block["size"].'",
-				"bits":"'.$raw_block["bits"].'",
-				"nonce":"'.$raw_block["nonce"].'",
-				"diff":"'.$raw_block["difficulty"].'",
-				"root":"'.$raw_block["merkleroot"].'",
+				"time":"'.$this->raw_block["time"].'",
+				"hash":"'.$this->raw_block["hash"].'",
+				"ver":"'.$this->raw_block["version"].'",
+				"size":"'.$this->raw_block["size"].'",
+				"bits":"'.$this->raw_block["bits"].'",
+				"nonce":"'.$this->raw_block["nonce"].'",
+				"diff":"'.$this->raw_block["difficulty"].'",
+				"root":"'.$this->raw_block["merkleroot"].'",
 				'.$txs.'
 			}';
 
 		// minify
-		$rdata["key"] = "block::".$raw_block["height"];
+		$rdata["key"] = "block::".$this->raw_block["height"];
 		$rdata["data"] = preg_replace("/\s/", "", $jdata);
 		
-		// send block data to Redis
+		// send data to Redis
 		$this->add_key($rdata);
 
 		// update db height value
-		$this->Redis->hSet($this->RKEY, "height", $raw_block["height"]);
+		$this->Redis->hSet($this->RKEY, "height", $this->raw_block["height"]);
+
+		// clear the raw data container
+		$this->raw_block = [];
+
+		
 
 		// debug: call it back and spit it out
 		$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
@@ -157,59 +169,59 @@ class Block2Redis {
 */
 
 	// assemble a new transaction to insert
-	function process_tx($raw_tx) {
+	function process_tx() {
 
 		// pre-render inputs and outputs
 		$inputs = '"inputs":{';
-		if (array_key_exists("vin",$raw_tx))
+		foreach ($this->raw_tx["vin"] as $key => $raw_input)
 		{
-			foreach ($raw_tx["vin"] as $key => $raw_input)
-			{
-				$comma = ($key == 0) ? "" : ",";
-				$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
-				$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
-				$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
+			$comma = ($key == 0) ? "" : ",";
+			$input_id = ( array_key_exists("coinbase", $raw_input) ) ? $raw_input["coinbase"] : $raw_input["scriptSig"]["hex"];
+			$input_type = ( array_key_exists("coinbase", $raw_input) ) ? "coinbase" : "hex";
+			$inputs = $inputs.$comma.'"'.$input_type.'":"'.$input_id.'"';
 
-				// collect each input into its own key
-				$this->process_input($raw_input);
-			}
+			// collect each input into its own key
+			//$this->process_input($raw_input);
 		}
 		$inputs = $inputs."}";
 		
 		$outputs = '"outputs":{';
-		if (array_key_exists("vin",$raw_tx))
+		foreach ($this->raw_tx["vout"] as $key => $raw_output)
 		{
-			foreach ($raw_tx["vout"] as $key => $raw_output)
-			{
-				$comma = ($key == 0) ? "" : ",";
-				$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
+			$comma = ($key == 0) ? "" : ",";
+			$outputs = $outputs.$comma.'"hex":"'.$raw_ouput["scriptSig"]["hex"].'"';
 
-				// collect each output into its own key
-				$this->process_input($raw_output);
-			}
+			// collect each output into its own key
+			//$this->process_input($raw_output);
 		}
 		$outputs = $outputs."}";
+
+		$tx_comment = ( array_key_exists("tx-comment", $this->raw_tx) ) ? htmlspecialchars($this->raw_tx["tx-comment"]) : "";
 
 		// redis hash data
 		$jdata = 
 			'{
-				"time":"'.$raw_tx["time"].'",
-				"ver":"'.$raw_tx["version"].'",
-				"lock":"'.$raw_tx["locktime"].'",
-				"block":"'.$raw_tx["blockhash"].'",
-				"hex":"'.$raw_tx["hex"].'",
-				"msg":"'.htmlspecialchars($raw_tx["tx-comment"]).'",
-				"intype":"'.$input_type.'",
+				"time":"'.$this->raw_tx["time"].'",
+				"ver":"'.$this->raw_tx["version"].'",
+				"lock":"'.$this->raw_tx["locktime"].'",
+				"block":"'.$this->raw_tx["blockhash"].'",
+				"hex":"'.$this->raw_tx["hex"].'",
+				"msg":"'.$tx_comment.'",
 				'.$inputs.',
 				'.$outputs.'
 			}';
 
 		// minify
-		$rdata["key"] = "tx::".$raw_tx["txid"];
+		$rdata["key"] = "tx::".$this->raw_tx["txid"];
 		$rdata["data"] = preg_replace("/\s/", "", $jdata);
 		
-		// send block data to Redis
+		// send data to Redis
 		$this->add_key($rdata);
+
+		// clear the raw data container
+		$this->raw_tx = [];
+
+
 
 		// debug: call it back and spit it out
 		$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
