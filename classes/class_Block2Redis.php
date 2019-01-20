@@ -155,7 +155,7 @@ class Block2Redis {
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
-	    	echo "<hr> Block ".$this->height."<br>";
+	    	echo "<hr> Block ".$start_at."<br>";
 			
 			$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
 			$raw_block = $this->WalletRPC->getblock($block_hash);
