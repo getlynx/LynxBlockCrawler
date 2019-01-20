@@ -1,3 +1,13 @@
+<style>
+body 
+{
+	word-break: break-all;
+	font-family: monospace;
+	background: #000;
+	color: #0f0;
+}
+</style>
+
 <?php
 
 /*
@@ -33,7 +43,7 @@ class Block2Redis {
 
 		$this->dbheight = $this->getdbheight();
 
-		echo "Latest DB Block is ".$this->dbheight."<br><br>";
+		echo "<h1>Latest DB Block is ".$this->dbheight."<br><br>";
 
 		// Include and instantiate the WalletRPC class
 		require_once ("class_WalletRPC.php");
@@ -59,7 +69,7 @@ class Block2Redis {
 		$start_at = $this->dbheight - $rewind_by;
 		$start_at = ($start_at < 0) ? 0 : $start_at;
 
-		echo "Scanning from block ".$start_at."...<br/><br/>";
+		echo "Scanning from block ".$start_at."...</h1>";
 
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
@@ -117,6 +127,8 @@ class Block2Redis {
 		if ( $this->raw_block ) 
 		{
 
+			$height = $this->raw_block["height"];
+
 			// pre-render tx list if any are found
 			$txs = "";
 			if ( array_key_exists("tx", $this->raw_block) )
@@ -149,14 +161,14 @@ class Block2Redis {
 				}';
 
 			// minify
-			$rdata["key"] = "block::".$this->raw_block["height"];
+			$rdata["key"] = "block::".$height;
 			$rdata["data"] = preg_replace("/\s/", "", $jdata);
 			
 			// send data to Redis
 			$this->add_key($rdata);
 
 			// update db height value
-			$this->Redis->hSet($this->RKEY, "height", $this->raw_block["height"]);
+			$this->Redis->hSet($this->RKEY, "height", $height);
 
 			// clear the raw data container
 			$this->raw_block = [];
@@ -165,7 +177,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<hr>".$block_data;
+			echo "<hr><h2>Block # ".$height."</h2>".$block_data;
 
 		} else { echo "<hr>NULL BLOCK"; }
 	}
@@ -185,6 +197,8 @@ class Block2Redis {
 
 		if ( $this->raw_tx )
 		{
+
+			$txid = $this->raw_tx["txid"];
 
 			// pre-render inputs and outputs
 			$inputs = '"inputs":{';
@@ -227,7 +241,7 @@ class Block2Redis {
 				}';
 
 			// minify
-			$rdata["key"] = "tx::".$this->raw_tx["txid"];
+			$rdata["key"] = "tx::".$txid;
 			$rdata["data"] = preg_replace("/\s/", "", $jdata);
 			
 			// send data to Redis
@@ -240,7 +254,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote>".$tx_data."</blockquote>";
+			echo "<blockquote><h3>TxID ".$txid."</h3>".$tx_data."</blockquote>";
 
 		} else { echo "<blockquote>NULL TX</blockquote>"; }
 	} 
@@ -297,7 +311,7 @@ class Block2Redis {
 
 		// debug: call it back and spit it out
 		$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<blockquote>".$input_data."</blockquote>";
+		echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
 	}
 
 /*
@@ -351,7 +365,7 @@ class Block2Redis {
 
 		// debug: call it back and spit it out
 		$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-		echo "<blockquote>".$output_data."</blockquote>";
+		echo "<blockquote><h4>Output (".$jdata["hex"].")</h4>".$output_data."</blockquote>";
 	}
 
 	// assemble new address data to insert
