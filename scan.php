@@ -10,8 +10,14 @@ body
 blockquote
 {
   border: 1px solid #ff0;
-  margin: 15px;
+  margin: 15px 50px;
   padding: 15px;
+}
+hr
+{
+  height: 10px;
+  background-color: #fff;
+  color: #fff;
 }
 </style>
 
