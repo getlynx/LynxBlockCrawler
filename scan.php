@@ -1,27 +1,31 @@
-<style>
-body 
-{
-  word-break: break-all;
-  font-family: Verdana;
-  background: #000;
-  color: #999;
-  font-size: small;
-}
-blockquote
-{
-  border: 1px solid #ff0;
-  margin: 15px 50px;
-  padding: 15px;
-}
-hr
-{
-  height: 10px;
-  background-color: #fff;
-  color: #fff;
-}
-</style>
-
-
+<html>
+<head>
+  <title>Block2Redis (PHP)</title>
+  <meta http-equiv="Refresh" content="30">
+  <style>
+    body 
+    {
+      word-break: break-all;
+      font-family: Verdana;
+      background: #000;
+      color: #999;
+      font-size: small;
+    }
+    blockquote
+    {
+      border: 1px solid #ff0;
+      margin: 15px 50px;
+      padding: 15px;
+    }
+    hr
+    {
+      height: 10px;
+      background-color: #fff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
 <?php
   
   // Show debug console output?
@@ -44,3 +48,5 @@ hr
 
 
 ?>
+</body>
+</html>
