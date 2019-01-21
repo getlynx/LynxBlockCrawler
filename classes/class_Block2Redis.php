@@ -171,9 +171,9 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$block_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo $block_data."<h2>(above) Block # ".$height."</h2><hr>";
+			echo "<h2>&#8593; Block # ".$height." &#8593;</h2>".$block_data."<hr>";
 
-		} else { echo "<hr>NULL BLOCK"; }
+		}
 	}
 
 /*
@@ -238,9 +238,7 @@ class Block2Redis {
 					"lock":"'.$this->raw_tx["locktime"].'",
 					"block":"'.$this->raw_tx["blockhash"].'",
 					"hex":"'.$this->raw_tx["hex"].'",
-					"msg":"'.$tx_comment.'",
-					'.$inputs.',
-					'.$outputs.'
+					"msg":"'.$tx_comment.'"
 				}';
 
 			// minify
@@ -257,7 +255,7 @@ class Block2Redis {
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote><h3>TX Raw:</h3>".var_dump($this->raw_tx)."</br></br><h3>TX Redis: ".$txid."</h3>".$tx_data."</blockquote>";
 
-		} else { echo "<blockquote>NULL TX</blockquote>"; }
+		}
 	} 
 
 /*
@@ -286,7 +284,7 @@ class Block2Redis {
 					$jdata = 
 					$jdata.$comma.'{
 						"cb":"'.$raw_input["coinbase"].'",
-						"seq":"'.$raw_input["sequence"].'",
+						"seq":"'.$raw_input["sequence"].'"
 						
 					}';
 				} 
@@ -298,7 +296,7 @@ class Block2Redis {
 						"txid":"'.$raw_input["txid"].'",
 						"out":"'.$raw_input["vout"].'",
 						"asm":"'.$raw_input["scriptSig"]["asm"].'",
-						"hex":"'.$raw_input["scriptSig"]["hex"].'",
+						"hex":"'.$raw_input["scriptSig"]["hex"].'"
 					}';
 				}
 				
@@ -317,7 +315,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
+			echo "<blockquote><h4>Inputs: (".$rdata["key"].")</h4>".$input_data."</blockquote>";
 
 		}
 	}
@@ -367,7 +365,7 @@ class Block2Redis {
 			$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
 		
-		} else { echo "<blockquote>NULL INPUT</blockquote>"; }
+		}
 	}
 
 /*
