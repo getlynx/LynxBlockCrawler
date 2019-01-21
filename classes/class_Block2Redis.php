@@ -57,7 +57,7 @@ class Block2Redis {
 			$start_at++;
 
 			// debug stop at 10
-			if ($start_at == 250) { break; }
+			//if ($start_at == 250) { break; }
 			// Clean up!
 			
 	    }	
@@ -353,14 +353,7 @@ class Block2Redis {
 
 	// assemble new address data to insert
 	function process_address($raw_address) {
-		/*
-			"address::KT5kYQXjvubU2F7cHWtNdfe9LPPyJX1dKp":"{
-				"txs":[
-					"7b5f3e5dc24...e203bb2ebbbf3",
-					"7b5f3e5dc24...e203bb2ebbbf3"
-				]
-			}",
-		*/
+
 		if ( $raw_address ) 
 		{
 			$address = $raw_address["address"];
@@ -405,7 +398,7 @@ class Block2Redis {
 			$address_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote><h4>".$rdata["key"]."</h4>".$address_data."</blockquote>";
 
-		} else { echo "<blockquote>NULL ADDRESS</blockquote>"; }
+		}
 	}
 
 
