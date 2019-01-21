@@ -375,11 +375,11 @@ class Block2Redis {
 				]
 			}",
 		*/
-		if ( $this->raw_address ) 
+		if ( $raw_address ) 
 		{
-			$address = $this->raw_address["address"];
+			$address = $raw_address["address"];
 			$akey = "address::".$address;
-			$txid = $this->raw_address["txid"];
+			$txid = $raw_address["txid"];
 
 			// find matching address key and read existing tx list
 			$txids = [];
