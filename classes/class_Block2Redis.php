@@ -388,7 +388,9 @@ class Block2Redis {
 			{
 				// get list if exists
 				$txids = json_decode($rdata, TRUE);
-			}	
+			}
+
+			var_dump($txids);
 
 			// add txid to the list if it is not already there
 			if (! in_array($txid, $txids)) { array_push($txids, $txid); }
