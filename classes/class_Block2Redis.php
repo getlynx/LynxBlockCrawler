@@ -377,14 +377,18 @@ class Block2Redis {
 			}
 
 			$jdata = '{"txs":[';
-			foreach ($txids["txs"] as $key => $id)
+			if (array_key_exists("txs", $txids))
 			{
-				$comma = ($key == 0) ? "" : ",";
-				$jdata = $jdata.$comma.'"'.$id.'"';
+				foreach ($txids["txs"] as $key => $id)
+				{
+					$comma = ($key == 0) ? "" : ",";
+					$jdata = $jdata.$comma.'"'.$id.'"';
+				}
 			}
-			
 			// add txid to the list if it is not already there
-			if (! in_array($txid, $txids["txs"])) { $jdata = $jdata.',"'.$txid.'"'; }
+			if (! in_array($txid, $txids["txs"])) { 
+				$jdata = (array_key_exists("txs", $txids)) ? $jdata.',"'.$txid.'"' : $jdata.'"'.$txid.'"'; 
+			}
 
 			$jdata = $jdata.']}';
 
