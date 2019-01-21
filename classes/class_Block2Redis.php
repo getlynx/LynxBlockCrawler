@@ -15,9 +15,6 @@ class Block2Redis {
 	var $WalletRPC;
 	var $blockchaininfo;
 
-	// Raw data containers
-	var $raw_block;
-	var $raw_tx;
 	
 	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
 	{
@@ -39,9 +36,6 @@ class Block2Redis {
 		// Get blockchain info for height
 		$this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
 
-		// Set raw data containers as arrays
-		$this->clearcontainers();
-
 	}
 
   	// scan the chain and record any new blocks
@@ -57,11 +51,9 @@ class Block2Redis {
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
 	    {
-	    	$this->clearcontainers();
 	    	$block_hash = $this->WalletRPC->getblockhash(intval($start_at));
-			$this->raw_block = $this->WalletRPC->getblock($block_hash);
-			$this->process_block();
-			$this->raw_block = [];
+			$raw_block = $this->WalletRPC->getblock($block_hash);
+			$this->process_block($raw_block);
 			$start_at++;
 
 			// debug stop at 10
@@ -95,11 +87,6 @@ class Block2Redis {
 		$this->Redis->hSet($this->RKEY, $rdata["key"], $rdata["data"]);
 	}
 
-	function clearcontainers() {
-		$this->raw_block = [];
-		$this->raw_tx = [];
-	}
-
 
 
 
@@ -114,27 +101,26 @@ class Block2Redis {
 */
 
 	// assemble a new block to insert
-	function process_block() {
+	function process_block($raw_block) {
 
-		if ( $this->raw_block ) 
+		if ( $raw_block ) 
 		{
 
-			$height = $this->raw_block["height"];
+			$height = $raw_block["height"];
 
 			// pre-render tx list if any are found
 			$txs = "";
-			if ( array_key_exists("tx", $this->raw_block) )
+			if ( array_key_exists("tx", $raw_block) )
 	    	{
 				$txs = '"txs":[';
-				foreach ($this->raw_block["tx"] as $key => $txid)
+				foreach ($raw_block["tx"] as $key => $txid)
 				{
 					$comma = ($key == 0) ? "" : ",";
 					$txs = $txs.$comma.'"'.$txid.'"';
 					
 					// collect each tx into its own key
-					$this->raw_tx = $this->WalletRPC->getrawtransaction($txid);
-					$this->process_tx();
-					$this->raw_tx = [];
+					$raw_tx = $this->WalletRPC->getrawtransaction($txid);
+					$this->process_tx($raw_tx);
 				}
 				$txs = $txs."]";
 			}
@@ -142,14 +128,14 @@ class Block2Redis {
 			// redis hash data
 			$jdata = 
 				'{
-					"time":"'.$this->raw_block["time"].'",
-					"hash":"'.$this->raw_block["hash"].'",
-					"ver":"'.$this->raw_block["version"].'",
-					"size":"'.$this->raw_block["size"].'",
-					"bits":"'.$this->raw_block["bits"].'",
-					"nonce":"'.$this->raw_block["nonce"].'",
-					"diff":"'.$this->raw_block["difficulty"].'",
-					"root":"'.$this->raw_block["merkleroot"].'",
+					"time":"'.$raw_block["time"].'",
+					"hash":"'.$raw_block["hash"].'",
+					"ver":"'.$raw_block["version"].'",
+					"size":"'.$raw_block["size"].'",
+					"bits":"'.$raw_block["bits"].'",
+					"nonce":"'.$raw_block["nonce"].'",
+					"diff":"'.$raw_block["difficulty"].'",
+					"root":"'.$raw_block["merkleroot"].'",
 					'.$txs.'
 				}';
 
@@ -181,27 +167,27 @@ class Block2Redis {
 */
 
 	// assemble a new transaction to insert
-	function process_tx() {
+	function process_tx($raw_tx) {
 
-		if ( $this->raw_tx )
+		if ( $raw_tx )
 		{
 
-			$txid = $this->raw_tx["txid"];
+			$txid = $raw_tx["txid"];
 
 			// pre-render inputs and outputs
-			$this->process_txins($this->raw_tx["vin"]);
-			$this->process_txouts($this->raw_tx["vout"]);
+			$this->process_txins($raw_tx["txid"], $raw_tx["vin"]);
+			$this->process_txouts($raw_tx["txid"], $raw_tx["vout"]);
 
-			$tx_comment = ( array_key_exists("tx-comment", $this->raw_tx) ) ? htmlspecialchars($this->raw_tx["tx-comment"]) : "";
+			$tx_comment = ( array_key_exists("tx-comment", $raw_tx) ) ? htmlspecialchars($raw_tx["tx-comment"]) : "";
 
 			// redis hash data
 			$jdata = 
 				'{
-					"time":"'.$this->raw_tx["time"].'",
-					"ver":"'.$this->raw_tx["version"].'",
-					"lock":"'.$this->raw_tx["locktime"].'",
-					"block":"'.$this->raw_tx["blockhash"].'",
-					"hex":"'.$this->raw_tx["hex"].'",
+					"time":"'.$raw_tx["time"].'",
+					"ver":"'.$raw_tx["version"].'",
+					"lock":"'.$raw_tx["locktime"].'",
+					"block":"'.$raw_tx["blockhash"].'",
+					"hex":"'.$raw_tx["hex"].'",
 					"msg":"'.$tx_comment.'"
 				}';
 
@@ -233,7 +219,7 @@ class Block2Redis {
 */
 
 	// assemble a new transaction INPUT to insert
-	function process_txins($txins) {
+	function process_txins($txid, $txins) {
 
 		if ( $txins ) 
 		{
@@ -268,7 +254,7 @@ class Block2Redis {
 			$jdata = $jdata."]";
 
 			// minify
-			$rdata["key"] = "txins::".$this->raw_tx["txid"];
+			$rdata["key"] = "txins::".$txid;
 			$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
 			// send block data to Redis
@@ -296,7 +282,7 @@ class Block2Redis {
 */
 	
 	// assemble a new transaction INPUT to insert
-	function process_txouts($txouts) {
+	function process_txouts($txid, $txouts) {
 
 		if ( $txouts ) 
 		{
@@ -315,7 +301,7 @@ class Block2Redis {
 						$comma = ($key == 0) ? "" : ",";
 						$addresses = $addresses.$comma.'"'.$address.'"';
 						$raw_address["address"] = $address;
-						$raw_address["txid"] = $this->raw_tx["txid"];
+						$raw_address["txid"] = $txid;
 						
 						// collect each address into its own key
 						$this->process_address($raw_address);
@@ -338,7 +324,7 @@ class Block2Redis {
 			$jdata = $jdata."]";
 
 			// minify
-			$rdata["key"] = "txouts::".$this->raw_tx["txid"];
+			$rdata["key"] = "txouts::".$txid;
 			$rdata["data"] = preg_replace('/\s/', '', $jdata);
 
 			// send block data to Redis
@@ -390,16 +376,15 @@ class Block2Redis {
 				$txids = json_decode($txs, TRUE);
 			}
 
-			// add txid to the list if it is not already there
-			if (! in_array($txid, $txids)) { array_push($txids, $txid); }
-
 			$jdata = '{"txs":[';
-
 			foreach ($txids["txs"] as $key => $id)
 			{
 				$comma = ($key == 0) ? "" : ",";
-				$jdata = $jdata.$comma.'"'.$id.'"';				
+				$jdata = $jdata.$comma.'"'.$id.'"';
 			}
+			
+			// add txid to the list if it is not already there
+			if (! in_array($txid, $txids["txs"])) { $jdata = $jdata.$comma.'"'.$txid.'"'; }
 
 			$jdata = $jdata.']}';
 
