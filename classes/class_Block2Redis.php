@@ -390,14 +390,12 @@ class Block2Redis {
 				$txids = json_decode($rdata, TRUE);
 			}
 
-			var_dump($txids);
-
 			// add txid to the list if it is not already there
 			if (! in_array($txid, $txids)) { array_push($txids, $txid); }
 
 			$jdata = '{"txs":[';
 
-			foreach ($txids as $key => $id)
+			foreach ($txids["txs"] as $key => $id)
 			{
 				$comma = ($key == 0) ? "" : ",";
 				$jdata = $jdata.$comma.'"'.$id.'"';				
