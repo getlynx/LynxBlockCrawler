@@ -18,10 +18,7 @@ class Block2Redis {
 	// Raw data containers
 	var $raw_block;
 	var $raw_tx;
-	var $raw_input;
-	var $raw_output;
-	var $raw_address;
-
+	
 	function __construct($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin="LYNX")
 	{
 		// Connect to Redis server on localhost 
@@ -101,9 +98,6 @@ class Block2Redis {
 	function clearcontainers() {
 		$this->raw_block = [];
 		$this->raw_tx = [];
-		$this->raw_input = [];
-		$this->raw_output = [];
-		$this->raw_address = [];
 	}
 
 
@@ -324,7 +318,7 @@ class Block2Redis {
 						$raw_address["txid"] = $this->raw_tx["txid"];
 						
 						// collect each address into its own key
-						//$this->process_address($raw_address);
+						$this->process_address($raw_address);
 
 					}
 
@@ -372,12 +366,13 @@ class Block2Redis {
 */
 
 	// assemble new address data to insert
-	function process_address() {
+	function process_address($raw_address) {
 		/*
 			"address::KT5kYQXjvubU2F7cHWtNdfe9LPPyJX1dKp":"{
-				'txs':{
-					'7b5f3e5dc24...e203bb2ebbbf3'
-				}
+				"txs":[
+					"7b5f3e5dc24...e203bb2ebbbf3",
+					"7b5f3e5dc24...e203bb2ebbbf3"
+				]
 			}",
 		*/
 		if ( $this->raw_address ) 
@@ -387,14 +382,39 @@ class Block2Redis {
 			$txid = $this->raw_address["txid"];
 
 			// find matching address key and read existing tx list
-			$txs = $this->Redis->hGet($this->RKEY, $akey);
-			if ($txs)
+			$txids = [];
+			$rdata = $this->Redis->hGet($this->RKEY, $akey);
+			if ($rdata)
 			{
-				val_dump(json_decode($txs, TRUE));
-			}			
+				// get list if exists
+				$txids = json_decode($rdata, TRUE);
+			}	
+
+			// add txid to the list if it is not already there
+			if (! in_array($txid, $txids)) { array_push($txids, $txid); }
+
+			$jdata = $jdata.'{"txs":[';
+
+			foreach ($txids as $key => $id)
+			{
+				$comma = ($key == 0) ? "" : ",";
+				$jdata = $jdata.$comma.'"'.$id.'"';				
+			}
+
+			$jdata = $jdata.']}';
+
+			// minify
+			$rdata["key"] = $akey;
+			$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+			// send block data to Redis
+			$this->add_key($rdata);
+
+			// debug: call it back and spit it out
+			$address_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			echo "<blockquote><h4>".$rdata["key"]."</h4>".$address_data."</blockquote>";
 
 
-			// toss out any duplicate transactions
 
 			// update list with new txids
 
