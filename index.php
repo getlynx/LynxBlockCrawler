@@ -53,7 +53,7 @@ elseif (isset($_REQUEST["search"]))  {
 	// Make sure there's a request...
 	if (empty($_REQUEST["search"])) 
 	{ 
-		$BlockCrawler->site_content = $BlockCrawler->error("no_request");
+		$BlockCrawler->site_content = $BlockCrawler->lookup_block("latest");
 	}
 	// Make sure it's alphanumeric only...
 	elseif (! ctype_alnum($_REQUEST["search"])) 
