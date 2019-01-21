@@ -393,7 +393,7 @@ class Block2Redis {
 			// add txid to the list if it is not already there
 			if (! in_array($txid, $txids)) { array_push($txids, $txid); }
 
-			$jdata = $jdata.'{"txs":[';
+			$jdata = '{"txs":[';
 
 			foreach ($txids as $key => $id)
 			{
