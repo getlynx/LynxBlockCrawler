@@ -315,7 +315,7 @@ class Block2Redis {
 				$addresses = "";
 				if (isset ($raw_output["scriptPubKey"]["addresses"]))
 				{
-					$addresses = '", addresses":[';
+					$addresses = ', "addresses":[';
 					foreach ($raw_output["scriptPubKey"]["addresses"] as $key => $address)
 					{
 						$comma = ($key == 0) ? "" : ",";
