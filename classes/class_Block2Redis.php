@@ -407,7 +407,7 @@ class Block2Redis {
 
 			// minify
 			$rdata["key"] = $akey;
-			$rdata["data"] = preg_replace('/\s/', '', $jdata);
+			$rdata["data"] = ":P"//preg_replace('/\s/', '', $jdata);
 
 			// send block data to Redis
 			$this->add_key($rdata);
