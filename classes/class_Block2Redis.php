@@ -384,7 +384,7 @@ class Block2Redis {
 			}
 			
 			// add txid to the list if it is not already there
-			if (! in_array($txid, $txids["txs"])) { $jdata = $jdata.$comma.'"'.$txid.'"'; }
+			if (! in_array($txid, $txids["txs"])) { $jdata = $jdata.',"'.$txid.'"'; }
 
 			$jdata = $jdata.']}';
 
