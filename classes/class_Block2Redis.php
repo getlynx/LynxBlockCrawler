@@ -414,48 +414,6 @@ class Block2Redis {
 			$address_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
 			echo "<blockquote><h4>".$rdata["key"]."</h4>".$address_data."</blockquote>";
 
-
-
-			// update list with new txids
-
-			// send back to Redis
-
-			/*
-
-			// pre-render address list if any are found
-			$txs = "";
-			if (isset ($this->raw_output["scriptPubKey"]["addresses"]))
-			{
-				$addresses = '"txs":{';
-				foreach ($this->raw_output["scriptPubKey"]["addresses"] as $key => $address)
-				{
-					$comma = ($key == 0) ? "" : ",";
-					$addresses = $addresses.$comma.'"'.$key.'":"'.$address.'"';
-				}
-				$addresses = $addresses."}";
-			}
-
-			// redis hash data
-			$jdata = 
-				'{
-					'.$txs.'
-				}';
-
-			// minify
-			$rdata["key"] = "output::".$hex;
-			$rdata["data"] = preg_replace('/\s/', '', $jdata);
-
-			// send block data to Redis
-			$this->add_key($rdata);
-
-			// clear the raw data container
-			$this->raw_output = [];
-
-			*/
-
-			// debug: call it back and spit it out
-			echo "<blockquote><h4>Address</h4>".$this->raw_address["address"]."</blockquote>";
-		
 		} else { echo "<blockquote>NULL ADDRESS</blockquote>"; }
 	}
 
