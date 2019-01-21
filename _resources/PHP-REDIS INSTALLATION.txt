@@ -1,0 +1,12 @@
+# PHP-REDIS INSTALLATION
+
+# install redis server and dependencies
+apt install redis-server php-pear php7.2-dev -y
+
+# get phpredis extension
+pecl install redis
+
+# add redis extension to PHP
+cd /etc/php/7.2/fpm/conf.d
+touch redis.ini
+echo "extension=redis.so" > redis.ini
