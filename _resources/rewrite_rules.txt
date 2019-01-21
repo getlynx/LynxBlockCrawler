@@ -1,5 +1,0 @@
-RewriteEngine On
-RewriteRule ^/tx/([^/]+)/?$ /index.php?txid=$1 [QSA,NC]
-RewriteRule ^/height/([^/]+)/?$ /index.php?height=$1 [QSA,NC]
-RewriteRule ^/block/([^/]+)/?$ /index.php?hash=$1 [QSA,NC]
-RewriteRule ^/address/([^/]+)/?$ /index.php?address=$1 [QSA,NC]
