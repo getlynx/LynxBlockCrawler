@@ -383,11 +383,11 @@ class Block2Redis {
 
 			// find matching address key and read existing tx list
 			$txids = [];
-			$rdata = $this->Redis->hGet($this->RKEY, $akey);
-			if ($rdata)
+			$txs = $this->Redis->hGet($this->RKEY, $akey);
+			if ($txs)
 			{
 				// get list if exists
-				$txids = json_decode($rdata, TRUE);
+				$txids = json_decode($txs, TRUE);
 			}
 
 			// add txid to the list if it is not already there
