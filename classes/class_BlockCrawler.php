@@ -63,7 +63,6 @@ class BlockCrawler {
     $this->WalletRPC = new WalletRPC($rpc_user, $rpc_pass, $rpc_addy, $rpc_port);
 
     // Populate info vars
-    $this->databaseinfo   = $this->WalletRPC->getdatabaseinfo();
     $this->blockchaininfo = $this->WalletRPC->getblockchaininfo();
     $this->networkinfo    = $this->WalletRPC->getnetworkinfo();
     $this->walletinfo     = $this->WalletRPC->getwalletinfo();

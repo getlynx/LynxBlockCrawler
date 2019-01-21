@@ -34,8 +34,8 @@ $$ |  $$\ $$ |     $$  __$$ |$$ | $$ | $$ |$$ |$$   ____|$$ |
 
 // Include and instantiate the BlockCrawler class 
 require_once ("./classes/class_BlockCrawler.php");
-$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
-//$BlockCrawler = new BlockCrawler("./_resources/test.conf"); // FOR DEBUGGING...
+//$BlockCrawler = new BlockCrawler("/var/www/crawler.conf");
+$BlockCrawler = new BlockCrawler("test.conf"); // FOR DEBUGGING...
 /* 
 DEBUG EXAMPLES
 --------------
