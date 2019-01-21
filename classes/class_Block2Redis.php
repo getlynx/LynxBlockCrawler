@@ -195,6 +195,9 @@ class Block2Redis {
 			$txid = $this->raw_tx["txid"];
 
 			// pre-render inputs and outputs
+			$this->process_txins($this->raw_tx["vin"]);
+			//$this->process_txouts($this->raw_tx["vout"]);
+			/*
 			$inputs = '"inputs":{';
 			foreach ($this->raw_tx["vin"] as $key => $raw_input)
 			{
@@ -209,7 +212,8 @@ class Block2Redis {
 				$this->raw_input = [];
 			}
 			$inputs = $inputs."}";
-			
+			*/
+
 			$outputs = '"outputs":{';
 			foreach ($this->raw_tx["vout"] as $key => $raw_output)
 			{
@@ -265,6 +269,58 @@ class Block2Redis {
 #####  #   #  #       ###     # 
 
 */
+
+	// assemble a new transaction INPUT to insert
+	function process_txins($txins) {
+
+		if ( $txins ) 
+		{
+			$jdata = "[";
+			foreach ($txins as $key => $raw_input)
+			{
+				$comma = ($key == 0) ? "" : ",";
+				
+				// check if coinbase or not
+				if (array_key_exists("coinbase", $raw_input))
+				{
+					$jdata = 
+					$jdata.$comma.'{
+						"cb":"'.$raw_input["coinbase"].'",
+						"seq":"'.$raw_input["sequence"].'",
+						
+					}';
+				} 
+				else 
+				{
+					$jdata = 
+					$jdata.$comma.'{
+						"seq":"'.$raw_input["sequence"].'",
+						"txid":"'.$raw_input["txid"].'",
+						"out":"'.$raw_input["vout"].'",
+						"asm":"'.$raw_input["scriptSig"]["asm"].'",
+						"hex":"'.$raw_input["scriptSig"]["hex"].'",
+					}';
+				}
+				
+			}
+			$jdata = $jdata."]";
+
+			// minify
+			$rdata["key"] = "txins::".$this->raw_tx["txid"];
+			$rdata["data"] = preg_replace('/\s/', '', $jdata);
+
+			// send block data to Redis
+			$this->add_key($rdata);
+
+
+
+
+			// debug: call it back and spit it out
+			$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			echo "<blockquote><h4>Input (".$rdata["key"].")</h4>".$input_data."</blockquote>";
+
+		}
+	}
 
 	// assemble a new transaction INPUT to insert
 	function process_input() {
