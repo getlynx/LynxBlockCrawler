@@ -223,7 +223,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h3>Tx: ".$txid."</h3>".$tx_data."</blockquote>";
+			echo "<blockquote><h3>".$rdata["key"]."</h3>".$tx_data."</blockquote>";
 
 		}
 	} 
@@ -285,7 +285,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$input_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h4>Inputs: (".$rdata["key"].")</h4>".$input_data."</blockquote>";
+			echo "<blockquote><h4>".$rdata["key"]."</h4>".$input_data."</blockquote>";
 
 		}
 	
@@ -355,7 +355,7 @@ class Block2Redis {
 
 			// debug: call it back and spit it out
 			$output_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h4>Outputs: (".$rdata["key"].")</h4>".$output_data."</blockquote>";
+			echo "<blockquote><h4>".$rdata["key"]."</h4>".$output_data."</blockquote>";
 
 		}
 	
