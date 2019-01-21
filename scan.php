@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>Block2Redis (PHP)</title>
-  <meta http-equiv="Refresh" content="30">
+  <meta http-equiv="Refresh" content="42">
   <style>
     body 
     {
