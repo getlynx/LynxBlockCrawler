@@ -39,7 +39,7 @@ hr
   $Block2Redis = new Block2Redis($rpc_user, $rpc_pass, $rpc_addy, $rpc_port, $coin);
 
 
-  $Block2Redis->scan(200);
+  $Block2Redis->scan(10);
 
 
 

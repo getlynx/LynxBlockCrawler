@@ -27,7 +27,7 @@ class Block2Redis {
 
 		$this->dbheight = $this->getdbheight();
 
-		echo "<h1>Latest DB Block is ".$this->dbheight."<br><br>";
+		echo "<h1>Latest DB Block is ".$this->dbheight."</h1>";
 
 		// Include and instantiate the WalletRPC class
 		require_once ("class_WalletRPC.php");
@@ -46,7 +46,7 @@ class Block2Redis {
 		$start_at = $this->dbheight - $rewind_by;
 		$start_at = ($start_at < 0) ? 0 : $start_at;
 
-		echo "Scanning from block ".$start_at."...</h1>";
+		echo "<h2>Scanning from block ".$start_at."...</h2>";
 
 		// check latest scanned height versus actual height    
 	    while ($start_at < $this->blockchaininfo["blocks"]) 
@@ -55,22 +55,7 @@ class Block2Redis {
 			$raw_block = $this->WalletRPC->getblock($block_hash);
 			$this->process_block($raw_block);
 			$start_at++;
-
-			// debug stop at 10
-			//if ($start_at == 250) { break; }
-			// Clean up!
-			
 	    }	
-
-
-
-
-
-
-		// build output
-		//$output = $this->Block2Redis->build_output($txout);
-		
-		
 	}
 
  	// return latest database height
@@ -202,8 +187,8 @@ class Block2Redis {
 
 
 			// debug: call it back and spit it out
-			$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h3>".$rdata["key"]."</h3>".$tx_data."</blockquote>";
+			//$tx_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			//echo "<blockquote><h3>".$rdata["key"]."</h3>".$tx_data."</blockquote>";
 
 		}
 	} 
@@ -395,8 +380,8 @@ class Block2Redis {
 			$this->add_key($rdata);
 
 			// debug: call it back and spit it out
-			$address_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
-			echo "<blockquote><h4>".$rdata["key"]."</h4>".$address_data."</blockquote>";
+			//$address_data = $this->Redis->hGet($this->RKEY, $rdata["key"]);
+			//echo "<blockquote><h4>".$rdata["key"]."</h4>".$address_data."</blockquote>";
 
 		}
 	}
