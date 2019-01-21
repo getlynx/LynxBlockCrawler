@@ -131,18 +131,18 @@ class Block2Redis {
 			$txs = "";
 			if ( array_key_exists("tx", $this->raw_block) )
 	    	{
-				$txs = '"txs":{';
-				foreach ($this->raw_block["tx"] as $key => $tx)
+				$txs = '"txs":[';
+				foreach ($this->raw_block["tx"] as $key => $txid)
 				{
 					$comma = ($key == 0) ? "" : ",";
-					$txs = $txs.$comma.'"'.$key.'":"'.$tx.'"';
+					$txs = $txs.$comma.'"'.$txid.'"';
 					
 					// collect each tx into its own key
-					$this->raw_tx = $this->WalletRPC->getrawtransaction($tx);
+					$this->raw_tx = $this->WalletRPC->getrawtransaction($txid);
 					$this->process_tx();
 					$this->raw_tx = [];
 				}
-				$txs = $txs."}";
+				$txs = $txs."]";
 			}
 
 			// redis hash data
