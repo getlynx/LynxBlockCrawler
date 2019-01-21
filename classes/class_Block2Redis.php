@@ -384,12 +384,14 @@ class Block2Redis {
 					$comma = ($key == 0) ? "" : ",";
 					$jdata = $jdata.$comma.'"'.$id.'"';
 				}
+				
+				// add txid to the list if it is not already there
+				if (! in_array($txid, $txids["txs"])) { 
+					$jdata = $jdata.',"'.$txid.'"';
+				}
+			} else {
+				$jdata = $jdata.'"'.$txid.'"';
 			}
-			// add txid to the list if it is not already there
-			if (! in_array($txid, $txids["txs"])) { 
-				$jdata = (array_key_exists("txs", $txids)) ? $jdata.',"'.$txid.'"' : $jdata.'"'.$txid.'"'; 
-			}
-
 			$jdata = $jdata.']}';
 
 			// minify
