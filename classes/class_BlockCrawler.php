@@ -28,7 +28,7 @@ class BlockCrawler {
     // Create temp RPC containers
     $rpc_user = "";
     $rpc_pass = "";
-    $rpc_addy = "";
+    $rpc_addy = "127.0.0.1";
     $rpc_port = "";
 
     // Open lynx.conf (sitting outside of public scope)
@@ -36,10 +36,10 @@ class BlockCrawler {
 
     // Iterate through each line until end-of-file
     while(!feof($conf)) {
-      
+
       // Get each line pointer...
       $line = fgets($conf);
-      
+
       // Split the line at the = sign
       $array = explode("=", $line);
 
@@ -48,8 +48,6 @@ class BlockCrawler {
         $rpc_user = str_replace('"', "", trim($array[1]));
       } else if (trim($array[0]) == "rpcpassword") {
         $rpc_pass = str_replace('"', "", trim($array[1]));
-      } else if (trim($array[0]) == "rpcbind" && trim($array[1]) != "::1") {
-        $rpc_addy = str_replace('"', "", trim($array[1]));
       } else if (trim($array[0]) == "rpcport") {
         $rpc_port = str_replace('"', "", trim($array[1]));
       }
