@@ -200,23 +200,23 @@ class WalletRPC {
       $hashspeed = 'H';
       $hashrate = $networkhashps;
       if ($networkhashps < 1) {
-        $hashspeed = 'µH';
+        $hashspeed = 'H/s';
         $hashrate = $networkhashps / 1000;
       }
       if ($networkhashps >= 1000) {
-        $hashspeed = 'KH';
+        $hashspeed = 'KH/s';
         $hashrate = $networkhashps / 1000;
       }
       if ($networkhashps >= 1000000) {
-        $hashspeed = 'MH';
+        $hashspeed = 'MH/s';
         $hashrate = $networkhashps / 1000 / 1000;
       }
       if ($networkhashps >= 1000000000) {
-        $hashspeed = 'GH';
+        $hashspeed = 'GH/s';
         $hashrate = $networkhashps / 1000 / 1000 / 1000;
       }
       if ($networkhashps >= 1000000000000) {
-        $hashspeed = 'TH';
+        $hashspeed = 'TH/s';
         $hashrate = $networkhashps / 1000 / 1000 / 1000 / 1000;
       }
       return array('hashrate'=>$hashrate, 'hashspeed'=>$hashspeed);

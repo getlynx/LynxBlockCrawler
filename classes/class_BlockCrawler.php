@@ -234,7 +234,7 @@ class BlockCrawler {
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Difficulty:</strong> <span class="text-glow">'. number_format($this->blockchaininfo["difficulty"], 8, '.', '') .'</span></div>');
     array_push($html, '            <div class="col-12 col-sm-3"><strong>Connected:</strong> <span class="text-glow">'. number_format($this->networkinfo["connections"], 0, '.', ',') .'</span></div>');
     $realspeed = $this->WalletRPC->humanHashSpeed($this->networkhashps);
-    array_push($html, '            <div class="col-12 col-sm-3"><strong>Speed:</strong> <span class="text-glow">'. round($realspeed["hashrate"],2).' '.$realspeed["hashspeed"] .'</a></div>');
+    array_push($html, '            <div class="col-12 col-sm-3"><strong>Network:</strong> <span class="text-glow">'. round($realspeed["hashrate"],2).' '.$realspeed["hashspeed"] .'</a></div>');
     array_push($html, '          </div>');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
@@ -354,7 +354,7 @@ class BlockCrawler {
         </div>
       </div>
 
-      
+
     ');
     return join("", $html);
   }
