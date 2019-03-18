@@ -167,9 +167,11 @@ class BlockCrawler {
     array_push($html, '    <li><a target="_blank" href="https://www.cryptocompare.com/coins/lynx/overview">CryptoCompare</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://www.livecoinwatch.com/price/Lynx-LYNX">LiveCoinWatch</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://walletinvestor.com/currency/lynx">WalletInvestor</a></li>');
+    array_push($html, '    <li><a target="_blank" href="https://blockspot.io/coin/lynx/">BlockSpot.io</a></li>');
 
     array_push($html, '    <li><a target="_blank" href="https://cryptopanic.com/news/lynx">CryptoPanic</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://www.coinsignals.trade/?coin=LYNX%3ABTC">CoinSignal</a></li>');
+
     array_push($html, '</ul>');
     return join("", $html);
   }
