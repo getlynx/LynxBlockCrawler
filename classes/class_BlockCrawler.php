@@ -152,10 +152,11 @@ class BlockCrawler {
     array_push($html, '    <li><a target="_blank" href="https://getlynx.io">Lynx Website</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://getlynx.io/news">Lynx News</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://getlynx.io/faq">Lynx FAQ</a></li>');
-    array_push($html, '    <li><a target="_blank" href="https://getlynx.io/downloads">Lynx Wallets</a></li>');
+    array_push($html, '    <li><a target="_blank" href="https://getlynx.io/downloads">Lynx Wallet</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://github.com/getlynx/LynxCI/releases/tag/v26">LynxCI ISO</a></li>');
-    array_push($html, '    <li><a target="_blank" href="https://www.coinomi.com/en/downloads">Coinomi Wallets</a></li>');
-
+    array_push($html, '    <li><a target="_blank" href="https://www.coinomi.com/en/downloads">Coinomi Wallet</a></li>');
+    array_push($html, '    <li><a target="_blank" href="https://getlynx.io/paperwallet/">Paper Wallet</a></li>');
+    
     array_push($html, '    <li><a target="_blank" href="https://explorer.getlynx.io">Block Explorer</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://github.com/getlynx/Lynx">Github</a></li>');
     array_push($html, '    <li><a target="_blank" href="https://discord.gg/yTfCs5J">Discord</a></li>');
@@ -281,7 +282,7 @@ class BlockCrawler {
     array_push($html, '    <div id="site_footer">');
     array_push($html, '      <div id="powered_by" class="box-glow">');
     array_push($html, '        <div class="row">');
-    array_push($html, '          <div class="col-12 align-center"><span class="text-glow"><em>Powered by LYNX</em></span></div>');
+    array_push($html, '          <div class="col-12 align-center"><span class="text-glow"><em>Powered by Lynx</em></span></div>');
     array_push($html, '        </div>');
     array_push($html, '      </div>');
     array_push($html, '    </div>');
