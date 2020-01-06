@@ -31,8 +31,9 @@ class BlockCrawler {
     $rpc_addy = "127.0.0.1";
     $rpc_port = "";
 
+    /*
     // Open lynx.conf (sitting outside of public scope)
-    $conf = fopen($conf_file, "r") or die("Cannot connect. Unable to read config file located at ".$conf_file."...");
+    $conf = fopen($conf_file, "r") or die("Cannot connect. Unable to read config file located at <strong> ".$conf_file."</strong>");
 
     // Iterate through each line until end-of-file
     while(!feof($conf)) {
@@ -52,7 +53,8 @@ class BlockCrawler {
         $rpc_port = str_replace('"', "", trim($array[1]));
       }
     }
-
+    */
+    
     // Close the file
     fclose($conf);
 
